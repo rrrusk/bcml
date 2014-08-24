@@ -1,5 +1,20 @@
+# encoding: utf-8
+#コンバート処理
+class Convert
+	def initialize()
+	end
+
+	def main(contents)
+		tags = %w[h1 h2 h3 h4 h5 h6 a span div]
+		converted = contents.gsub(/^@(#{tags.join("|")})\s+(.+)/, '<\1>\2</\1>')
+		puts converted
+		return converted
+	end
+end
+
+
 fileName = File.basename(ARGV[0],'.bcml') #引数からファイル読み込み
-newfile = open(fileName + '.html', 'w') #変換先ファイルを開く
+newfile = open('convert' + '.html', 'w') #変換先ファイルを開く
 
 #変換元ファイルを開いて変数に格納した後閉じる
 source = open(fileName + '.bcml')
@@ -7,18 +22,11 @@ contents = source.read
 source.close
 
 #変換元データを処理した後変換先ファイルに書き込み
-newfile.write(contents)
+con = Convert.new
+converted = con.main(contents)
+
+newfile.write(converted) #書き込み
 
 #開いていたファイルを閉じる
 newfile.close
 
-#コンバート処理
-class Convert
-	def initialize(contents)
-		@contents = contents
-	end
-
-	def execute
-	end
-
-end
