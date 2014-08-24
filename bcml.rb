@@ -6,8 +6,27 @@ class Convert
 
 	def main(contents)
 		tags = %w[h1 h2 h3 h4 h5 h6 a span div]
+		qualifier = {
+			"."=>{
+				"point"=>"intag",
+				"usage"=>'class="#{subject}"'
+			},
+		}
+
 		converted = contents.gsub(/^@(#{tags.join("|")})\s+(.+)/, '<\1>\2</\1>')
-		puts converted
+		array = contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/)
+		print converted
+		print array
+
+		contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/) {|match|
+			subject = $~[:subject]
+			tags = $~[:tags]
+			qualifier = $~[:qualifier]
+			puts "qualifier:" + qualifier if qualifier
+			goal = "<" + tags + ">" + subject + "</" + tags + ">"
+			puts goal
+		}
+			
 		return converted
 	end
 end
