@@ -9,25 +9,28 @@ class Convert
 		qualifier = {
 			"."=>{
 				"point"=>"intag",
-				"usage"=>'class="#{subject}"'
+				"usage"=>'class="#{qualifier}"'
 			},
 		}
 
-		converted = contents.gsub(/^@(#{tags.join("|")})\s+(.+)/, '<\1>\2</\1>')
-		array = contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/)
-		print converted
-		print array
+#		converted = contents.gsub(/^@(#{tags.join("|")})\s+(.+)/, '<\1>\2</\1>')
+#		array = contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/)
+#		print converted
+#		p array
+		scan = contents.scan(/^@(?<prefix>[^\s]+)\s(?<subject>.+)/)
+		p scan
 
-		contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/) {|match|
-			subject = $~[:subject]
-			tags = $~[:tags]
-			qualifier = $~[:qualifier]
-			puts "qualifier:" + qualifier if qualifier
-			goal = "<" + tags + ">" + subject + "</" + tags + ">"
-			puts goal
-		}
+
+#		contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/) {|match|
+#			subject = $~[:subject]
+#			tags = $~[:tags]
+#			qualifier = $~[:qualifier]
+#			intag = ' class="' + qualifier + '"'
+#			puts "qualifier:" + qualifier if qualifier
+#			goal = "<" + tags + intag + ">" + subject + "</" + tags + ">"
+#			puts goal
+#		}
 			
-		return converted
 	end
 end
 
