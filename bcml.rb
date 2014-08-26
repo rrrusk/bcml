@@ -17,8 +17,11 @@ class Convert
 #		array = contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/)
 #		print converted
 #		p array
-		scan = contents.scan(/^@(?<prefix>[^\s]+)\s(?<subject>.+)/)
-		p scan
+		contents.scan(/^@(?<prefix>[^\s]+)\s(?<subject>.+)/) do |match|
+			p match
+			subject = $~[:subject]
+			prefix = $~[:prefix]
+		end
 
 
 #		contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/) {|match|
