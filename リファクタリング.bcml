@@ -1,0 +1,8 @@
+@ruby{
+	#before
+	goal = outtag[0] + "<" + tag + intag + ">" + subject + "</" + tag + ">" + outtag[1]
+	#after
+	goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
+	#もちろんこう書くことも可能(余計見づらくなる気がしたのでやめました)
+	goal = "#{outtag[0]}<#{tag}#{intag}>#{subject}</#{tag}>#{outtag[1]}"
+}@

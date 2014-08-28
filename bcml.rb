@@ -1,10 +1,10 @@
-# encoding: utf-8
+# encoding utf-8
 #コンバート処理
 class Convert
 	def initialize()
 		# 本来は別ファイルから読み込む
-		@tags = %w[h1 h2 h3 h4 h5 h6 a span div]
-		@qualifiers = {
+		@TAGS = %w[h1 h2 h3 h4 h5 h6 a span div].freeze
+		@QUALIFIERS = {
 			"."=>{
 				"point"=>"intag",
 				"usage"=>'class="<qsub>"',
@@ -18,25 +18,29 @@ class Convert
 				"usage"=>['<a href="<qsub>">','</a>'],
 				"other"=>["bracket",],
 			},
-		}
+		}.freeze
 
-		@starters = []
+		createStarters(@QUALIFIERS) #@STARTERS作成
+	end
 
-		#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
-		@qualifiers.each do |key,value|
+	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
+	def createStarters(qualifiers)
+		@STARTERS = []
+		qualifiers.each do |key,value|
 			if value["other"]
 				if value["other"].include?("bracket")
-					@starters << key + "[.+?]"
+					@STARTERS << key + "[.+?]"
 				end
 			else
-				@starters << key
+				@STARTERS << key
 			end
 		end
+		@STARTERS.freeze
 	end
 
 	def main(contents)
-		#ワンライナーbcml記法
-		converted = contents.gsub(/^\s*@(?<prefix>\S+)\s(?<subject>.+)/) do |match|
+	#ワンライナーbcml記法
+		contents.gsub!(/(^\s*@(?<prefix>\S+)\s(?<subject>.+))/) do |match|
 			subject,prefix = $~[:subject],$~[:prefix] #subject => 本文 prefix => @~の~の部分
 			
 			#タグを書いてる部分と修飾してる部分分離
@@ -45,49 +49,45 @@ class Convert
 			tag = $~ ? $~[:tag] : ""
 
 			#タグが設定されてるか確認
-			if @tags.include?(tag) || tag == ""
-				intags = []
-				outtags = [[],[]]
-
-				#修飾部分の分離
-				qualifier.scan(/(?<starter>#{@starters.join("|")})(?<qsub>.+)/) do |match| 
-					starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
-
-					qinfo = @qualifiers[starter]
-					if qinfo["point"] == "intag"
-						intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
-					elsif qinfo["point"] == "outtag"
-						qsub.gsub!(/^\[(.+?)\]$/,'\1')
-						outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
-						outtags[1] << qinfo["usage"][1].gsub(/<qsub>/,qsub)
-						p outtags
-					end
-				end
-				intag = intags.empty? ? "":" " + intags.join(" ")
-				outtags[0].join()
-				outtag = outtags.empty? ? "": [outtags[0].join(),outtags[1].join()]
-				p outtag
-
-				if tag == ""
-					if outtag != ""
-						goal = outtag[0] + subject + outtag[1]
-					elsif intag != ""
-						goal = "<span" + intag + ">" + subject + "</span>"
-					elsif intag != "" && outtag != ""
-						goal = outtag[0] + "<span" + intag + ">" + subject + "</span>" + outtag[1]
-					end
-				else
-					goal = outtag[0] + "<" + tag + intag + ">" + subject + "</" + tag + ">" + outtag[1]
-				end
-
-				puts goal
-				goal
-			
-			else #タグが設定されてないのなら置き換えずに終了
-				match
+			unless @TAGS.include?(tag) || tag == ""
 			end
+
+			intags = []
+			outtags = [[],[]]
+
+			#修飾部分の分離
+			if qualifier.match(/(?<starter>#{@STARTERS.join("|")})(?<qsub>.+)/) 
+				starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
+				qinfo = @QUALIFIERS[starter] 
+				if qinfo["point"] == "intag"
+					intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
+				elsif qinfo["point"] == "outtag"
+					qsub.gsub!(/^\[(.+?)\]$/,'\1')
+					outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
+					outtags[1] << qinfo["usage"][1].gsub(/<qsub>/,qsub)
+				end
+			end
+
+
+			intag = intags.empty? ? "":" " + intags.join(" ")
+			outtags[0].join()
+			outtag = outtags.empty? ? "": [outtags[0].join(),outtags[1].join()]
+
+			if tag == ""
+				if outtag != ""
+					goal = outtag[0] + subject + outtag[1]
+				elsif intag != ""
+					goal = "<span#{intag}>" + subject + "</span>"
+				elsif intag != "" && outtag != ""
+					goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
+				end
+			else
+				goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
+			end
+
+			goal
 		end
-		return converted
+		puts 'contents' + contents
 	end
 end
 
@@ -105,6 +105,5 @@ con = Convert.new
 converted = con.main(contents)
 
 newfile.write(converted) #書き込み
-
 #開いていたファイルを閉じる
 newfile.close

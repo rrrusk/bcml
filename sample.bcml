@@ -9,9 +9,9 @@ f
 @h2#head headd
 @h5.he#ha h55
 @a:[http://google.com] aa
+@foo fooo
+@ふう ふうう
 @:[http://yahoo.com] yahoo
 @span spann
 @div divv
-@foo fooo
-@ふう ふうう
 <!-- <h3>hello</h3> -->
