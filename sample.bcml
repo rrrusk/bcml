@@ -3,11 +3,15 @@ a
 @h2 h22
 a
 @h3 h33
-@h4 h44
+  @h4 h44
 f
 @h6.bbb h66
-@h5 h55
-@a aa
+@h2#head headd
+@h5.he#ha h55
+@a:[http://google.com] aa
+@:[http://yahoo.com] yahoo
 @span spann
 @div divv
+@foo fooo
+@ふう ふうう
 <!-- <h3>hello</h3> -->

@@ -2,38 +2,92 @@
 #コンバート処理
 class Convert
 	def initialize()
-	end
-
-	def main(contents)
-		tags = %w[h1 h2 h3 h4 h5 h6 a span div]
-		qualifier = {
+		# 本来は別ファイルから読み込む
+		@tags = %w[h1 h2 h3 h4 h5 h6 a span div]
+		@qualifiers = {
 			"."=>{
 				"point"=>"intag",
-				"usage"=>'class="#{qualifier}"'
+				"usage"=>'class="<qsub>"',
+			},
+			"#"=>{
+				"point"=>"intag",
+				"usage"=>'id="<qsub>"',
+			},
+			":"=>{
+				"point"=>"outtag",
+				"usage"=>['<a href="<qsub>">','</a>'],
+				"other"=>["bracket",],
 			},
 		}
 
-#		converted = contents.gsub(/^@(#{tags.join("|")})\s+(.+)/, '<\1>\2</\1>')
-#		array = contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/)
-#		print converted
-#		p array
-		contents.scan(/^@(?<prefix>[^\s]+)\s(?<subject>.+)/) do |match|
-			p match
-			subject = $~[:subject]
-			prefix = $~[:prefix]
+		@starters = []
+
+		#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
+		@qualifiers.each do |key,value|
+			if value["other"]
+				if value["other"].include?("bracket")
+					@starters << key + "[.+?]"
+				end
+			else
+				@starters << key
+			end
 		end
+	end
 
-
-#		contents.scan(/^@(?<tags>#{tags.join("|")})\.(?<qualifier>.+)\s+(?<subject>.+)/) {|match|
-#			subject = $~[:subject]
-#			tags = $~[:tags]
-#			qualifier = $~[:qualifier]
-#			intag = ' class="' + qualifier + '"'
-#			puts "qualifier:" + qualifier if qualifier
-#			goal = "<" + tags + intag + ">" + subject + "</" + tags + ">"
-#			puts goal
-#		}
+	def main(contents)
+		#ワンライナーbcml記法
+		converted = contents.gsub(/^\s*@(?<prefix>\S+)\s(?<subject>.+)/) do |match|
+			subject,prefix = $~[:subject],$~[:prefix] #subject => 本文 prefix => @~の~の部分
 			
+			#タグを書いてる部分と修飾してる部分分離
+			prefix.slice!(/^(?<tag>[a-z0-9あ-ん]+)/)
+			qualifier = prefix
+			tag = $~ ? $~[:tag] : ""
+
+			#タグが設定されてるか確認
+			if @tags.include?(tag) || tag == ""
+				intags = []
+				outtags = [[],[]]
+
+				#修飾部分の分離
+				qualifier.scan(/(?<starter>#{@starters.join("|")})(?<qsub>.+)/) do |match| 
+					starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
+
+					qinfo = @qualifiers[starter]
+					if qinfo["point"] == "intag"
+						intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
+					elsif qinfo["point"] == "outtag"
+						qsub.gsub!(/^\[(.+?)\]$/,'\1')
+						outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
+						outtags[1] << qinfo["usage"][1].gsub(/<qsub>/,qsub)
+						p outtags
+					end
+				end
+				intag = intags.empty? ? "":" " + intags.join(" ")
+				outtags[0].join()
+				outtag = outtags.empty? ? "": [outtags[0].join(),outtags[1].join()]
+				p outtag
+
+				if tag == ""
+					if outtag != ""
+						goal = outtag[0] + subject + outtag[1]
+					elsif intag != ""
+						goal = "<span" + intag + ">" + subject + "</span>"
+					elsif intag != "" && outtag != ""
+						goal = outtag[0] + "<span" + intag + ">" + subject + "</span>" + outtag[1]
+					end
+				else
+					goal = outtag[0] + "<" + tag + intag + ">" + subject + "</" + tag + ">" + outtag[1]
+				end
+
+				puts goal
+				goal
+			
+			else #タグが設定されてないのなら置き換えずに終了
+				match
+			end
+		end
+		return converted
 	end
 end
 
@@ -54,4 +108,3 @@ newfile.write(converted) #書き込み
 
 #開いていたファイルを閉じる
 newfile.close
-
