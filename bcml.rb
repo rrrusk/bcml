@@ -26,16 +26,20 @@ class Convert
 	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
 	def createStarters(qualifiers)
 		@STARTERS = []
+		@SYMBOL = []
 		qualifiers.each do |key,value|
 			if value["other"]
 				if value["other"].include?("bracket")
-					@STARTERS << key + "[.+?]"
+					@STARTERS << key + "\\[.+?\\]"
+					@SYMBOL << key
 				end
 			else
 				@STARTERS << key
+				@SYMBOL << key
 			end
 		end
 		@STARTERS.freeze
+		puts @STARTERS
 	end
 
 	def main(contents)
@@ -56,11 +60,13 @@ class Convert
 			outtags = [[],[]]
 
 			#修飾部分の分離
-			if qualifier.match(/(?<starter>#{@STARTERS.join("|")})(?<qsub>.+)/) 
+			qualifier.scan(/((?<starter>#{@STARTERS.join("|")})(?<qsub>.+))+/) do |match|
+				p $~
 				starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
 				qinfo = @QUALIFIERS[starter] 
 				if qinfo["point"] == "intag"
 					intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
+					p intags
 				elsif qinfo["point"] == "outtag"
 					qsub.gsub!(/^\[(.+?)\]$/,'\1')
 					outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
