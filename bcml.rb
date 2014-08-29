@@ -62,28 +62,29 @@ class Convert
 
 	def main(contents)
 	#ワンライナーbcml記法
-		contents.gsub!(/(^\s*@(?<prefix>\S+)\s(?<subject>.+))/) do |match|
+		contents.gsub!(/(?<origin>^\s*@(?<prefix>\S+)\s(?<subject>.+))/) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
-
-			#タグが設定されてるか確認
-			unless @TAGS.include?(tag) || tag == ""
-			end
 
 			intag,outtag = separatorQ(qualifier)
 
 			if tag == ""
-				if outtag != ""
+				if intag != "" && outtag != ""
+					goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
+				elsif outtag != ""
 					goal = outtag[0] + subject + outtag[1]
 				elsif intag != ""
 					goal = "<span#{intag}>" + subject + "</span>"
-				elsif intag != "" && outtag != ""
-					goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
 				end
 			else
 				goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
 			end
 
-			goal
+			#タグが設定されてるか確認
+			if @TAGS.include?(tag) || tag == ""
+				goal
+			else
+				$~[:origin]
+			end
 		end
 		puts "converted:\n" + contents
 	end

@@ -8,10 +8,10 @@ f
 @h6.bbb h66
 @h2#head headd
 @h5.he#ha h55
-@a:[http://google.com] aa
+@a.yaml:[http://google.com] aa
 @foo fooo
 @ふう ふうう
-@:[http://yahoo.com] yahoo
+@.yaml:[http://yahoo.com] yahoo
 @span spann
 @div divv
 <!-- <h3>hello</h3> -->
