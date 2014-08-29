@@ -1,24 +1,12 @@
 # encoding utf-8
+require 'yaml'
 #コンバート処理
 class Convert
 	def initialize()
-		# 本来は別ファイルから読み込む
-		@TAGS = %w[h1 h2 h3 h4 h5 h6 a span div].freeze
-		@QUALIFIERS = {
-			"."=>{
-				"point"=>"intag",
-				"usage"=>'class="<qsub>"',
-			},
-			"#"=>{
-				"point"=>"intag",
-				"usage"=>'id="<qsub>"',
-			},
-			":"=>{
-				"point"=>"outtag",
-				"usage"=>['<a href="<qsub>">','</a>'],
-				"other"=>["bracket",],
-			},
-		}.freeze
+		# 設定ファイルからタグリストなどを読み込む
+		config = YAML.load_file('config.yml')
+		@TAGS = config["TAGS"].freeze
+		@QUALIFIERS = config["QUALIFIERS"].freeze
 
 		createStarters(@QUALIFIERS) #@STARTERS作成
 	end
@@ -50,7 +38,7 @@ class Convert
 		qualifiers.each do |key,value|
 			if value["other"]
 				if value["other"].include?("bracket")
-					@STARTERS << key + "\\[.+?\\]"
+					@STARTERS << key + '\[.+?\]'
 					@SYMBOL << key
 				end
 			else
@@ -62,7 +50,7 @@ class Convert
 		@SYMBOL.freeze
 	end
 
-	#タグを書いてる部分と修飾してる部分分離
+	#正規表現にマッチしたものをパーツごとに分ける
 	def separator(data)
 		subject = data[:subject]
 		prefix = data[:prefix]
@@ -75,7 +63,7 @@ class Convert
 	def main(contents)
 	#ワンライナーbcml記法
 		contents.gsub!(/(^\s*@(?<prefix>\S+)\s(?<subject>.+))/) do |match|
-			subject,tag,qualifier = separator($~)
+			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
 
 			#タグが設定されてるか確認
 			unless @TAGS.include?(tag) || tag == ""
@@ -97,7 +85,7 @@ class Convert
 
 			goal
 		end
-		puts 'contents' + contents
+		puts "converted:\n" + contents
 	end
 end
 

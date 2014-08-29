@@ -1,0 +1,23 @@
+---
+TAGS:
+- h1
+- h2
+- h3
+- h4
+- h5
+- h6
+- a
+- span
+- div
+QUALIFIERS:
+  ".":
+    point: intag
+    usage: class="<qsub>"
+  "#":
+    point: intag
+    usage: id="<qsub>"
+  ":":
+    point: outtag
+    usage: [<a href="<qsub>">, </a>]
+    other:
+    - bracket
