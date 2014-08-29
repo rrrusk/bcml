@@ -38,7 +38,9 @@ class Convert
 				outtags[1] << qinfo["usage"][1].gsub(/<qsub>/,qsub)
 			end
 		end
-		return intags,outtags
+		intag = intags.empty? ? "":" " + intags.join(" ")
+		outtag = outtags.empty? ? "": [outtags[0].join(),outtags[1].join()]
+		return intag,outtag
 	end
 
 	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
@@ -57,26 +59,29 @@ class Convert
 			end
 		end
 		@STARTERS.freeze
+		@SYMBOL.freeze
+	end
+
+	#タグを書いてる部分と修飾してる部分分離
+	def separator(data)
+		subject = data[:subject]
+		prefix = data[:prefix]
+		prefix.slice!(/^(?<tag>[a-z0-9あ-ん]+)/)
+		qualifier = prefix
+		tag = $~ ? $~[:tag] : ""
+		return subject,tag,qualifier
 	end
 
 	def main(contents)
 	#ワンライナーbcml記法
 		contents.gsub!(/(^\s*@(?<prefix>\S+)\s(?<subject>.+))/) do |match|
-			subject,prefix = $~[:subject],$~[:prefix] #subject => 本文 prefix => @~の~の部分
-			
-			#タグを書いてる部分と修飾してる部分分離
-			prefix.slice!(/^(?<tag>[a-z0-9あ-ん]+)/)
-			qualifier = prefix
-			tag = $~ ? $~[:tag] : ""
+			subject,tag,qualifier = separator($~)
 
 			#タグが設定されてるか確認
 			unless @TAGS.include?(tag) || tag == ""
 			end
 
-			intags,outtags = separatorQ(qualifier)
-
-			intag = intags.empty? ? "":" " + intags.join(" ")
-			outtag = outtags.empty? ? "": [outtags[0].join(),outtags[1].join()]
+			intag,outtag = separatorQ(qualifier)
 
 			if tag == ""
 				if outtag != ""
