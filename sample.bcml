@@ -7,11 +7,15 @@ a
 f
 @h6.bbb h66
 @h2#head headd
+@(h3 hehefff @(a.yaml hello )@ )@
 @h5.he#ha h55
+@(h4 jfa @(h3 hello )@
+aafda)@
 @a.yaml:[http://google.com] aa
+@(h2 fafdaf)@
 @foo fooo
 @ふう ふうう
 @.yaml:[http://yahoo.com] yahoo
-@span spann
+@span @(h4 hell to you! )@fa
 @div divv
 <!-- <h3>hello</h3> -->

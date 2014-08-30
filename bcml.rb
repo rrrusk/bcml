@@ -15,6 +15,7 @@ class Convert
 	def separatorQ(qualifier)
 		intags = []
 		outtags = [[],[]]
+		# /#{@STARTERS.join("|")}(\[.+?\]|[^#{@SYMBOL.join("")}])+/
 		qualifier.scan(/(?<starter>#{@STARTERS.join("|")})(?<qsub>(\[.+?\]|[^#{@SYMBOL.join("")}])+)/) do |match|
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
 			qinfo = @QUALIFIERS[starter] 
@@ -61,8 +62,9 @@ class Convert
 	end
 
 	def main(contents)
-	#ワンライナーbcml記法
-		contents.gsub!(/(?<origin>^\s*@(?<prefix>\S+)\s(?<subject>.+))/) do |match|
+		#ワンライナーbcml記法
+    #/^\s*@[^\(\s]+\s.+/ @ (空白でも(でもないもの) 空白 任意の文字列
+		contents.gsub!(/(?<origin>^\s*@(?<prefix>[^\(\s]+)\s(?<subject>.+))/) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
 
 			intag,outtag = separatorQ(qualifier)
@@ -87,6 +89,7 @@ class Convert
 			end
 		end
 		puts "converted:\n" + contents
+		puts contents.match(/(?<f>@\((\g<f>*.+)*\)@)/m)
 	end
 end
 
