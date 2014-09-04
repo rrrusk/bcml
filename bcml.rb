@@ -61,46 +61,8 @@ class Convert
 		return subject,tag,qualifier
 	end
 
-	def manyline(contents)
-		re = /(?<f>@\((\g<f>*.*?)*\)@)/m
-		while re =~ contents
-			contents.gsub!(re) do |match|
-				match.gsub!(/(\A@\(|\)@\Z)/,"")
-				match.gsub!(/^(?<prefix>[^\(\s]+)\s(?<subject>.+)/m) do |match|
-					p $~
-					subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
-
-					intag,outtag = separatorQ(qualifier)
-
-					if tag == ""
-						if intag != "" && outtag != ""
-							goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
-						elsif outtag != ""
-							goal = outtag[0] + subject + outtag[1]
-						elsif intag != ""
-							goal = "<span#{intag}>" + subject + "</span>"
-						end
-					else
-						goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
-					end
-
-					#タグが設定されてるか確認
-					if @TAGS.include?(tag) || tag == ""
-						goal
-					else
-						$~[:origin]
-					end
-				end
-			end
-		end
-	end
-
-	def main(contents)
-		manyline(contents)
-		#ワンライナーbcml記法
-    #/^\s*@[^\(\s]+\s.+/ @ (空白でも(でもないもの) 空白 任意の文字列
-		#scan = contents.scan(/(?<f>@\((\g<f>*.*)*\)@)/m)
-		contents.gsub!(/(?<origin>^\s*@(?<prefix>[^\(\s]+)\s(?<subject>.+))/) do |match|
+	def convert(contents,re)
+		contents.gsub!(re) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
 
 			intag,outtag = separatorQ(qualifier)
@@ -124,6 +86,25 @@ class Convert
 				$~[:origin]
 			end
 		end
+	end
+
+	def oneline(contents)
+		convert(contents,/(?<origin>^\s*@(?<prefix>[^\(\s]+)\s(?<subject>.+))/)
+	end
+
+	def manyline(contents)
+		re = /(?<f>@\((\g<f>*.*?)*\)@)/m
+		while re =~ contents
+			contents.gsub!(re) do |match|
+				match.gsub!(/(\A@\(|\)@\Z)/,"")
+				convert(match,/^(?<prefix>[^\(\s]+)\s(?<subject>.+)/m)
+			end
+		end
+	end
+
+	def main(contents)
+		manyline(contents)
+		oneline(contents)
 		puts "converted:\n" + contents
 	end
 end
