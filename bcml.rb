@@ -62,8 +62,9 @@ class Convert
 	end
 
 	def manyline(contents)
-		scan = contents.scan(/(?<f>@\((?<h>\g<f>*.*?)*\)@)/m)
-		p scan
+		contents.scan(/(?<f>@\((?<h>\g<f>*.*?)*\)@)/m).scan do |match|
+			p match
+		end
 	end
 
 	def main(contents)
