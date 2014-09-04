@@ -61,9 +61,16 @@ class Convert
 		return subject,tag,qualifier
 	end
 
+	def manyline(contents)
+		scan = contents.scan(/(?<f>@\((?<h>\g<f>*.*?)*\)@)/m)
+		p scan
+	end
+
 	def main(contents)
+		manyline(contents)
 		#ワンライナーbcml記法
     #/^\s*@[^\(\s]+\s.+/ @ (空白でも(でもないもの) 空白 任意の文字列
+		#scan = contents.scan(/(?<f>@\((\g<f>*.*)*\)@)/m)
 		contents.gsub!(/(?<origin>^\s*@(?<prefix>[^\(\s]+)\s(?<subject>.+))/) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
 
@@ -89,7 +96,6 @@ class Convert
 			end
 		end
 		puts "converted:\n" + contents
-		puts contents.match(/(?<f>@\((\g<f>*.+)*\)@)/m)
 	end
 end
 
