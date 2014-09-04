@@ -62,8 +62,36 @@ class Convert
 	end
 
 	def manyline(contents)
-		contents.scan(/(?<f>@\((?<h>\g<f>*.*?)*\)@)/m).scan do |match|
-			p match
+		re = /(?<f>@\((\g<f>*.*?)*\)@)/m
+		while re =~ contents
+			contents.gsub!(re) do |match|
+				match.gsub!(/(\A@\(|\)@\Z)/,"")
+				match.gsub!(/^(?<prefix>[^\(\s]+)\s(?<subject>.+)/m) do |match|
+					p $~
+					subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
+
+					intag,outtag = separatorQ(qualifier)
+
+					if tag == ""
+						if intag != "" && outtag != ""
+							goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
+						elsif outtag != ""
+							goal = outtag[0] + subject + outtag[1]
+						elsif intag != ""
+							goal = "<span#{intag}>" + subject + "</span>"
+						end
+					else
+						goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
+					end
+
+					#タグが設定されてるか確認
+					if @TAGS.include?(tag) || tag == ""
+						goal
+					else
+						$~[:origin]
+					end
+				end
+			end
 		end
 	end
 
