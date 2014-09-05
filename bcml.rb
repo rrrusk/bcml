@@ -1,5 +1,6 @@
 # encoding utf-8
 require 'yaml'
+require 'pp'
 #コンバート処理
 class Convert
 	def initialize()
@@ -11,6 +12,19 @@ class Convert
 		createStarters(@QUALIFIERS) #@STARTERS作成
 	end
 
+	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
+	def createStarters(qualifiers)
+		@STARTERS = []
+		@SYMBOL = []
+		qualifiers.each do |key,value|
+			@STARTERS << key + '\[.+?\]'
+			@STARTERS << key
+			@SYMBOL << key
+		end
+		@STARTERS.freeze
+		@SYMBOL.freeze
+	end
+
 	#修飾部分の分離
 	def separatorQ(qualifier)
 		intags = []
@@ -20,7 +34,11 @@ class Convert
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
 			qinfo = @QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
+				p qsub
+				qsub.gsub!(/^\[(.+?)\]$/,'\1')
+				p qsub
 				intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
+				p intags
 			elsif qinfo["point"] == "outtag"
 				qsub.gsub!(/^\[(.+?)\]$/,'\1')
 				outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
@@ -30,25 +48,6 @@ class Convert
 		intag = intags.empty? ? "":" " + intags.join(" ")
 		outtag = outtags.empty? ? "": [outtags[0].join(),outtags[1].join()]
 		return intag,outtag
-	end
-
-	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
-	def createStarters(qualifiers)
-		@STARTERS = []
-		@SYMBOL = []
-		qualifiers.each do |key,value|
-			if value["other"]
-				if value["other"].include?("bracket")
-					@STARTERS << key + '\[.+?\]'
-					@SYMBOL << key
-				end
-			else
-				@STARTERS << key
-				@SYMBOL << key
-			end
-		end
-		@STARTERS.freeze
-		@SYMBOL.freeze
 	end
 
 	#正規表現にマッチしたものをパーツごとに分ける
@@ -64,9 +63,7 @@ class Convert
 	def convert(contents,re)
 		contents.gsub!(re) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
-
 			intag,outtag = separatorQ(qualifier)
-
 			if tag == ""
 				if intag != "" && outtag != ""
 					goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
@@ -97,7 +94,7 @@ class Convert
 		while re =~ contents
 			contents.gsub!(re) do |match|
 				match.gsub!(/(\A@\(|\)@\Z)/,"")
-				convert(match,/^(?<prefix>[^\(\s]+)\s(?<subject>.+)/m)
+				convert(match,/(?<origin>^(?<prefix>[^\(\s]+)\s(?<subject>.+))/m)
 			end
 		end
 	end
@@ -106,6 +103,7 @@ class Convert
 		manyline(contents)
 		oneline(contents)
 		puts "converted:\n" + contents
+		return contents
 	end
 end
 

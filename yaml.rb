@@ -1,2 +1,3 @@
 require 'yaml'
-p YAML.load_file('config.yml')
+require 'pp'
+pp YAML.load_file('config.yml')
