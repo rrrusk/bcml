@@ -5,13 +5,13 @@ printで出力したデータはpython manage.py runserverのログでみれま�
 <h3>ソースコード</h3>
 polls/templates/polls/test.html
 <pre class="brush:html">
-<form action="/polls/test" method="POST">{% csrf_token %}
-	<label for="text">text:</label>
-	<input type="text" id="text" name="text">
-	<label for="number">number:</label>
-	<input type="number" id="number" name="number">
-	<input type="submit">
-</form>
+&lt;form action=&quot;/polls/test&quot; method=&quot;POST&quot;&gt;{% csrf_token %}
+	&lt;label for=&quot;text&quot;&gt;text:&lt;/label&gt;
+	&lt;input type=&quot;text&quot; id=&quot;text&quot; name=&quot;text&quot;&gt;
+	&lt;label for=&quot;number&quot;&gt;number:&lt;/label&gt;
+	&lt;input type=&quot;number&quot; id=&quot;number&quot; name=&quot;number&quot;&gt;
+	&lt;input type=&quot;submit&quot;&gt;
+&lt;/form&gt;
 </pre>
 
 polls/views.py
@@ -22,14 +22,14 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 
 def test(request):
-	if request.method == "POST": #requestがPOSTかGETか判別
-		print request.POST["text"]
-		print request.POST["number"]
+	if request.method == &quot;POST&quot;: #requestがPOSTかGETか判別
+		print request.POST[&quot;text&quot;]
+		print request.POST[&quot;number&quot;]
 		print request.POST
-		return HttpResponseRedirect("")
+		return HttpResponseRedirect(&quot;&quot;)
 
 	else: #POSTじゃない=GET
-		return render_to_response("polls/test.html",RequestContext(request))
+		return render_to_response(&quot;polls/test.html&quot;,RequestContext(request))
 </pre>
 <h3>補足</h3>
 form.htmlの{% csrf_token %}はPOSTをdjangoで使用するときブラウザ攻撃を防ぐラメに必要なものらしいのですが、詳しい説明は公式ドキュメントに投げることにします。

@@ -7,6 +7,11 @@ class Convert
 		# 設定ファイルからタグリストなどを読み込む
 		config = YAML.load_file('config.yml')
 		@TAGS = config["TAGS"].freeze
+		@TAG = []
+		config["TAGS"].each do |key,value|
+			@TAG << key
+		end
+		@TAG.freeze
 		@QUALIFIERS = config["QUALIFIERS"].freeze
 
 		createStarters(@QUALIFIERS) #@STARTERS作成
@@ -64,22 +69,26 @@ class Convert
 		contents.gsub!(re) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
 			intag,outtag = separatorQ(qualifier)
-			if tag == ""
-				if intag != "" && outtag != ""
-					goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
-				elsif outtag != ""
-					goal = outtag[0] + subject + outtag[1]
-				elsif intag != ""
-					goal = "<span#{intag}>" + subject + "</span>"
-				end
-			else
-				goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
-			end
-
 			#タグが設定されてるか確認
-			if @TAGS.include?(tag) || tag == ""
+			#タグのオプションによって処理を変えたい
+			if @TAG.include?(tag) || tag == ""
+				if tag == ""
+					if intag != "" && outtag != ""
+						goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
+					elsif outtag != ""
+						goal = outtag[0] + subject + outtag[1]
+					elsif intag != ""
+						goal = "<span#{intag}>" + subject + "</span>"
+					end
+				else
+					case
+					when @TAGS[tag] && @TAGS[tag]["escape"]
+						subject.gsub!(/[<>&"]/,"<" => "&lt;", ">" => "&gt;", "&" => "&amp;", '"' => "&quot;")
+					end
+					goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
+				end
 				goal
-			else
+			else #タグが無効なものだったら変換せずに終了
 				$~[:origin]
 			end
 		end
