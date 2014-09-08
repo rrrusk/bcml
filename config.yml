@@ -11,6 +11,10 @@ TAGS:
   div:
   pre:
     escape: true
+  midasi:
+    ul: mokuzi
+    other: [mokuzi]
+  mokuzi:
 QUALIFIERS:
   ".":
     point: intag

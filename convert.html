@@ -1,43 +1,13 @@
-djangoのrequest.POSTで送られてきたデータを取得
-
-djangoでフォームでデータを送ってそのデータをprintで出力してみましょう。
-printで出力したデータはpython manage.py runserverのログでみれます。
-<h3>ソースコード</h3>
-polls/templates/polls/test.html
-<pre class="brush:html">
-&lt;form action=&quot;/polls/test&quot; method=&quot;POST&quot;&gt;{% csrf_token %}
-	&lt;label for=&quot;text&quot;&gt;text:&lt;/label&gt;
-	&lt;input type=&quot;text&quot; id=&quot;text&quot; name=&quot;text&quot;&gt;
-	&lt;label for=&quot;number&quot;&gt;number:&lt;/label&gt;
-	&lt;input type=&quot;number&quot; id=&quot;number&quot; name=&quot;number&quot;&gt;
-	&lt;input type=&quot;submit&quot;&gt;
-&lt;/form&gt;
-</pre>
-
-polls/views.py
-<pre class="brush:python">
-# -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
-from django.template import RequestContext
-
-def test(request):
-	if request.method == &quot;POST&quot;: #requestがPOSTかGETか判別
-		print request.POST[&quot;text&quot;]
-		print request.POST[&quot;number&quot;]
-		print request.POST
-		return HttpResponseRedirect(&quot;&quot;)
-
-	else: #POSTじゃない=GET
-		return render_to_response(&quot;polls/test.html&quot;,RequestContext(request))
-</pre>
-<h3>補足</h3>
-form.htmlの{% csrf_token %}はPOSTをdjangoで使用するときブラウザ攻撃を防ぐラメに必要なものらしいのですが、詳しい説明は公式ドキュメントに投げることにします。
-<a href="http://docs.djangoproject.jp/en/latest/ref/contrib/csrf.html"><a>django公式ドキュメント</a></a>
-これを書かないとエラーが出るので忘れないようにしてください。
-
-それで、viewsの方なのですが、if request.method == "POST": の部分でリクエストがPOSTかどうかを判別しています。
-POSTじゃない(リクエストがGET)ならテンプレートからtest.htmlを読み込みます。
-逆にPOSTだった場合は request.POST["text"] でPOSTで送られてきたデータが辞書形式で読み込めるのでそれをprintで出力した後、リクエストを送ってきたページにリダイレクトしています。
-
-printの代わりにデータベースに保存させたりするようにすれば、色々なものが作れるようになる気がします。
+<p>あああああ
+あああ
+</p>
+<p>ああああ
+</p>
+</ br>
+<p>ああああ
+</p>
+<p>@h3 aa
+aaaa
+</p>
+</ br>
+</ br>

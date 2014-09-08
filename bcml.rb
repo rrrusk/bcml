@@ -39,11 +39,8 @@ class Convert
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
 			qinfo = @QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
-				p qsub
 				qsub.gsub!(/^\[(.+?)\]$/,'\1')
-				p qsub
 				intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
-				p intags
 			elsif qinfo["point"] == "outtag"
 				qsub.gsub!(/^\[(.+?)\]$/,'\1')
 				outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
@@ -63,6 +60,14 @@ class Convert
 		qualifier = prefix
 		tag = $~ ? $~[:tag] : ""
 		return subject,tag,qualifier
+	end
+
+	def text(contents)
+		contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
+			match.gsub!(/(?<origin>(.+\n)+)/,'<p>\k<origin></p>')
+			match.gsub!(/^\n/,"</ br>\n")
+			p match
+		end
 	end
 
 	def convert(contents,re)
@@ -108,7 +113,13 @@ class Convert
 		end
 	end
 
+	def comment(contents)
+		contents.gsub!(/^@---.+?---@$/m,"")
+	end
+
 	def main(contents)
+		comment(contents)
+		text(contents)
 		manyline(contents)
 		oneline(contents)
 		puts "converted:\n" + contents
@@ -132,3 +143,10 @@ converted = con.main(contents)
 newfile.write(converted) #書き込み
 #開いていたファイルを閉じる
 newfile.close
+
+=begin
+自動br挿入
+generalコンフィグ
+目次自動生成
+目次自動生成のような機能をコンフィグで
+=end
