@@ -12,6 +12,12 @@ class Convert
 			@TAG << key
 		end
 		@TAG.freeze
+		@STAGS = config["STAGS"].freeze
+		@STAG = []
+		config["STAGS"].each do |key,value|
+			@STAG << key
+		end
+		@STAG.freeze
 		@QUALIFIERS = config["QUALIFIERS"].freeze
 
 		createStarters(@QUALIFIERS) #@STARTERS作成
@@ -22,6 +28,7 @@ class Convert
 		@STARTERS = []
 		@SYMBOL = []
 		qualifiers.each do |key,value|
+			# keys = key.gsub(/([\\\*\+\.\?\{\}\(\)\[\]\-\^\$\|\/])/,'\\1')
 			@STARTERS << key + '\[.+?\]'
 			@STARTERS << key
 			@SYMBOL << key
@@ -35,8 +42,11 @@ class Convert
 		intags = []
 		outtags = [[],[]]
 		# /#{@STARTERS.join("|")}(\[.+?\]|[^#{@SYMBOL.join("")}])+/
-		qualifier.scan(/(?<starter>#{@STARTERS.join("|")})(?<qsub>(\[.+?\]|[^#{@SYMBOL.join("")}])+)/) do |match|
+		p 'q:' +qualifier
+		qualifier.scan(/(?<starter>\.|:|#)(?<qsub>(\[.+?\]|[^\.:#])+)/) do |match|
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
+			p starter
+			p qsub
 			qinfo = @QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
 				qsub.gsub!(/^\[(.+?)\]$/,'\1')
@@ -73,6 +83,7 @@ class Convert
 	def convert(contents,re)
 		contents.gsub!(re) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
+			p "tag:"+tag
 			intag,outtag = separatorQ(qualifier)
 			#タグが設定されてるか確認
 			#タグのオプションによって処理を変えたい
@@ -86,13 +97,22 @@ class Convert
 						goal = "<span#{intag}>" + subject + "</span>"
 					end
 				else
+					tagt = @TAGS[tag]
 					case
-					when @TAGS[tag] && @TAGS[tag]["escape"]
+					when tagt && tagt["escape"]
 						subject.gsub!(/[<>&"]/,"<" => "&lt;", ">" => "&gt;", "&" => "&amp;", '"' => "&quot;")
+					when tagt && tagt["mokuzi"]
+						@original.scan(/@h3/) do |match|
+							p match
+						end
 					end
 					goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
 				end
 				goal
+			
+			elsif @STAG.include?(tag)
+				p tag
+
 			else #タグが無効なものだったら変換せずに終了
 				$~[:origin]
 			end
@@ -118,6 +138,7 @@ class Convert
 	end
 
 	def main(contents)
+		@original = contents
 		comment(contents)
 		text(contents)
 		manyline(contents)

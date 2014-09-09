@@ -12,9 +12,10 @@ TAGS:
   pre:
     escape: true
   midasi:
-    ul: mokuzi
-    other: [mokuzi]
+    bcml: h3.bbb
+STAGS:
   mokuzi:
+    mokuzi: true
 QUALIFIERS:
   ".":
     point: intag
