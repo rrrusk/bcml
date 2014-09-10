@@ -71,7 +71,7 @@ class Convert
 
 	def text(contents)
 		contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
-			match.gsub!(/(?<origin>(.+\n)+)/,'<p>\k<origin></p>')
+			match.gsub!(/(?<origin>(.+\n)+)/,"<p>\n\\k<origin>\n</p>")
 			match.gsub!(/^\n/,"</ br>\n")
 			match
 		end
@@ -103,12 +103,17 @@ class Convert
 				end
 				goal
 			
-			#elsif @STAG.include?(tag)
-			#	case
-			#	when @STAGS[tag]["mokuzi"]
-			#		@original.scan(/@h3/) do |match|
-			#		end
-			#	end
+			elsif @STAG.include?(tag)
+				p 'stag'
+				case
+				when @STAGS[tag]["mokuzi"]
+					p 'moku'
+					mokuh3 = [] unless defined? mokuh3
+					@original.scan(/@h3/) do |match|
+						mokuh3 << '@h3'
+					end
+					p mokuh3
+				end
 
 			else #タグが無効なものだったら変換せずに終了
 				$~[:origin]
@@ -135,6 +140,7 @@ class Convert
 	end
 
 	def main(contents)
+		@origin = contents.dup
 		comment(contents)
 		text(contents)
 		manyline(contents)
