@@ -42,11 +42,8 @@ class Convert
 		intags = []
 		outtags = [[],[]]
 		# /#{@STARTERS.join("|")}(\[.+?\]|[^#{@SYMBOL.join("")}])+/
-		p 'q:' +qualifier
-		qualifier.scan(/(?<starter>\.|:|#)(?<qsub>(\[.+?\]|[^\.:#])+)/) do |match|
+		qualifier.scan(/(?<starter>[\.:#])(?<qsub>(\[.+?\]|[^\.:#])+)/) do |match|
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
-			p starter
-			p qsub
 			qinfo = @QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
 				qsub.gsub!(/^\[(.+?)\]$/,'\1')
@@ -76,14 +73,14 @@ class Convert
 		contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
 			match.gsub!(/(?<origin>(.+\n)+)/,'<p>\k<origin></p>')
 			match.gsub!(/^\n/,"</ br>\n")
-			p match
+			match
 		end
+		return contents
 	end
 
 	def convert(contents,re)
 		contents.gsub!(re) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
-			p "tag:"+tag
 			intag,outtag = separatorQ(qualifier)
 			#タグが設定されてるか確認
 			#タグのオプションによって処理を変えたい
@@ -101,17 +98,17 @@ class Convert
 					case
 					when tagt && tagt["escape"]
 						subject.gsub!(/[<>&"]/,"<" => "&lt;", ">" => "&gt;", "&" => "&amp;", '"' => "&quot;")
-					when tagt && tagt["mokuzi"]
-						@original.scan(/@h3/) do |match|
-							p match
-						end
 					end
 					goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
 				end
 				goal
 			
-			elsif @STAG.include?(tag)
-				p tag
+			#elsif @STAG.include?(tag)
+			#	case
+			#	when @STAGS[tag]["mokuzi"]
+			#		@original.scan(/@h3/) do |match|
+			#		end
+			#	end
 
 			else #タグが無効なものだったら変換せずに終了
 				$~[:origin]
@@ -138,12 +135,13 @@ class Convert
 	end
 
 	def main(contents)
-		@original = contents
 		comment(contents)
 		text(contents)
 		manyline(contents)
 		oneline(contents)
-		puts "converted:\n" + contents
+		puts 'return'
+		puts contents
+		puts 'end'
 		return contents
 	end
 end
