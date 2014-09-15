@@ -136,11 +136,21 @@ class Convert
 				case
 				when @STAGS[stag]["mokuzi"]
 					@mokuh3 = [] if @mokuh3.nil?
+
+					i = 0
 					# p @original.scan(/(?<origin>^\s*@(?<prefix>h3[^\(\s]*)\s(?<subject>.+))/)
-					contents.scan(/<h3(?<attr>.*?)>(?<con>.+?)<\/h3>/m) do |match|
-						@mokuh3 << $~[:con] 
+					contents.scan(/<h3(?<attr>\s.*?)?>(?<con>.+?)<\/h3>/m) do |match|
+						con,attr = $~[:con],$~[:attr]
+						con.gsub!(/<.+?>/, "")
+						@mokuh3 << con 
+						p "<h3#{attr} id=\"#{i}h3\">#{con}</h3>"
+						i += 1
 					end
-					p @mokuh3
+					li = ""
+					@mokuh3.each_with_index do |var,index|
+						li = li + "<li><a href=\"#h3#{index}\">#{var}</a></li>"
+					end
+					"<ul>#{li}</ul>"
 				end
 			else
 				$~[0]
