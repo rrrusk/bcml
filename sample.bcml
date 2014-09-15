@@ -14,11 +14,13 @@ f
 jfa @(h3 hello
 )@
 aafda)@
+@mokuzi
 @a.yaml:[http://google.com] aa
 @(h2 fafdaf)@
 @foo fooo
 @ふう ふうう
 @.yaml:[http://yahoo.com] yahoo
+@(.yaa hello)@
 @span @(h4 hell to you! )@fa
 @div divv
 <!-- <h3>hello</h3> -->

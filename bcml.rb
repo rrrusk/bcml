@@ -42,7 +42,7 @@ class Convert
 		intags = []
 		outtags = [[],[]]
 		# /#{@STARTERS.join("|")}(\[.+?\]|[^#{@SYMBOL.join("")}])+/
-		qualifier.scan(/(?<starter>[\.:#])(?<qsub>(\[.+?\]|[^\.:#])+)/) do |match|
+		qualifier.scan(/(?<starter>[.:#])(?<qsub>(\[.+?\]|[^.:#])+)/) do |match|
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
 			qinfo = @QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
@@ -86,6 +86,7 @@ class Convert
 			#タグのオプションによって処理を変えたい
 			if @TAG.include?(tag) || tag == ""
 				if tag == ""
+					p "tagssss"
 					if intag != "" && outtag != ""
 						goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
 					elsif outtag != ""
@@ -102,18 +103,6 @@ class Convert
 					goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
 				end
 				goal
-			
-			elsif @STAG.include?(tag)
-				p 'stag'
-				case
-				when @STAGS[tag]["mokuzi"]
-					p 'moku'
-					mokuh3 = [] unless defined? mokuh3
-					@original.scan(/@h3/) do |match|
-						mokuh3 << '@h3'
-					end
-					p mokuh3
-				end
 
 			else #タグが無効なものだったら変換せずに終了
 				$~[:origin]
@@ -122,7 +111,7 @@ class Convert
 	end
 
 	def oneline(contents)
-		convert(contents,/(?<origin>^\s*@(?<prefix>[^\(\s]+)\s(?<subject>.+))/)
+		convert(contents,/(?<origin>^\s*@(?<prefix>[^( ]+)\s(?<subject>.+))/)
 	end
 
 	def manyline(contents)
@@ -135,16 +124,42 @@ class Convert
 		end
 	end
 
+	def stag(contents)
+		contents.gsub!(/^\s*@(?<stag>[^\s\[]+)(?<ssub>\[.+?\])?/) do |match|
+			stag = $~[:stag]
+
+			unless $~[:ssub].nil?
+				ssub = $~[:ssub]
+				ssub.gsub!(/^\[(.+?)\]$/,'\1')
+			end
+
+			if @STAG.include?(stag)
+				case
+				when @STAGS[stag]["mokuzi"]
+					@mokuh3 = [] if @mokuh3.nil?
+					p @original.scan(/(?<origin>^\s*@(?<prefix>h3[^\(\s]*)\s(?<subject>.+))/)
+					contents.scan(/<h3(?<test><.*?>).+<\/h3>/m) do |match|
+						@mokuh3 << 'mokuh3'
+					end
+					p @mokuh3
+				end
+			else
+				$~[0]
+			end
+		end
+	end
+
 	def comment(contents)
 		contents.gsub!(/^@---.+?---@$/m,"")
 	end
 
 	def main(contents)
-		@origin = contents.dup
+		@original = contents.dup
 		comment(contents)
 		text(contents)
 		manyline(contents)
 		oneline(contents)
+		stag(contents)
 		puts 'return'
 		puts contents
 		puts 'end'
