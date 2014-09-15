@@ -14,8 +14,8 @@ f
 jfa @(h3 hello
 )@
 aafda)@
-@mokuzi
-@a.yaml:[http://google.com] aa
+
+@.yaml:[http://google.com] aa
 @(h2 fafdaf)@
 @foo fooo
 @ふう ふうう

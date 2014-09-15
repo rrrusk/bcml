@@ -86,7 +86,6 @@ class Convert
 			#タグのオプションによって処理を変えたい
 			if @TAG.include?(tag) || tag == ""
 				if tag == ""
-					p "tagssss"
 					if intag != "" && outtag != ""
 						goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
 					elsif outtag != ""
@@ -137,9 +136,9 @@ class Convert
 				case
 				when @STAGS[stag]["mokuzi"]
 					@mokuh3 = [] if @mokuh3.nil?
-					p @original.scan(/(?<origin>^\s*@(?<prefix>h3[^\(\s]*)\s(?<subject>.+))/)
-					contents.scan(/<h3(?<test><.*?>).+<\/h3>/m) do |match|
-						@mokuh3 << 'mokuh3'
+					# p @original.scan(/(?<origin>^\s*@(?<prefix>h3[^\(\s]*)\s(?<subject>.+))/)
+					contents.scan(/<h3(?<attr>.*?)>(?<con>.+?)<\/h3>/m) do |match|
+						@mokuh3 << $~[:con] 
 					end
 					p @mokuh3
 				end
