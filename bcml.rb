@@ -124,36 +124,39 @@ class Convert
 	end
 
 	def stag(contents)
-		contents.gsub!(/^\s*@(?<stag>[^\s\[]+)(?<ssub>\[.+?\])?/) do |match|
-			stag = $~[:stag]
-
-			unless $~[:ssub].nil?
-				ssub = $~[:ssub]
-				ssub.gsub!(/^\[(.+?)\]$/,'\1')
-			end
+		foo = contents.scan(/(?<origin>^\s*@(?<stag>[^\s\[]+)(\[(?<ssub>.+?)\])?)/)
+		foo.each do |x|
+			stag = x[1]
 
 			if @STAG.include?(stag)
+				origin = x[0]
+				unless x[2].nil?
+					ssub = x[2]
+				end
 				case
 				when @STAGS[stag]["mokuzi"]
 					@mokuh3 = [] if @mokuh3.nil?
 
 					i = 0
 					# p @original.scan(/(?<origin>^\s*@(?<prefix>h3[^\(\s]*)\s(?<subject>.+))/)
-					contents.scan(/<h3(?<attr>\s.*?)?>(?<con>.+?)<\/h3>/m) do |match|
-						con,attr = $~[:con],$~[:attr]
+					target = contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
+					p target
+					target.each do |x|
+						p x
+						object,attr,con = x[0],x[1],x[2]
 						con.gsub!(/<.+?>/, "")
 						@mokuh3 << con 
-						p "<h3#{attr} id=\"#{i}h3\">#{con}</h3>"
+						contents.gsub!(/#{object}/,"<#{ssub}#{attr} id=\"#{i}#{ssub}\">#{con}</#{ssub}>")
 						i += 1
 					end
+
 					li = ""
 					@mokuh3.each_with_index do |var,index|
-						li = li + "<li><a href=\"#h3#{index}\">#{var}</a></li>"
+						li = li + "<li><a href=\"##{index}#{ssub}\">#{var}</a></li>"
 					end
-					"<ul>#{li}</ul>"
+					origin.gsub!(/([-\\*+.?{}()\[\]^$|\/])/) { '\\' + $1 } #正規表現で使えるようエスケープ
+					contents.gsub!(/#{origin}/, "<ul>#{li}</ul>") #@mokuzi[]を目次に変更
 				end
-			else
-				$~[0]
 			end
 		end
 	end
