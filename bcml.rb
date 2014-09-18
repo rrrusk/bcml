@@ -1,6 +1,7 @@
 # encoding utf-8
 require 'yaml'
 require 'pp'
+require 'strscan'
 #コンバート処理
 class Convert
 	def initialize()
@@ -71,11 +72,29 @@ class Convert
 	end
 
 	def text(contents)
-		contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
-			match.gsub!(/(?<origin>(.+\n)+)/,"<p>\n\\k<origin>\n</p>")
-			match.gsub!(/^\n/,"<br />\n")
-			match
+		#contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
+		#	match.gsub!(/(?<origin>(.+\n)+)/,"<p>\n\\k<origin>\n</p>")
+		#	match.gsub!(/^\n/,"<br />\n")
+		#	match
+		#end
+
+		#s = StringScanner.new(contents)
+		#until s.eos?
+		#	case
+		#	when s.scan_until(/^[ \t]*@[^( ]+[ \t].+/)
+		#		contents.gsub!(/$/,"<br />\n")
+		#	when s.scan(/./m)
+		#	else
+		#	end
+		#end
+		contents.each_line do |line|
+			if line !~ /(<.*?>)$/
+				line.gsub!(/$/,"<br>")
+				p line
+			end
+			line
 		end
+
 		return contents
 	end
 
@@ -111,7 +130,7 @@ class Convert
 	end
 
 	def oneline(contents)
-		convert(contents,/(?<origin>^\s*@(?<prefix>[^( ]+)\s(?<subject>.+))/)
+		convert(contents,/(?<origin>^[ \t]*@(?<prefix>[^( ]+)[ \t](?<subject>.+))/)
 	end
 
 	def manyline(contents)
@@ -181,7 +200,7 @@ class Convert
 				utagt << x[0]
 			end
 		end
-		contents.gsub!(/(#{utagt})(?=\s+)/, utagh)
+		contents.gsub!(/(#{utagt})(?=[ \t]+)/, utagh)
 	end
 
 	def main(contents)
