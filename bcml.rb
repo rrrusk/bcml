@@ -19,6 +19,7 @@ class Convert
 		end
 		@STAG.freeze
 		@QUALIFIERS = config["QUALIFIERS"].freeze
+		@UTAGS = config["UTAGS"].freeze
 
 		createStarters(@QUALIFIERS) #@STARTERS作成
 	end
@@ -72,7 +73,7 @@ class Convert
 	def text(contents)
 		contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
 			match.gsub!(/(?<origin>(.+\n)+)/,"<p>\n\\k<origin>\n</p>")
-			match.gsub!(/^\n/,"</ br>\n")
+			match.gsub!(/^\n/,"<br />\n")
 			match
 		end
 		return contents
@@ -165,13 +166,32 @@ class Convert
 		contents.gsub!(/^@---.+?---@$/m,"")
 	end
 
+	def utag(contents)
+		utagl = []
+		utagh = {} 
+		utagt = ""
+		@UTAGS.each do |key,value|
+			utagl << ['@'+key,'@'+value["bcml"]]
+		end
+		utagl.each_with_index do |x,index|
+			utagh[x[0]] = x[1]
+			unless index == utagl.length - 1
+				utagt << x[0] + "|"
+			else
+				utagt << x[0]
+			end
+		end
+		contents.gsub!(/(#{utagt})(?=\s+)/, utagh)
+	end
+
 	def main(contents)
 		@original = contents.dup
 		comment(contents)
-		text(contents)
+		utag(contents)
 		manyline(contents)
 		oneline(contents)
 		stag(contents)
+		text(contents)
 		puts 'return'
 		puts contents
 		puts 'end'

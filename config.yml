@@ -1,4 +1,13 @@
 ---
+UTAGS:
+  midasi:
+    bcml: h3.bbb
+  ruby:
+    bcml: pre.[brush:ruby]
+  python:
+    bcml: pre.[brush:python]
+  js:
+    bcml: pre.[brush:js]
 TAGS:
   h1:
   h2:
@@ -11,8 +20,6 @@ TAGS:
   div:
   pre:
     escape: true
-  midasi:
-    bcml: h3.bbb
 STAGS:
   mokuzi:
     mokuzi: true
