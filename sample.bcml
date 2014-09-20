@@ -1,8 +1,12 @@
+a
+a
+
+a
 @h1 h11
 a
 @h2 h22
 a
-@mokuzi[h2] 
+@mokuzi[h2]
 @h3 h33
   @h4 h44
 f
@@ -10,6 +14,8 @@ f
 @h2#head headd
 @(h3 hehefff @(a.yaml hello )@ )@
 @h5.he#ha h55
+はろー
+わーるど
 @(h4 
 jfa @(h3 hello
 )@

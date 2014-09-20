@@ -1,6 +1,5 @@
 # encoding utf-8
 require 'yaml'
-require 'pp'
 require 'strscan'
 #コンバート処理
 class Convert
@@ -72,27 +71,37 @@ class Convert
 	end
 
 	def text(contents)
+		#contents.each_line do |line|
+		#	if line !~ /(<.*?>)$/
+		#		line.gsub!(/$/,"<br>")
+		#		p line
+		#	end
+		#	line
+		#end
+
 		#contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
 		#	match.gsub!(/(?<origin>(.+\n)+)/,"<p>\n\\k<origin>\n</p>")
 		#	match.gsub!(/^\n/,"<br />\n")
 		#	match
 		#end
 
-		#s = StringScanner.new(contents)
-		#until s.eos?
-		#	case
-		#	when s.scan_until(/^[ \t]*@[^( ]+[ \t].+/)
-		#		contents.gsub!(/$/,"<br />\n")
-		#	when s.scan(/./m)
-		#	else
-		#	end
-		#end
-		contents.each_line do |line|
-			if line !~ /(<.*?>)$/
-				line.gsub!(/$/,"<br>")
-				p line
+		s = StringScanner.new(contents)
+		point = []
+		until s.eos?
+			if s.skip(/^[ \t]*@[^\( ]+[ \t].+/)
+			elsif s.skip(/<\/.+>[ \t]?$/)
+			elsif s.scan(/.$/)
+				p s.charpos
+				point << s.charpos
+			elsif s.scan(/./m)
 			end
-			line
+		end
+		
+		p point
+		pluspoint = 0
+		point.each do |x|
+			contents.insert(x + pluspoint,"<br>")
+			pluspoint += 4
 		end
 
 		return contents
