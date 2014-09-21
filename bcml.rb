@@ -71,33 +71,37 @@ class Convert
 	end
 
 	def text(contents)
-		#contents.each_line do |line|
-		#	if line !~ /(<.*?>)$/
-		#		line.gsub!(/$/,"<br>")
-		#		p line
-		#	end
-		#	line
-		#end
-
-		#contents.gsub!(/.*(?!\A\s*@[^\(\s]+\s\z)/m) do |match|
-		#	match.gsub!(/(?<origin>(.+\n)+)/,"<p>\n\\k<origin>\n</p>")
-		#	match.gsub!(/^\n/,"<br />\n")
-		#	match
-		#end
+		s = StringScanner.new(contents)
+		texttag = nil
+		test = [[],[]]
+		until s.eos?
+			case
+			when texttag
+				if s.skip_until(/<\/#{texttag}>/)
+					texttag = nil
+				end
+			when s.skip(/<(?<tag>[a-zA-Z0-9]+).*?>/)
+				texttag = s[:tag]
+			when s.skip(/\n./)
+				test[0] << s.charpos
+			when s.skip(/\n$/)
+				test[1] << s.charpos
+			when s.skip(/./m)
+			end
+		end
+		p test
 
 		s = StringScanner.new(contents)
 		point = []
 		until s.eos?
-			if s.skip(/^[ \t]*@[^\( ]+[ \t].+/)
-			elsif s.skip(/<\/.+>[ \t]?$/)
-			elsif s.scan(/.$/)
-				p s.charpos
+			case
+			when s.skip(/<\/.+>[ \t]?$/)
+			when s.scan(/(\n|.)$/)
 				point << s.charpos
-			elsif s.scan(/./m)
+			when s.skip(/./m)
 			end
 		end
 		
-		p point
 		pluspoint = 0
 		point.each do |x|
 			contents.insert(x + pluspoint,"<br>")

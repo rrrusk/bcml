@@ -1,0 +1,34 @@
+facebook apiでアプリを公開するまで
+
+facebook apiを使ってdjangoでなんかしようと思い、facebook apiを登録したのですがハマりポイントがちょくちょくあるので僕がハマったポイントと共に解説していこうと思います。
+
+@mokuzi[h3]
+
+@midasi アプリを登録する
+このページにアクセスして、Add a new appでアプリケーションを登録します。
+@:[https://developers.facebook.com/] Facebook Developers
+今回はウェブサイトを選択します。
+
+アプリの名前を決めたらCreate New Facebook App IDを押して、ダイアログに適当に答えます。
+Skip Quickstartを押せばチュートリアルみたいなのは飛ばせます。
+
+@midasi apiキーの確認
+dashboardからapiキーを確認できます。
+このキーはapiを使うときに必要になるのでここで見れることを覚えておきましょう。
+
+@midasi 各種設定
+settingsのBasicでContact EmailとSite URLとMobile Site URLを設定します。
+今回はローカルで動かすのでlocalhostを設定しました。
+Contact Emailは後述するSandbox modeの解除に必要なので設定しておきましょう。
+
+@midasi Sandbox modeの解除
+開発中は開発者以外からはアプリを見ることができないようにするSandbox modeというものがあるのですが、公開するときはこのモードを解除しないといけないのでYESにして解除しましょう。
+
+@midasi おまけ
+facebookは仕様上捨てアカウントを作ってはいけないということになっているのですが、開発をしていると複数のユーザーを使ってテストしたくなると思います。
+そんなときには、RolesのTEST USERからAddを押すとこんな画面が出てくるので必要なユーザー数を選んでCreate Test Usersをしましょう。
+
+この機能はSandbox modeが有効になっていても使えるようです。
+
+@midasi 最後に
+APIの設定ミスによる不具合は原因が特定しづらい上に情報がそんなに無かったりすることが多々あるので、この記事が少しでも役立てば書いたかいがあるというものです。
