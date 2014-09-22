@@ -73,23 +73,60 @@ class Convert
 	def text(contents)
 		s = StringScanner.new(contents)
 		texttag = nil
-		test = [[],[]]
+		test = [[],[],[],[]]
+		taghash = {}
+		tagbra = [[],[]]
+		kaigyou = []
+		textpos = nil
+		startp = 0
 		until s.eos?
 			case
 			when texttag
-				if s.skip_until(/<\/#{texttag}>/)
+				if s.scan_until(/<\/#{texttag}>/)
+					tagbra[1] << s.charpos
+					taghash[textpos] = s.charpos
 					texttag = nil
+					textpos = nil
 				end
-			when s.skip(/<(?<tag>[a-zA-Z0-9]+).*?>/)
+			when s.scan(/<(?<tag>[a-zA-Z0-9]+).*?>/)
+				tagbra[0] << s.charpos - s[0].length
+				textpos = s.charpos - s[0].length
 				texttag = s[:tag]
-			when s.skip(/\n./)
-				test[0] << s.charpos
+				startp = 0
 			when s.skip(/\n$/)
-				test[1] << s.charpos
+				kaigyou << s.charpos
+				test[2] << s.charpos
+				if startp == 1
+					test[3] << s.charpos
+					startp = 0
+				end
+			when s.skip(/^\n(?=.)/)
+					test[0] << s.charpos
+					if startp == 0
+						test[1] << s.charpos
+						startp = 1
+					end
 			when s.skip(/./m)
 			end
 		end
-		p test
+		p kaigyou
+		p tagbra
+		p taghash
+		pluspoint = 0
+		taghash.each do |key,var|
+			contents.insert(key + pluspoint,"</p>")
+			pluspoint += 4
+			contents.insert(var + pluspoint,"<p>")
+			pluspoint += 3
+		end
+
+		contents.gsub!(/^\n$/,"</p><p>")
+		contents.insert(0,"<p>")
+		contents.insert(-1,"</p>")
+		#test[1].each do |x|
+		#	contents.insert(x + pluspoint,"<p>")
+		#	pluspoint += 3
+		#end
 
 		s = StringScanner.new(contents)
 		point = []
@@ -173,9 +210,7 @@ class Convert
 					i = 0
 					# p @original.scan(/(?<origin>^\s*@(?<prefix>h3[^\(\s]*)\s(?<subject>.+))/)
 					target = contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
-					p target
 					target.each do |x|
-						p x
 						object,attr,con = x[0],x[1],x[2]
 						con.gsub!(/<.+?>/, "")
 						@mokuh3 << con 
