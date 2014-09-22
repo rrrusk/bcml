@@ -1,34 +1,35 @@
-<p>aaa<br>
-aaaaaa<br>
+<p>facebook apiでアプリを公開するまで<br>
 <br>
-avvv<br>
-</p><h1>h11</h1><p>
-avj<br>
-</p><h2 id="0h2">h22</h2><p>
-abviiju<br>
-</p><ul><li><a href="#0h2">h22</a></li><li><a href="#1h2">headd</a></li><li><a href="#2h2">fafdaf</a></li></ul><p>
-@h3 h33<br>
-</p><h4>h44</h4><p>
-f<br>
-</p><h6 class="bbb">h66</h6><p>
-</p><h2 id="head" id="1h2">headd</h2><p>
-</p><h3>hehefff <a class="yaml">hello </a> </h3><p>
-</p><h5 class="he" id="ha">h55</h5><p>
-はろー<br>
-わーるど<br>
-</p><h4>
-jfa <h3>hello<br>
-</h3>
-aafda</h4><p>
-</p><p>
-</p><a href="http://google.com"><span class="yaml">aa</span></a><p>
-</p><h2 id="2h2">fafdaf</h2><p>
+facebook apiを使ってdjangoでなんかしようと思い、facebook apiを登録したのですがハマりポイントがちょくちょくあるので僕がハマったポイントと共に解説していこうと思います。</p>
+<ul><li><a href="#0h3">apiキーの確認</a></li><li><a href="#1h3">各種設定</a></li><li><a href="#2h3">Sandbox modeの解除</a></li><li><a href="#3h3">おまけ</a></li><li><a href="#4h3">最後に</a></li></ul><p>
 <br>
-@foo fooo<br>
-@ふう ふうう<br>
-</p><a href="http://yahoo.com"><span class="yaml">yahoo</span></a><p>
-</p><span class="yaa">hello</span><p>
-</p><span><h4>hell to you! </h4>fa</span><p>
-</p><div>divv</div><p>
-<!-- </p><h3>hello</h3><p> -->
+a<br>
+@h3.bbb アプリを登録する<br>
+このページにアクセスして、Add a new appでアプリケーションを登録します。</p>
+<a href="https://developers.facebook.com/">Facebook Developers</a><p>
+今回はウェブサイトを選択します。<br>
+<br>
+アプリの名前を決めたらCreate New Facebook App IDを押して、ダイアログに適当に答えます。<br>
+Skip Quickstartを押せばチュートリアルみたいなのは飛ばせます。<br>
+</p>
+<h3 class="bbb" id="0h3">apiキーの確認</h3><p>
+dashboardからapiキーを確認できます。<br>
+このキーはapiを使うときに必要になるのでここで見れることを覚えておきましょう。<br>
+</p>
+<h3 class="bbb" id="1h3">各種設定</h3><p>
+settingsのBasicでContact EmailとSite URLとMobile Site URLを設定します。<br>
+今回はローカルで動かすのでlocalhostを設定しました。<br>
+Contact Emailは後述するSandbox modeの解除に必要なので設定しておきましょう。<br>
+</p>
+<h3 class="bbb" id="2h3">Sandbox modeの解除</h3><p>
+開発中は開発者以外からはアプリを見ることができないようにするSandbox modeというものがあるのですが、公開するときはこのモードを解除しないといけないのでYESにして解除しましょう。<br>
+</p>
+<h3 class="bbb" id="3h3">おまけ</h3><p>
+facebookは仕様上捨てアカウントを作ってはいけないということになっているのですが、開発をしていると複数のユーザーを使ってテストしたくなると思います。<br>
+そんなときには、RolesのTEST USERからAddを押すとこんな画面が出てくるので必要なユーザー数を選んでCreate Test Usersをしましょう。<br>
+<br>
+この機能はSandbox modeが有効になっていても使えるようです。<br>
+</p>
+<h3 class="bbb" id="4h3">最後に</h3><p>
+APIの設定ミスによる不具合は原因が特定しづらい上に情報がそんなに無かったりすることが多々あるので、この記事が少しでも役立てば書いたかいがあるというものです。<br>
 </p>

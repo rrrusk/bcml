@@ -84,7 +84,7 @@ class Convert
 					textpos = nil
 				end
 			when s.scan(/<(?<tag>[a-zA-Z0-9]+).*?>/)
-				textpos = s.charpos - s[0].length
+				textpos = s.charpos - s[0].length - 1
 				texttag = s[:tag]
 			when s.skip(/./m)
 			end
@@ -101,6 +101,7 @@ class Convert
 		contents.gsub!(/^\n$/,"</p><p>")
 		contents.insert(0,"<p>")
 		contents.insert(-1,"</p>")
+		contents.gsub!(/<p>[ \t]*(\n?)<\/p>/,'\1')
 
 		s = StringScanner.new(contents)
 		point = []
