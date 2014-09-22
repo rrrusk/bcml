@@ -73,44 +73,22 @@ class Convert
 	def text(contents)
 		s = StringScanner.new(contents)
 		texttag = nil
-		test = [[],[],[],[]]
 		taghash = {}
-		tagbra = [[],[]]
-		kaigyou = []
 		textpos = nil
-		startp = 0
 		until s.eos?
 			case
 			when texttag
 				if s.scan_until(/<\/#{texttag}>/)
-					tagbra[1] << s.charpos
 					taghash[textpos] = s.charpos
 					texttag = nil
 					textpos = nil
 				end
 			when s.scan(/<(?<tag>[a-zA-Z0-9]+).*?>/)
-				tagbra[0] << s.charpos - s[0].length
 				textpos = s.charpos - s[0].length
 				texttag = s[:tag]
-				startp = 0
-			when s.skip(/\n$/)
-				kaigyou << s.charpos
-				test[2] << s.charpos
-				if startp == 1
-					test[3] << s.charpos
-					startp = 0
-				end
-			when s.skip(/^\n(?=.)/)
-					test[0] << s.charpos
-					if startp == 0
-						test[1] << s.charpos
-						startp = 1
-					end
 			when s.skip(/./m)
 			end
 		end
-		p kaigyou
-		p tagbra
 		p taghash
 		pluspoint = 0
 		taghash.each do |key,var|
@@ -123,10 +101,6 @@ class Convert
 		contents.gsub!(/^\n$/,"</p><p>")
 		contents.insert(0,"<p>")
 		contents.insert(-1,"</p>")
-		#test[1].each do |x|
-		#	contents.insert(x + pluspoint,"<p>")
-		#	pluspoint += 3
-		#end
 
 		s = StringScanner.new(contents)
 		point = []
