@@ -261,19 +261,3 @@ class Convert
 		return contents
 	end
 end
-
-fileName = File.basename(ARGV[0],'.bcml') #引数からファイル読み込み
-newfile = open('convert' + '.html', 'w') #変換先ファイルを開く
-
-#変換元ファイルを開いて変数に格納した後閉じる
-source = open(fileName + '.bcml')
-contents = source.read
-source.close
-
-#変換元データを処理した後変換先ファイルに書き込み
-con = Convert.new
-converted = con.main(contents)
-
-newfile.write(converted) #書き込み
-#開いていたファイルを閉じる
-newfile.close
