@@ -17,8 +17,6 @@ class Convert
 		@TAG.freeze
 
 		@STAGS = config["STAGS"].freeze
-		@STAG = make_list(config["STAGS"])
-		@STAG.freeze
 
 		@QUALIFIERS = config["QUALIFIERS"].freeze
 		create_starters(@QUALIFIERS) #@STARTERS作成
@@ -82,7 +80,8 @@ class Convert
 		point = []
 		until s.eos?
 			case
-			when s.skip(/<\/.+>[ \t]?$/)
+			when s.skip(/<\/.+?>[ \t]?$/)
+			when s.skip(/<.+?>[ \t]?$/)
 			when s.scan(/(\n|.)$/)
 				point << s.charpos
 			when s.skip(/./m)
@@ -164,7 +163,7 @@ class Convert
 	end
 
 	def oneline(contents)
-		convert(contents,/(?<origin>^[ \t]*@(?<prefix>[^( ]+)[ \t](?<subject>.+))/)
+		convert(contents,/(?<origin>^[ \t]*@(?<prefix>[^(\s]+)[ \t](?<subject>.+))/)
 	end
 
 	def manyline(contents)
@@ -182,17 +181,16 @@ class Convert
 		foo.each do |x|
 			stag = x[1]
 
-			if @STAG.include?(stag)
+			if @STAGS.include?(stag)
 				origin = x[0]
 				unless x[2].nil?
 					ssub = x[2]
 				end
 				case
-				when @STAGS[stag]["mokuzi"]
+				when stag = "mokuzi"
 					@mokuh3 = [] if @mokuh3.nil?
 
 					i = 0
-					# p @original.scan(/(?<origin>^\s*@(?<prefix>h3[^\(\s]*)\s(?<subject>.+))/)
 					target = contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
 					target.each do |x|
 						object,attr,con = x[0],x[1],x[2]
@@ -226,7 +224,7 @@ class Convert
 		utagh = {} 
 		utagt = ""
 		@UTAGS.each do |key,value|
-			utagl << ['@'+key,'@'+value["bcml"]]
+			utagl << [key,value["bcml"]]
 		end
 		utagl.each_with_index do |x,index|
 			utagh[x[0]] = x[1]
@@ -236,11 +234,13 @@ class Convert
 				utagt << x[0]
 			end
 		end
-		contents.gsub!(/(#{utagt})(?=[ \t]+)/, utagh)
+		p utagl
+		p utagh
+		p utagt
+		contents.gsub!(/(?<=@|@\()(#{utagt})(?=[ \t]+)/, utagh)
 	end
 
 	def main(contents)
-		@original = contents.dup
 		comment(contents)
 		utag(contents)
 		manyline(contents)
