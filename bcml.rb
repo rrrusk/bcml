@@ -197,11 +197,15 @@ class Convert
 					@mokuh3.each_with_index do |var,index|
 						li = li + "<li><a href=\"##{index}#{ssub}\">#{var}</a></li>"
 					end
-					origin.gsub!(/([-\\*+.?{}()\[\]^$|\/])/) { '\\' + $1 } #正規表現で使えるようエスケープ
+					origin = regex_esc(origin)
 					contents.gsub!(/#{origin}/, "<ul>#{li}</ul>") #@mokuzi[]を目次に変更
 				end
 			end
 		end
+	end
+
+	def regex_esc(strings)
+		strings.gsub!(/([-\\*+.?{}()\[\]^$|\/])/) { '\\' + $1 } #正規表現で使えるようエスケープ
 	end
 
 	def comment(contents)
