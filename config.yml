@@ -1,4 +1,7 @@
 ---
+GENERAL:
+  symbol: ["@", "@(", ")@"]
+  bracket: ["[", "]"]
 UTAGS:
   midasi:
     bcml: h3.bbb

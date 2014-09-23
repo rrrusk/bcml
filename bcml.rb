@@ -4,38 +4,45 @@ require 'strscan'
 #コンバート処理
 class Convert
 	def initialize()
-		# 設定ファイルからタグリストなどを読み込む
-		config = YAML.load_file('config.yml')
-		@TAGS = config["TAGS"].freeze
-		@TAG = []
-		config["TAGS"].each do |key,value|
-			@TAG << key
-		end
-		@TAG.freeze
-		@STAGS = config["STAGS"].freeze
-		@STAG = []
-		config["STAGS"].each do |key,value|
-			@STAG << key
-		end
-		@STAG.freeze
-		@QUALIFIERS = config["QUALIFIERS"].freeze
-		@UTAGS = config["UTAGS"].freeze
+		# 設定ファイルから変数定義
+		config_open()
+	end
 
-		createStarters(@QUALIFIERS) #@STARTERS作成
+	# 設定ファイルから変数定義
+	def config_open()
+		config = YAML.load_file('config.yml')
+
+		@TAGS = config["TAGS"].freeze
+		@TAG = make_list(config["TAGS"])
+		@TAG.freeze
+
+		@STAGS = config["STAGS"].freeze
+		@STAG = make_list(config["STAGS"])
+		@STAG.freeze
+
+		@QUALIFIERS = config["QUALIFIERS"].freeze
+		create_starters(@QUALIFIERS) #@STARTERS作成
+
+		@UTAGS = config["UTAGS"].freeze
+	end
+
+	#ハッシュのキーの配列を返す
+	def make_list(source)
+		product = []
+		source.each_key do |key|
+			product << key
+		end
+		return product
 	end
 
 	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
-	def createStarters(qualifiers)
-		@STARTERS = []
-		@SYMBOL = []
+	def create_starters(qualifiers)
+		@STARTERS = "" 
 		qualifiers.each do |key,value|
 			# keys = key.gsub(/([\\\*\+\.\?\{\}\(\)\[\]\-\^\$\|\/])/,'\\1')
-			@STARTERS << key + '\[.+?\]'
 			@STARTERS << key
-			@SYMBOL << key
 		end
 		@STARTERS.freeze
-		@SYMBOL.freeze
 	end
 
 	#修飾部分の分離
@@ -43,7 +50,7 @@ class Convert
 		intags = []
 		outtags = [[],[]]
 		# /#{@STARTERS.join("|")}(\[.+?\]|[^#{@SYMBOL.join("")}])+/
-		qualifier.scan(/(?<starter>[.:#])(?<qsub>(\[.+?\]|[^.:#])+)/) do |match|
+		qualifier.scan(/(?<starter>[#{@STARTERS}])(?<qsub>(\[.+?\]|[^#{@STARTERS}])+)/) do |match|
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
 			qinfo = @QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
@@ -72,6 +79,27 @@ class Convert
 
 	def text(contents)
 		s = StringScanner.new(contents)
+		point = []
+		until s.eos?
+			case
+			when s.skip(/<\/.+>[ \t]?$/)
+			when s.scan(/(\n|.)$/)
+				point << s.charpos
+			when s.skip(/./m)
+			end
+		end
+		
+		pluspoint = 0
+		point.each do |x|
+			contents.insert(x + pluspoint,"<br>")
+			pluspoint += 4
+		end
+
+		return contents
+	end
+
+	def ptag_insert(contents)
+		s = StringScanner.new(contents)
 		texttag = nil
 		taghash = {}
 		textpos = nil
@@ -89,7 +117,6 @@ class Convert
 			when s.skip(/./m)
 			end
 		end
-		p taghash
 		pluspoint = 0
 		taghash.each do |key,var|
 			contents.insert(key + pluspoint,"</p>")
@@ -99,27 +126,9 @@ class Convert
 		end
 
 		contents.gsub!(/^\n$/,"</p><p>")
-		contents.insert(0,"<p>")
-		contents.insert(-1,"</p>")
-		contents.gsub!(/<p>[ \t]*(\n?)<\/p>/,'\1')
-
-		s = StringScanner.new(contents)
-		point = []
-		until s.eos?
-			case
-			when s.skip(/<\/.+>[ \t]?$/)
-			when s.scan(/(\n|.)$/)
-				point << s.charpos
-			when s.skip(/./m)
-			end
-		end
-		
-		pluspoint = 0
-		point.each do |x|
-			contents.insert(x + pluspoint,"<br>")
-			pluspoint += 4
-		end
-
+			.insert(0,"<p>")
+			.insert(-1,"</p>")
+			.gsub!(/<p>[ \t]*(\n?)<\/p>/,'\1')
 		return contents
 	end
 
