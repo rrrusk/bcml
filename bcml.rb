@@ -9,7 +9,7 @@ class Convert
 	end
 
 	# 設定ファイルから変数定義
-	def config_open()
+	def config_open
 		config = YAML.load_file('config.yml')
 
 		@TAGS = config["TAGS"].freeze
@@ -21,7 +21,8 @@ class Convert
 		@QUALIFIERS = config["QUALIFIERS"].freeze
 		create_starters(@QUALIFIERS) #@STARTERS作成
 
-		@UTAGS = config["UTAGS"].freeze
+		@UTAGS = config["UTAGS"].freeze #ユーザー定義のタグ @midasi
+		@GENERAL = config["GENERAL"].freeze #シンボルに使う文字など
 	end
 
 	#ハッシュのキーの配列を返す
@@ -75,8 +76,8 @@ class Convert
 		return subject,tag,qualifier
 	end
 
-	def text(contents)
-		s = StringScanner.new(contents)
+	def text
+		s = StringScanner.new(@contents)
 		point = []
 		until s.eos?
 			case
@@ -90,15 +91,13 @@ class Convert
 		
 		pluspoint = 0
 		point.each do |x|
-			contents.insert(x + pluspoint,"<br>")
+			@contents.insert(x + pluspoint,"<br>")
 			pluspoint += 4
 		end
-
-		return contents
 	end
 
-	def ptag_insert(contents)
-		s = StringScanner.new(contents)
+	def ptag_insert
+		s = StringScanner.new(@contents)
 		texttag = nil
 		taghash = {}
 		textpos = nil
@@ -118,21 +117,20 @@ class Convert
 		end
 		pluspoint = 0
 		taghash.each do |key,var|
-			contents.insert(key + pluspoint,"</p>")
+			@contents.insert(key + pluspoint,"</p>")
 			pluspoint += 4
-			contents.insert(var + pluspoint,"<p>")
+			@contents.insert(var + pluspoint,"<p>")
 			pluspoint += 3
 		end
 
-		contents.gsub!(/^\n$/,"</p><p>")
+		@contents.gsub!(/^\n$/,"</p><p>")
 			.insert(0,"<p>")
 			.insert(-1,"</p>")
 			.gsub!(/<p>[ \t]*(\n?)<\/p>/,'\1')
-		return contents
 	end
 
-	def convert(contents,re)
-		contents.gsub!(re) do |match|
+	def convert(strings,re)
+		strings.gsub!(re) do |match|
 			subject,tag,qualifier = separator($~) #マッチしたものをパーツごとに分ける
 			intag,outtag = separatorQ(qualifier)
 			#タグが設定されてるか確認
@@ -162,22 +160,22 @@ class Convert
 		end
 	end
 
-	def oneline(contents)
-		convert(contents,/(?<origin>^[ \t]*@(?<prefix>[^(\s]+)[ \t](?<subject>.+))/)
+	def oneline
+		convert(@contents,/(?<origin>^[ \t]*@(?<prefix>[^(\s]+)[ \t](?<subject>.+))/)
 	end
 
-	def manyline(contents)
+	def manyline
 		re = /(?<f>@\((\g<f>*.*?)*\)@)/m
-		while re =~ contents
-			contents.gsub!(re) do |match|
+		while re =~ @contents
+			@contents.gsub!(re) do |match|
 				match.gsub!(/(\A@\(|\)@\Z)/,"")
 				convert(match,/(?<origin>^(?<prefix>[^\(\s]+)\s(?<subject>.+))/m)
 			end
 		end
 	end
 
-	def stag(contents)
-		foo = contents.scan(/(?<origin>^\s*@(?<stag>[^\s\[]+)(\[(?<ssub>.+?)\])?)/)
+	def stag
+		foo = @contents.scan(/(?<origin>^\s*@(?<stag>[^\s\[]+)(\[(?<ssub>.+?)\])?)/)
 		foo.each do |x|
 			stag = x[1]
 
@@ -191,12 +189,12 @@ class Convert
 					@mokuh3 = [] if @mokuh3.nil?
 
 					i = 0
-					target = contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
+					target = @contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
 					target.each do |x|
 						object,attr,con = x[0],x[1],x[2]
 						con.gsub!(/<.+?>/, "")
 						@mokuh3 << con 
-						contents.gsub!(/#{object}/,"<#{ssub}#{attr} id=\"#{i}#{ssub}\">#{con}</#{ssub}>")
+						@contents.gsub!(/#{object}/,"<#{ssub}#{attr} id=\"#{i}#{ssub}\">#{con}</#{ssub}>")
 						i += 1
 					end
 
@@ -205,7 +203,7 @@ class Convert
 						li = li + "<li><a href=\"##{index}#{ssub}\">#{var}</a></li>"
 					end
 					origin = regex_esc(origin)
-					contents.gsub!(/#{origin}/, "<ul>#{li}</ul>") #@mokuzi[]を目次に変更
+					@contents.gsub!(/#{origin}/, "<ul>#{li}</ul>") #@mokuzi[]を目次に変更
 				end
 			end
 		end
@@ -215,11 +213,11 @@ class Convert
 		strings.gsub!(/([-\\*+.?{}()\[\]^$|\/])/) { '\\' + $1 } #正規表現で使えるようエスケープ
 	end
 
-	def comment(contents)
-		contents.gsub!(/^@---.+?---@$/m,"")
+	def comment
+		@contents.gsub!(/^@---.+?---@$/m,"")
 	end
 
-	def utag(contents)
+	def utag
 		utagl = []
 		utagh = {} 
 		utagt = ""
@@ -237,16 +235,17 @@ class Convert
 		p utagl
 		p utagh
 		p utagt
-		contents.gsub!(/(?<=@|@\()(#{utagt})(?=[ \t]+)/, utagh)
+		@contents.gsub!(/(?<=@|@\()(#{utagt})(?=[ \t]+)/, utagh)
 	end
 
 	def main(contents)
-		comment(contents)
-		utag(contents)
-		manyline(contents)
-		oneline(contents)
-		stag(contents)
-		text(contents)
+		@contents = contents
+		comment
+		utag
+		manyline
+		oneline
+		stag
+		text
 		puts 'return'
 		puts contents
 		puts 'end'
