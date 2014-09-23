@@ -29,18 +29,17 @@ class Convert
 	end
 
 	def general_parse
-		@SYMBOL = []
-		@GENERAL["symbol"].each do |x|
-			x = regex_esc(x)
-			@SYMBOL << x
-		end
+		@SYMBOL = make_list(@GENERAL["symbol"])
+		@BRACKET = make_list(@GENERAL["bracket"])
+		@COMMENT = make_list(@GENERAL["comment"])
 	end
 
 	#ハッシュのキーの配列を返す
 	def make_list(source)
 		product = []
-		source.each_key do |key|
-			product << key
+		source.each do |x,y|
+			x = regex_esc(x)
+			product << x
 		end
 		return product
 	end
@@ -58,15 +57,14 @@ class Convert
 	def separatorQ(qualifier)
 		intags = []
 		outtags = [[],[]]
-		# /#{@STARTERS.join("|")}(\[.+?\]|[^#{@SYMBOL.join("")}])+/
-		qualifier.scan(/(?<starter>[#{@STARTERS}])(?<qsub>(\[.+?\]|[^#{@STARTERS}])+)/) do |match|
+		qualifier.scan(/(?<starter>[#{@STARTERS}])(?<qsub>(#{@BRACKET[0]}.+?#{@BRACKET[1]}|[^#{@STARTERS}])+)/) do |match|
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
 			qinfo = @QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
-				qsub.gsub!(/^\[(.+?)\]$/,'\1')
+				qsub.gsub!(/^#{@BRACKET[0]}(.+?)#{@BRACKET[1]}$/,'\1')
 				intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
 			elsif qinfo["point"] == "outtag"
-				qsub.gsub!(/^\[(.+?)\]$/,'\1')
+				qsub.gsub!(/^#{@BRACKET[0]}(.+?)#{@BRACKET[1]}$/,'\1')
 				outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
 				outtags[1] << qinfo["usage"][1].gsub(/<qsub>/,qsub)
 			end
@@ -186,7 +184,7 @@ class Convert
 	end
 
 	def stag
-		foo = @contents.scan(/(?<origin>^\s*#{@SYMBOL[0]}(?<stag>[^\s\[]+)(\[(?<ssub>.+?)\])?)/)
+		foo = @contents.scan(/(?<origin>^\s*#{@SYMBOL[0]}(?<stag>[^\s#{@BRACKET[0]}]+)(#{@BRACKET[0]}(?<ssub>.+?)#{@BRACKET[1]})?)/)
 		foo.each do |x|
 			stag = x[1]
 
@@ -228,7 +226,7 @@ class Convert
 	end
 
 	def comment
-		@contents.gsub!(/^#{@GENERAL["comment"][0]}.+?#{@GENERAL["comment"][1]}$/m,"")
+		@contents.gsub!(/^#{@COMMENT[0]}.+?#{@COMMENT[1]}$/m,"")
 	end
 
 	def utag
@@ -246,7 +244,7 @@ class Convert
 				utagt << x[0]
 			end
 		end
-		@contents.gsub!(/(?<=@|@\()(#{utagt})(?=[ \t]+)/, utagh)
+		@contents.gsub!(/(?<=#{@SYMBOL[0]}|#{@SYMBOL[1]})(#{utagt})(?=[ \t]+)/, utagh)
 	end
 
 	def main(contents)

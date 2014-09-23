@@ -1,6 +1,6 @@
 ---
 GENERAL:
-  symbol: ["！", "！(", ")！"]
+  symbol: ["@", "@(", ")@"]
   bracket: ["[", "]"]
   comment: ["@---","---@"]
 UTAGS:

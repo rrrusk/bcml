@@ -1,40 +1,25 @@
 a
-！a
-！(h3
-print 'hello'
-)！
-aaaaaa
+@a
 
 avvv
-！h1
-！a hellp
-！h1 h11
+@h1 h11
 avj
-！h2 h22
 abviiju
-！mokuzi[h2]
-！h3 h33
-  ！h4 h44
+@midasi midasi
+@mokuzi[h2]
+  @h4 h44
 f
-！h6.bbb h66
-！h2#head headd
-！(h3 hehefff ！(a.yaml hello )！ )！
-！h5.he#ha h55
+@h5.he#ha h55
 はろー
-わーるど
-！(h4 
-jfa ！(h3 hello
-)！
-aafda)！
-
+@(h4 
+jfa @(h3 hello
+)@
+aafda)@
 
 @-- ういっす --@
-！.yaml:[http://google.com] aa
-！(h2 fafdaf)！
+@.yaml:[http://google.com] aa
+@(h2 fafdaf)@
 
-！foo fooo
-！ふう ふうう
-！.yaml:[http://yahoo.com] yahoo
-！(.yaa hello)！
-！span ！(h4 hell to you！ )！fa
-！div divv
+@ふう ふうう
+@.yaml:[http://yahoo.com] yahoo
+@(.yaa hello)@

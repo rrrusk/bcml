@@ -1,42 +1,28 @@
 return
 a<br>
-！a<br>
-<h3>print 'hello'<br>
-</h3>
-aaaaaa<br>
+@a<br>
 <br>
 avvv<br>
-！h1<br>
-<a>hellp</a>
 <h1>h11</h1>
 avj<br>
-<h2 id="0h2">h22</h2>
 abviiju<br>
-<ul><li><a href="#0h2">h22</a></li><li><a href="#1h2">headd</a></li><li><a href="#2h2">fafdaf</a></li></ul>
-<h3>h33</h3>
+<h3 class="bbb">midasi</h3>
+<ul><li><a href="#0h2">fafdaf</a></li></ul>
 <h4>h44</h4>
 f<br>
-<h6 class="bbb">h66</h6>
-<h2 id="head" id="1h2">headd</h2>
-<h3>hehefff <a class="yaml">hello </a> </h3>
 <h5 class="he" id="ha">h55</h5>
 はろー<br>
-わーるど<br>
 <h4>
 jfa <h3>hello<br>
 </h3>
 aafda</h4>
 <br>
-<br>
-<br>
+ういっす --@<br>
 <a href="http://google.com"><span class="yaml">aa</span></a>
-<h2 id="2h2">fafdaf</h2>
+<h2 id="0h2">fafdaf</h2>
 <br>
-！foo fooo<br>
-！ふう ふうう<br>
+@ふう ふうう<br>
 <a href="http://yahoo.com"><span class="yaml">yahoo</span></a>
 <span class="yaa">hello</span>
-<span><h4>hell to you！ </h4>fa</span>
-<div>divv</div>
 <br>
 end
