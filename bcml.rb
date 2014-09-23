@@ -1,3 +1,4 @@
+#!ruby -Ku
 # encoding utf-8
 require 'yaml'
 require 'strscan'
@@ -22,7 +23,17 @@ class Convert
 		create_starters(@QUALIFIERS) #@STARTERS作成
 
 		@UTAGS = config["UTAGS"].freeze #ユーザー定義のタグ @midasi
+
 		@GENERAL = config["GENERAL"].freeze #シンボルに使う文字など
+		general_parse() #@SYMBOL作成
+	end
+
+	def general_parse
+		@SYMBOL = []
+		@GENERAL["symbol"].each do |x|
+			x = regex_esc(x)
+			@SYMBOL << x
+		end
 	end
 
 	#ハッシュのキーの配列を返す
@@ -38,7 +49,6 @@ class Convert
 	def create_starters(qualifiers)
 		@STARTERS = "" 
 		qualifiers.each do |key,value|
-			# keys = key.gsub(/([\\\*\+\.\?\{\}\(\)\[\]\-\^\$\|\/])/,'\\1')
 			@STARTERS << key
 		end
 		@STARTERS.freeze
@@ -76,6 +86,7 @@ class Convert
 		return subject,tag,qualifier
 	end
 
+	#pタグとbrタグ挿入
 	def text
 		s = StringScanner.new(@contents)
 		point = []
@@ -161,21 +172,21 @@ class Convert
 	end
 
 	def oneline
-		convert(@contents,/(?<origin>^[ \t]*@(?<prefix>[^(\s]+)[ \t](?<subject>.+))/)
+		convert(@contents,/(?<origin>^[ \t]*#{@SYMBOL[0]}(?<prefix>[^\s]+)[ \t](?<subject>.+))/)
 	end
 
 	def manyline
-		re = /(?<f>@\((\g<f>*.*?)*\)@)/m
+		re = /(?<f>#{@SYMBOL[1]}(\g<f>*.*?)*#{@SYMBOL[2]})/m
 		while re =~ @contents
 			@contents.gsub!(re) do |match|
-				match.gsub!(/(\A@\(|\)@\Z)/,"")
-				convert(match,/(?<origin>^(?<prefix>[^\(\s]+)\s(?<subject>.+))/m)
+				match.gsub!(/(\A#{@SYMBOL[1]}|#{@SYMBOL[2]}\Z)/,"")
+				convert(match,/(?<origin>^(?<prefix>[^\s]+)\s(?<subject>.+))/m)
 			end
 		end
 	end
 
 	def stag
-		foo = @contents.scan(/(?<origin>^\s*@(?<stag>[^\s\[]+)(\[(?<ssub>.+?)\])?)/)
+		foo = @contents.scan(/(?<origin>^\s*#{@SYMBOL[0]}(?<stag>[^\s\[]+)(\[(?<ssub>.+?)\])?)/)
 		foo.each do |x|
 			stag = x[1]
 
@@ -210,11 +221,14 @@ class Convert
 	end
 
 	def regex_esc(strings)
-		strings.gsub!(/([-\\*+.?{}()\[\]^$|\/])/) { '\\' + $1 } #正規表現で使えるようエスケープ
+		if /[-\\*+.?{}()\[\]^$|\/]/ =~ strings
+			strings.gsub!(/([-\\*+.?{}()\[\]^$|\/])/) { '\\' + $1 } #正規表現で使えるようエスケープ
+		end
+		return strings
 	end
 
 	def comment
-		@contents.gsub!(/^@---.+?---@$/m,"")
+		@contents.gsub!(/^#{@GENERAL["comment"][0]}.+?#{@GENERAL["comment"][1]}$/m,"")
 	end
 
 	def utag
@@ -232,9 +246,6 @@ class Convert
 				utagt << x[0]
 			end
 		end
-		p utagl
-		p utagh
-		p utagt
 		@contents.gsub!(/(?<=@|@\()(#{utagt})(?=[ \t]+)/, utagh)
 	end
 
@@ -253,7 +264,6 @@ class Convert
 	end
 end
 
-
 fileName = File.basename(ARGV[0],'.bcml') #引数からファイル読み込み
 newfile = open('convert' + '.html', 'w') #変換先ファイルを開く
 
@@ -269,10 +279,3 @@ converted = con.main(contents)
 newfile.write(converted) #書き込み
 #開いていたファイルを閉じる
 newfile.close
-
-=begin
-自動br挿入
-generalコンフィグ
-目次自動生成
-目次自動生成のような機能をコンフィグで
-=end
