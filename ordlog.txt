@@ -1,27 +1,36 @@
+{:h3=>[[{:object=>"<h3 class=\"bbb\">midasi</h3>", :attr=>" class=\"bbb\"", :con=>"midasi"}, {:object=>"<h3>0banme</h3>", :attr=>nil, :con=>"0banme"}], [{:object=>"<h3>hello\n</h3>", :attr=>nil, :con=>"hello\n"}], [{:object=>"<h3>2bante</h3>", :attr=>nil, :con=>"2bante"}]], "h2"=>[{:object=>"<h2>fdaf</h2>", :attr=>nil, :con=>"fdaf"}, {:object=>"<h2>fafdaf</h2>", :attr=>nil, :con=>"fafdaf"}]}
+"<ul><ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li></ul><li><a href=\"#1h2\">fdaf</a></li><ul><li><a href=\"#10h3\">hello\n</a></li></ul><li><a href=\"#2h2\">fafdaf</a></li><ul><li><a href=\"#20h3\">2bante</a></li></ul></ul>"
+["<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li></ul>", "<li><a href=\"#1h2\">fdaf</a></li><ul><li><a href=\"#10h3\">hello\n</a></li></ul>", "<li><a href=\"#2h2\">fafdaf</a></li><ul><li><a href=\"#20h3\">2bante</a></li></ul>"]
+"<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li></ul>"
+"<li><a href=\"#1h2\">fdaf</a></li><ul><li><a href=\"#10h3\">hello\n</a></li></ul>"
+"<li><a href=\"#2h2\">fafdaf</a></li><ul><li><a href=\"#20h3\">2bante</a></li></ul>"
 return
-a<br>
+<p>a<br>
 @a<br>
 <br>
-avvv<br>
-<h1>h11</h1>
+avvv</p>
+<h1>h11</h1><p>
 avj<br>
-abviiju<br>
+abviiju</p>
 <h3 class="bbb">midasi</h3>
-<ul><li><a href="#0h2">fafdaf</a></li></ul>
-<h4>h44</h4>
-f<br>
-<h5 class="he" id="ha">h55</h5>
-はろー<br>
+<h3>0banme</h3>
+<ul><li><a href="#0h2">fdaf</a></li><li><a href="#1h2">fafdaf</a></li></ul>
+<h4>h44</h4><p>
+f</p>
+<h5 class="he" id="ha">h55</h5><p>
+はろー</p>
+<h2 id="0h2">fdaf</h2>
 <h4>
 jfa <h3>hello<br>
 </h3>
-aafda</h4>
+aafda</h4><p>
 <br>
-<br>
+</p>
 <a href="http://google.com"><span class="yaml">aa</span></a>
-<h2 id="0h2">fafdaf</h2>
+<h2 id="1h2">fafdaf</h2>
+<h3>2bante</h3><p>
 <br>
-@ふう ふうう<br>
+@ふう ふうう</p>
 <a href="http://yahoo.com"><span class="yaml">yahoo</span></a>
 <span class="yaa">hello</span>
 <br>
