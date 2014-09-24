@@ -11,7 +11,7 @@ class Convert
 
 	# 設定ファイルから変数定義
 	def config_open
-		config = YAML.load_file('../config.yml')
+		config = YAML.load_file("#{$MY_DIRECTORY}/config.yml")
 
 		@TAGS = config["TAGS"].freeze
 		@TAG = make_list(config["TAGS"])
@@ -189,33 +189,36 @@ class Convert
 			stag = x[1]
 
 			if @STAGS.include?(stag)
-				origin = x[0]
+				origin = regex_esc(x[0])
 				unless x[2].nil?
 					ssub = x[2]
 				end
 				case
 				when stag = "mokuzi"
-					@mokuh3 = [] if @mokuh3.nil?
-
-					i = 0
-					target = @contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
-					target.each do |x|
-						object,attr,con = x[0],x[1],x[2]
-						con.gsub!(/<.+?>/, "")
-						@mokuh3 << con 
-						@contents.gsub!(/#{object}/,"<#{ssub}#{attr} id=\"#{i}#{ssub}\">#{con}</#{ssub}>")
-						i += 1
-					end
-
-					li = ""
-					@mokuh3.each_with_index do |var,index|
-						li = li + "<li><a href=\"##{index}#{ssub}\">#{var}</a></li>"
-					end
-					origin = regex_esc(origin)
-					@contents.gsub!(/#{origin}/, "<ul>#{li}</ul>") #@mokuzi[]を目次に変更
+					mokuzi(origin,stag,ssub)
 				end
 			end
 		end
+	end
+
+	def mokuzi(origin,stag,ssub)
+		@mokuh3 = [] if @mokuh3.nil?
+
+		i = 0
+		target = @contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
+		target.each do |x|
+			object,attr,con = x[0],x[1],x[2]
+			con.gsub!(/<.+?>/, "")
+			@mokuh3 << con 
+			@contents.gsub!(/#{object}/,"<#{ssub}#{attr} id=\"#{i}#{ssub}\">#{con}</#{ssub}>")
+			i += 1
+		end
+
+		li = ""
+		@mokuh3.each_with_index do |var,index|
+			li = li + "<li><a href=\"##{index}#{ssub}\">#{var}</a></li>"
+		end
+		@contents.gsub!(/#{origin}/, "<ul>#{li}</ul>") #@mokuzi[]を目次に変更
 	end
 
 	def regex_esc(strings)

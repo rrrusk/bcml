@@ -17,7 +17,7 @@ jfa <h3>hello<br>
 </h3>
 aafda</h4>
 <br>
-ういっす --@<br>
+<br>
 <a href="http://google.com"><span class="yaml">aa</span></a>
 <h2 id="0h2">fafdaf</h2>
 <br>
@@ -26,4 +26,3 @@ aafda</h4>
 <span class="yaa">hello</span>
 <br>
 end
-"bcml.rb"

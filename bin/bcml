@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 
 THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
+$MY_DIRECTORY = File.dirname(THIS_FILE) + '/..'
 begin
   require File.dirname(THIS_FILE) + '/../lib/bcml'
 rescue LoadError
   require 'bcml'
 end
 
-newfile = open('convert' + '.html', 'w') #変換先ファイルを開く
+newfile = open('convert' + '.html', 'w')
 
-#変換元ファイルを開いて変数に格納した後閉じる
 source = open(ARGV[0])
 contents = source.read
 source.close
@@ -18,6 +18,5 @@ source.close
 con = Convert.new
 converted = con.main(contents)
 
-newfile.write(converted) #書き込み
-#開いていたファイルを閉じる
+newfile.write(converted)
 newfile.close
