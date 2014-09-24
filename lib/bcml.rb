@@ -218,7 +218,6 @@ class Convert
 			when s.skip(/./m)
 			end
 		end
-		p alltag
 
 		alltag[:list] = Array.new(alltag[ssub].length + 1){""}
 
@@ -226,6 +225,7 @@ class Convert
 			alltag[:list][0] << "<ul>"
 			alltag[:h3][0].each_with_index do |x,y|
 				alltag[:list][0] << "<li><a href=\"#0#{y}h3\">#{x[:con]}</a></li>"
+				@contents.gsub!(/#{x[:object]}/,"<h3#{x[:attr]} id=\"0#{y}h3\">#{x[:con]}</h3>")
 			end
 			alltag[:list][0] << "</ul>"
 		end
@@ -233,40 +233,23 @@ class Convert
 		alltag[ssub].each_with_index do |x,i|
 			i += 1
 			alltag[:list][i] << "<li><a href=\"##{i}#{ssub}\">#{x[:con]}</a></li>"
+			@contents.gsub!(/#{x[:object]}/,"<#{ssub}#{x[:attr]} id=\"#{i}#{ssub}\">#{x[:con]}</#{ssub}>")
 			if alltag[:h3][i]
 				alltag[:list][i] << "<ul>"
 				alltag[:h3][i].each_with_index do |x,y|
 					alltag[:list][i] << "<li><a href=\"##{i}#{y}h3\">#{x[:con]}</a></li>"
+					@contents.gsub!(/#{x[:object]}/,"<h3#{x[:attr]} id=\"#{i}#{y}h3\">#{x[:con]}</h3>")
 				end
 				alltag[:list][i] << "</ul>"
 			end
 		end
 
-		p alltag[:list]
 		alltag[:list].each {|x| p x}
 
-		product = "<ul>"
+		product = ""
 		alltag[:list].each {|x| product << x}
-		product << "</ul>"
 		p product
-
-		list = [] if list.nil?
-		tagcount = Hash.new(0)
-
-		target = @contents.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
-		target.each do |x|
-			object,attr,con = x[0],x[1],x[2]
-			con.gsub!(/<.+?>/, "") #htmlタグを削除
-			list << con 
-			@contents.gsub!(/#{object}/,"<#{ssub}#{attr} id=\"#{tagcount[ssub]}#{ssub}\">#{con}</#{ssub}>")
-			tagcount[ssub] += 1
-		end
-
-		li = ""
-		list.each_with_index do |var,index|
-			li = li + "<li><a href=\"##{index}#{ssub}\">#{var}</a></li>"
-		end
-		@contents.gsub!(/#{origin}/, "<ul>#{li}</ul>") #@mokuzi[]を目次に変更
+		@contents.gsub!(/#{origin}/, "<ul>#{product}</ul>") #@mokuzi[]を目次に変更
 	end
 
 	def regex_esc(strings)
