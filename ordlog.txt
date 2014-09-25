@@ -1,22 +1,6 @@
-"<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li><li><a href=\"#02h3\">hello</a></li></ul>"
-"<li><a href=\"#1h2\">fafdaf</a></li><ul><li><a href=\"#10h3\">2bante</a></li></ul>"
-"<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li><li><a href=\"#02h3\">hello</a></li></ul><li><a href=\"#1h2\">fafdaf</a></li><ul><li><a href=\"#10h3\">2bante</a></li></ul>"
-0
--1
--2
--2
--3
--4
--5
--6
--7
--8
--9
--10
--11
--12
--13
-{10=>23, 35=>295, 300=>313, 315=>347, 358=>403, 404=>444, 446=>558, 575=>671}
+"h3"
+#<MatchData "h3" 1:"h3" 2:"">
+["h3", ""]
 return
 <p>a<br>
 @a<br>
@@ -24,16 +8,16 @@ return
 <h1>h11</h1><p>
 avj<br>
 abviiju</p>
-<h3 class="bbb" id="00h3">midasi</h3>
-<h3 id="01h3">0banme</h3>
-<ul><ul><li><a href="#00h3">midasi</a></li><li><a href="#01h3">0banme</a></li><li><a href="#02h3">hello</a></li></ul><li><a href="#1h2">fafdaf</a></li><ul><li><a href="#10h3">2bante</a></li></ul><p></ul></p>
+<h3 class="bbb" id="1h3">midasi</h3>
+<h3 id="2h3">0banme</h3>
+<ul><li><a href="#1h3">midasi</a></li><li><a href="#2h3">0banme</a></li><li><a href="#3h3">hello</a></li><li><a href="#4h3">2bante</a></li></ul>
 <h4>h44</h4><p>
 f</p>
 <h5 class="he" id="ha">h55</h5><p>
 はろー<br>
 fdaf)@</p>
 <h4>
-jfa <h3 id="02h3">hello</h3>
+jfa <h3 id="3h3">hello</h3>
 aafda</h4>
 <br>
 <pre>
@@ -41,8 +25,8 @@ aafda</h4>
 </pre>
 <br>
 <a href="http://google.com"><span class="yaml">aa</span></a>
-<h2 id="1h2">fafdaf</h2>
-<h3 id="10h3">2bante</h3><p>
+<h2>fafdaf</h2>
+<h3 id="4h3">2bante</h3><p>
 aaa<br>
 </p><p>aaa<br>
 @ふう ふうう</p>

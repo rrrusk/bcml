@@ -112,18 +112,16 @@ class Convert
 		taghash = {}
 		textpos = nil
 		tagcount = 0
-		closepos = nil
 		until s.eos?
 			case
 			when texttag
 				case
 				when s.skip(/<\/#{texttag}>/)
 					if tagcount == 0
-						closepos = s.charpos
 						if !taghash.empty? and textpos - taghash.max[1] <= 0
-							taghash[taghash.max[0]] = closepos
+							taghash[taghash.max[0]] = s.charpos
 						else
-							taghash[textpos] = closepos
+							taghash[textpos] = s.charpos
 						end
 						#末尾のハッシュのキーと現在の位置を比較
 						texttag = nil
@@ -141,7 +139,6 @@ class Convert
 			when s.skip(/./m)
 			end
 		end
-		p taghash
 		pluspoint = 0
 		taghash.each do |key,var|
 			@contents.insert(key + pluspoint,"</p>")
@@ -220,40 +217,45 @@ class Convert
 	end
 
 	def mokuzi(origin,stag,ssub)
+		p ssub
+		ssub.scan(/(\w+) ?(\w*)/)
+		p $~
+		tag = [$~[1],$~[2]]
+		p tag
 		s = StringScanner.new(@contents)
 		alltag = Hash.new{|hash,key| hash[key] = []}
-		alltag[:h3] = [[]]
+		alltag[tag[1]] = [[]]
 		main = 0
 		until s.eos?
 			case
-			when s.scan(/(?<object><#{ssub}(?<attr>\s.*?)?>(?<con>.+?)<\/#{ssub}>)/m)
+			when s.scan(/(?<object><#{tag[0]}(?<attr>\s.*?)?>(?<con>.+?)<\/#{tag[0]}>)/m)
 				main += 1
-				alltag[ssub] << {object: s[:object],attr: s[:attr],con: s[:con]}
-				alltag[:h3][main] = []
-			when s.scan(/(?<object><h3(?<attr>\s.*?)?>(?<con>.+?)<\/h3>)/m)
-				alltag[:h3][main] << {object: s[:object],attr: s[:attr],con: s[:con]}
+				alltag[tag[0]] << {object: s[:object],attr: s[:attr],con: s[:con]}
+				alltag[tag[1]][main] = []
+			when tag[1] && s.scan(/(?<object><#{tag[1]}(?<attr>\s.*?)?>(?<con>.+?)<\/#{tag[1]}>)/m)
+				alltag[tag[1]][main] << {object: s[:object],attr: s[:attr],con: s[:con]}
 			when s.skip(/./m)
 			end
 		end
 
-		alltag[:list] = Array.new(alltag[ssub].length + 1){""}
+		alltag[:list] = Array.new(alltag[tag[0]].length + 1){""}
 
-		if alltag[:h3][0]
+		unless alltag[tag[1]][0].empty?
 			alltag[:list][0] << "<ul>"
-			alltag[:h3][0].each_with_index do |x,y|
+			alltag[tag[1]][0].each_with_index do |x,y|
 				alltag[:list][0] << "<li><a href=\"#0#{y}h3\">#{x[:con]}</a></li>"
 				@contents.gsub!(/#{x[:object]}/,"<h3#{x[:attr]} id=\"0#{y}h3\">#{x[:con]}</h3>")
 			end
 			alltag[:list][0] << "</ul>"
 		end
 
-		alltag[ssub].each_with_index do |x,i|
+		alltag[tag[0]].each_with_index do |x,i|
 			i += 1
-			alltag[:list][i] << "<li><a href=\"##{i}#{ssub}\">#{x[:con]}</a></li>"
-			@contents.gsub!(/#{x[:object]}/,"<#{ssub}#{x[:attr]} id=\"#{i}#{ssub}\">#{x[:con]}</#{ssub}>")
-			if alltag[:h3][i]
+			alltag[:list][i] << "<li><a href=\"##{i}#{tag[0]}\">#{x[:con]}</a></li>"
+			@contents.gsub!(/#{x[:object]}/,"<#{tag[0]}#{x[:attr]} id=\"#{i}#{tag[0]}\">#{x[:con]}</#{tag[0]}>")
+			unless alltag[tag[1]][i].empty?
 				alltag[:list][i] << "<ul>"
-				alltag[:h3][i].each_with_index do |x,y|
+				alltag[tag[1]][i].each_with_index do |x,y|
 					alltag[:list][i] << "<li><a href=\"##{i}#{y}h3\">#{x[:con]}</a></li>"
 					@contents.gsub!(/#{x[:object]}/,"<h3#{x[:attr]} id=\"#{i}#{y}h3\">#{x[:con]}</h3>")
 				end
@@ -261,11 +263,8 @@ class Convert
 			end
 		end
 
-		alltag[:list].each {|x| p x}
-
 		product = ""
 		alltag[:list].each {|x| product << x}
-		p product
 		@contents.gsub!(/#{origin}/, "<ul>#{product}</ul>") #@mokuzi[]を目次に変更
 	end
 

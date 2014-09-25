@@ -1,22 +1,6 @@
-"<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li><li><a href=\"#02h3\">hello</a></li></ul>"
-"<li><a href=\"#1h2\">fafdaf</a></li><ul><li><a href=\"#10h3\">2bante</a></li></ul>"
-"<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li><li><a href=\"#02h3\">hello</a></li></ul><li><a href=\"#1h2\">fafdaf</a></li><ul><li><a href=\"#10h3\">2bante</a></li></ul>"
-0
-0
-0
-1
-1
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-{10=>23, 35=>313, 315=>347, 358=>403, 404=>444, 446=>558, 575=>671}
+"h2 h3"
+#<MatchData "h2 h3" 1:"h2" 2:"h3">
+["h2", "h3"]
 return
 <p>a<br>
 @a<br>
