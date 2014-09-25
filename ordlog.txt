@@ -1,35 +1,22 @@
 "<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li><li><a href=\"#02h3\">hello</a></li></ul>"
 "<li><a href=\"#1h2\">fafdaf</a></li><ul><li><a href=\"#10h3\">2bante</a></li></ul>"
 "<ul><li><a href=\"#00h3\">midasi</a></li><li><a href=\"#01h3\">0banme</a></li><li><a href=\"#02h3\">hello</a></li></ul><li><a href=\"#1h2\">fafdaf</a></li><ul><li><a href=\"#10h3\">2bante</a></li></ul>"
-12
-23
 0
-73
-0
-99
 -1
-217
--1
-251
-5
-295
-2
-313
-11
-347
-1
-403
-2
-444
-0
-507
-0
-532
-17
-558
-0
-638
-{10=>23, 35=>73, 73=>99, 99=>217, 216=>251, 250=>295, 300=>313, 315=>347, 358=>403, 404=>444, 446=>507, 507=>532, 532=>558, 575=>638, 638=>671}
+-2
+-2
+-3
+-4
+-5
+-6
+-7
+-8
+-9
+-10
+-11
+-12
+-13
+{10=>23, 35=>295, 300=>313, 315=>347, 358=>403, 404=>444, 446=>558, 575=>671}
 return
 <p>a<br>
 @a<br>
@@ -39,7 +26,7 @@ avj<br>
 abviiju</p>
 <h3 class="bbb" id="00h3">midasi</h3>
 <h3 id="01h3">0banme</h3>
-<ul><ul><li><a href="#00h3">midasi</a></li><li><a href="#01h3">0banme</a></li><li><a href="#02h3">hello</a></li></ul><p</p>><li><a href="#1h2">fafdaf</a></li><p</p>><ul><li><a href="#10h3">2bante</a></li></ul><p></ul></p>
+<ul><ul><li><a href="#00h3">midasi</a></li><li><a href="#01h3">0banme</a></li><li><a href="#02h3">hello</a></li></ul><li><a href="#1h2">fafdaf</a></li><ul><li><a href="#10h3">2bante</a></li></ul><p></ul></p>
 <h4>h44</h4><p>
 f</p>
 <h5 class="he" id="ha">h55</h5><p>

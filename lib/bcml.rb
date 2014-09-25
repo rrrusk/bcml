@@ -111,22 +111,29 @@ class Convert
 		texttag = nil
 		taghash = {}
 		textpos = nil
+		tagcount = 0
 		closepos = nil
 		until s.eos?
 			case
 			when texttag
-				if s.scan_until(/<\/#{texttag}>/)
-					closepos = s.charpos
-					p textpos - taghash.max[1] unless taghash.empty?
-					unless taghash.empty?
-						if taghash.max[1] - closepos <= 0
-							p taghash.max[1]
+				case
+				when s.skip(/<\/#{texttag}>/)
+					if tagcount == 0
+						closepos = s.charpos
+						if !taghash.empty? and textpos - taghash.max[1] <= 0
+							taghash[taghash.max[0]] = closepos
+						else
+							taghash[textpos] = closepos
 						end
+						#末尾のハッシュのキーと現在の位置を比較
+						texttag = nil
+						textpos = nil
+					else
+						tagcount -= 1
 					end
-					taghash[textpos] = closepos
-					#末尾のハッシュのキーと現在の位置を比較
-					texttag = nil
-					textpos = nil
+				when s.skip(/<(?<!\/)#{texttag}.*?>/)
+					tagcount += 1
+				when s.skip(/./m)
 				end
 			when s.scan(/<(?<tag>[a-zA-Z0-9]+).*?>/)
 				textpos = s.charpos - s[0].length - 1
