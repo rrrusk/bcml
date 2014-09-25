@@ -2,6 +2,7 @@
 # encoding utf-8
 require 'yaml'
 require 'strscan'
+require 'open-uri'
 #コンバート処理
 class Convert
 	def initialize()
@@ -209,19 +210,18 @@ class Convert
 					ssub = x[2]
 				end
 				case
-				when stag = "mokuzi"
-					mokuzi(origin,stag,ssub)
+				when stag == "mokuzi"
+					mokuzi(origin,ssub)
+				when stag == ":"
+					get_link_title(origin,ssub)
 				end
 			end
 		end
 	end
 
-	def mokuzi(origin,stag,ssub)
-		p ssub
+	def mokuzi(origin,ssub)
 		ssub.scan(/(\w+) ?(\w*)/)
-		p $~
 		tag = [$~[1],$~[2]]
-		p tag
 		s = StringScanner.new(@contents)
 		alltag = Hash.new{|hash,key| hash[key] = []}
 		alltag[tag[1]] = [[]]
@@ -266,6 +266,21 @@ class Convert
 		product = ""
 		alltag[:list].each {|x| product << x}
 		@contents.gsub!(/#{origin}/, "<ul>#{product}</ul>") #@mokuzi[]を目次に変更
+	end
+
+	def get_link_title(origin,ssub)
+		if ssub =~ /https?:\/\/.+/
+			title = ""
+			open(ssub) {|f|
+				html = f.read
+				html.scan(/<title>(.+)<\/title>/)
+				title = $~[1]
+			}
+			product = "<a href=\"#{ssub}\">#{title}</a>"
+		else
+			product = "<a href=\"#{ssub}\">#{ssub}</a>"
+		end
+		@contents.gsub!(/#{origin}/,product)
 	end
 
 	def regex_esc(strings)

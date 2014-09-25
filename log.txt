@@ -1,6 +1,3 @@
-"h2 h3"
-#<MatchData "h2 h3" 1:"h2" 2:"h3">
-["h2", "h3"]
 return
 <p>a<br>
 @a<br>
@@ -30,7 +27,7 @@ aafda</h4>
 aaa<br>
 </p><p>aaa<br>
 @ふう ふうう</p>
-<a href="http://yahoo.com"><span class="yaml">yahoo</span></a>
-<span class="yaa">hello)@</span>
+<span class="yaa">hello</span>
+<a href="https://www.yahoo.com/">Yahoo</a>
 <br>
 end

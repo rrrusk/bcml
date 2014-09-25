@@ -26,6 +26,7 @@ TAGS:
     escape: true
 STAGS:
   - mokuzi
+  - ":"
 QUALIFIERS:
   ".":
     point: intag
