@@ -14,15 +14,20 @@ f
 はろー
 @(h2 fdaf)@
 @(h4 
-jfa @(h3 hello
-)@
+jfa @(h3 hello)@
 aafda)@
+
+@(pre 
+@h3 hello
+)@
 
 @--- ういっす ---@
 @.yaml:[http://google.com] aa
-@(h2 fafdaf)@
+@h2 fafdaf
 @h3 2bante
+aaa
 
+aaa
 @ふう ふうう
 @.yaml:[http://yahoo.com] yahoo
 @(.yaa hello)@

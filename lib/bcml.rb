@@ -111,11 +111,20 @@ class Convert
 		texttag = nil
 		taghash = {}
 		textpos = nil
+		closepos = nil
 		until s.eos?
 			case
 			when texttag
 				if s.scan_until(/<\/#{texttag}>/)
-					taghash[textpos] = s.charpos
+					closepos = s.charpos
+					p textpos - taghash.max[1] unless taghash.empty?
+					unless taghash.empty?
+						if taghash.max[1] - closepos <= 0
+							p taghash.max[1]
+						end
+					end
+					taghash[textpos] = closepos
+					#末尾のハッシュのキーと現在の位置を比較
 					texttag = nil
 					textpos = nil
 				end
@@ -125,6 +134,7 @@ class Convert
 			when s.skip(/./m)
 			end
 		end
+		p taghash
 		pluspoint = 0
 		taghash.each do |key,var|
 			@contents.insert(key + pluspoint,"</p>")
@@ -133,7 +143,7 @@ class Convert
 			pluspoint += 3
 		end
 
-		@contents.gsub!(/^\n$/,"</p><p>")
+		@contents.gsub!(/^\n/,"</p><p>")
 		@contents.insert(0,"<p>")
 			.insert(-1,"</p>")
 			.gsub!(/<p>[ \t]*(\n?)<\/p>/,'\1')
@@ -285,8 +295,8 @@ class Convert
 		@contents = contents
 		comment
 		utag
-		manyline
 		oneline
+		manyline
 		stag
 		text
 		puts 'return'
