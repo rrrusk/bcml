@@ -8,8 +8,8 @@ rescue LoadError
   require 'bcml'
 end
 
-newfile = open('convert' + '.html', 'w')
-
+newfile = open('convert.html', 'w')
+p ARGV[0]
 source = open(ARGV[0])
 contents = source.read
 source.close

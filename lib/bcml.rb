@@ -85,26 +85,11 @@ class Convert
 		return subject,tag,qualifier
 	end
 
-	#pタグとbrタグ挿入
+	#テキスト部分にpとかbrとか&nbsp;とかいれる
 	def text
 		ptag_insert
-		s = StringScanner.new(@contents)
-		point = []
-		until s.eos?
-			case
-			when s.skip(/<\/.+?>[ \t]?$/)
-			when s.skip(/<.+?>[ \t]?$/)
-			when s.scan(/(\n|.)$/)
-				point << s.charpos
-			when s.skip(/./m)
-			end
-		end
-		
-		pluspoint = 0
-		point.each do |x|
-			@contents.insert(x + pluspoint,"<br>")
-			pluspoint += 4
-		end
+		br_insert
+		space_esc
 	end
 
 	def ptag_insert
@@ -135,11 +120,12 @@ class Convert
 				when s.skip(/./m)
 				end
 			when s.scan(/<(?<tag>[a-zA-Z0-9]+).*?>/)
-				textpos = s.charpos - s[0].length - 1
+				textpos = s.charpos - s[0].length >= 1? s.charpos - s[0].length - 1 : 0
 				texttag = s[:tag]
 			when s.skip(/./m)
 			end
 		end
+
 		pluspoint = 0
 		taghash.each do |key,var|
 			@contents.insert(key + pluspoint,"</p>")
@@ -152,6 +138,59 @@ class Convert
 		@contents.insert(0,"<p>")
 			.insert(-1,"</p>")
 			.gsub!(/<p>[ \t]*(\n?)<\/p>/,'\1')
+	end
+
+	def br_insert
+		s = StringScanner.new(@contents)
+		point = []
+		until s.eos?
+			case
+			when s.skip(/<\/.+?>[ \t]?$/)
+			when s.skip(/<.+?>[ \t]?$/)
+			when s.skip(/<pre( .*?)?>/)
+				esc = true
+			when s.skip(/<\/pre>/)
+				esc = false
+			when s.skip(/(\n|.)$/)
+				point << s.charpos unless esc
+			when s.skip(/./m)
+			end
+		end
+		
+		pluspoint = 0
+		point.each do |x|
+			@contents.insert(x + pluspoint,"<br>")
+			pluspoint += 4
+		end
+	end
+
+	def space_esc
+		s = StringScanner.new(@contents)
+	  open = true
+		text = {}
+		pluspoint = 0
+
+		until s.eos?
+			case
+			when s.skip(/<p( .*?)?>/)
+				if open
+					open = false
+					start = s.charpos
+				end
+			when s.skip(/<\/p>/)
+				if !open
+					open = true
+					text[start] = s.charpos - s[0].length
+				end
+			when s.skip(/./m)
+			end
+		end
+		
+		p text
+
+		text.each do |key,var|
+			@contents[key..var-1] = @contents[key..var-1].gsub(/ /,"&nbsp;")
+		end
 	end
 
 	def convert(strings,re)
@@ -243,21 +282,21 @@ class Convert
 		unless alltag[tag[1]][0].empty?
 			alltag[:list][0] << "<ul>"
 			alltag[tag[1]][0].each_with_index do |x,y|
-				alltag[:list][0] << "<li><a href=\"#0#{y}h3\">#{x[:con]}</a></li>"
-				@contents.gsub!(/#{x[:object]}/,"<h3#{x[:attr]} id=\"0#{y}h3\">#{x[:con]}</h3>")
+				alltag[:list][0] << "<li><a href=\"##{tag[1]}0#{y}\">#{x[:con]}</a></li>"
+				@contents.gsub!(/#{x[:object]}/,"<#{tag[1]}#{x[:attr]} id=\"#{tag[1]}0#{y}\">#{x[:con]}</#{tag[1]}>")
 			end
 			alltag[:list][0] << "</ul>"
 		end
 
 		alltag[tag[0]].each_with_index do |x,i|
 			i += 1
-			alltag[:list][i] << "<li><a href=\"##{i}#{tag[0]}\">#{x[:con]}</a></li>"
-			@contents.gsub!(/#{x[:object]}/,"<#{tag[0]}#{x[:attr]} id=\"#{i}#{tag[0]}\">#{x[:con]}</#{tag[0]}>")
+			alltag[:list][i] << "<li><a href=\"##{tag[0]}#{i}\">#{x[:con]}</a></li>"
+			@contents.gsub!(/#{x[:object]}/,"<#{tag[0]}#{x[:attr]} id=\"#{tag[0]}#{i}\">#{x[:con]}</#{tag[0]}>")
 			unless alltag[tag[1]][i].empty?
 				alltag[:list][i] << "<ul>"
 				alltag[tag[1]][i].each_with_index do |x,y|
-					alltag[:list][i] << "<li><a href=\"##{i}#{y}h3\">#{x[:con]}</a></li>"
-					@contents.gsub!(/#{x[:object]}/,"<h3#{x[:attr]} id=\"#{i}#{y}h3\">#{x[:con]}</h3>")
+					alltag[:list][i] << "<li><a href=\"##{tag[1]}#{i}#{y}\">#{x[:con]}</a></li>"
+					@contents.gsub!(/#{x[:object]}/,"<#{tag[1]}#{x[:attr]} id=\"#{tag[1]}#{i}#{y}\">#{x[:con]}</#{tag[1]}>")
 				end
 				alltag[:list][i] << "</ul>"
 			end

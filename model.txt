@@ -1,33 +1,40 @@
+"README.bcml"
 return
-<p>a<br>
-@a<br>
-</p><p>avvv</p>
-<h1>h11</h1><p>
-avj<br>
-abviiju</p>
-<h3 class="bbb" id="00h3">midasi</h3>
-<h3 id="01h3">0banme</h3>
-<ul><ul><li><a href="#00h3">midasi</a></li><li><a href="#01h3">0banme</a></li><li><a href="#02h3">hello</a></li></ul><li><a href="#1h2">fafdaf</a></li><ul><li><a href="#10h3">2bante</a></li></ul></ul>
-<h4>h44</h4><p>
-f</p>
-<h5 class="he" id="ha">h55</h5><p>
-はろー<br>
-fdaf)@</p>
-<h4>
-jfa <h3 id="02h3">hello</h3>
-aafda</h4>
+<h2 id="1h2">目次</h2>
+<ul><li><a href="#1h2">目次</a></li><li><a href="#2h2">説明</a></li><li><a href="#3h2">使いかた</a></li><li><a href="#4h2">文法</a></li><li><a href="#5h2">カスタマイズ例</a></li></ul>
 <br>
+<h2 id="2h2">説明</h2><p>
+bcmlはブログなどのサイト上のテキストコンテンツを書きやすくする独自の記法を提供し、bcmlファイルからhtmlファイルを生成することができます。<br>
+これを聞くとマークダウンをイメージするかもしれませんがbcmlはクラスを指定するなどより細かい作業に対応しています。<br>
+bcmlはユーザーが記法をカスタマイズでき、記事を書く上で煩わしい作業はbcmlが請負ます。<br>
+あなたはPCでもスマホでも好きな端末で書きやすい記法にカスタマイズし文章の作成に集中することができます。<br>
+</p>
+<h2 id="3h2">使いかた</h2><p>
+bcmlはlib/bcmlにファイル名を引数として渡し実行することでhtmlファイルを生成できます。<br>
+</p><p>@command bcml foo.bcml<br>
+</p>
+<h2 id="4h2">文法</h2><p>
+h3タグでhello worldと書きたい場合はbcml記法が始まることを表す「@」とタグ名「h3」をbcmlでは書きます。</p>
 <pre>
-&lt;h3&gt;hello&lt;/h3&gt;<br>
+&lt;h3&gt;hello world&lt;/h3&gt;<br>
+-&gt; @h3 hello world<br>
 </pre>
-<br>
-<a href="http://google.com"><span class="yaml">aa</span></a>
-<h2 id="1h2">fafdaf</h2>
-<h3 id="10h3">2bante</h3><p>
-aaa<br>
-</p><p>aaa<br>
-@ふう ふうう</p>
-<span class="yaa">hello</span>
-<a href="https://www.yahoo.com/"></a>
-<br>
+<p>ここで紹介したのはbcmlのデフォルト設定での最も基本的なサンプルです。詳しい情報はdocフォルダを参照ください。<br>
+また、bcmlで書かれた文書のサンプルがexamplesフォルダにあるので何ができるかを知りたい場合はそこを見ると解決すると思います。<br>
+</p>
+<h2 id="5h2">カスタマイズ例</h2><p>
+bcmlは設定ファイルを変更することで簡単に文法を変えることができますがこれはその中の一例です。<br>
+</p>
+<pre>&lt;span class=&quot;command&quot;&gt;bcml sample.bcml&lt;/span&gt;<br>
+-&gt; ！こまんど bcml sample.bcml<br>
+</pre>
+<p>この例を見れば解ると思いますがbcmlはひらがなを使うこともできます。<br>
+そしてこの設定にした時の設定ファイルは以下のものです。<br>
+</p><p>GENERAL:<br>
+  symbol: ["！", "！(", ")！"]<br>
+UTAGS:<br>
+  こまんど:<br>
+    bcml: span.command<br>
+</p><p>具体的な設定ファイルの書きかたは付属のドキュメントを参照してください。<br>
+</p>
 end
