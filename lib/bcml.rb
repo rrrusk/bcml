@@ -26,21 +26,17 @@ class Bcml
 	end
 
 	def user_tag
-		user_tag_list = []
-		user_tagh = {} 
-		user_tagt = ""
-		@@config.USERTAGS.each do |key,value|
-			user_tag_list << [key,value["bcml"]]
-		end
-		user_tag_list.each_with_index do |x,index|
-			user_tagh[x[0]] = x[1]
-			unless index == user_tag_list.length - 1
-				user_tagt << x[0] + "|"
+		user_tag_hash = {} 
+		user_tag_pipe = ""
+		@@config.USERTAGS.each_with_index do |(key,value),index|
+			user_tag_hash[key] = value["bcml"]
+			unless index == @@config.USERTAGS.length - 1
+				user_tag_pipe << key + "|"
 			else
-				user_tagt << x[0]
+				user_tag_pipe << key
 			end
 		end
-		@@contents.gsub!(/(?<=#{@@config.SYMBOL[0]}|#{@@config.SYMBOL[1]})(#{user_tagt})(?=[ \t]+)/, user_tagh)
+		@@contents.gsub!(/(?<=#{@@config.SYMBOL[0]}|#{@@config.SYMBOL[1]})(#{user_tag_pipe})(?=[ \t]+)/, user_tag_hash)
 	end
 
 	def regex_esc(strings)
@@ -135,7 +131,7 @@ class SpecialTag < Bcml
 		main = 0
 		until s.eos?
 			case
-			when s.scan(/(?<object><#{tag[0]}(?<attr>\s.*?)?>(?<con>.+?)<\/#{tag[0]}>)/m)
+			when s.scan(/(?<object><#{tag[0]}(?<attr>\s[^>]*?)?>(?<con>[^<]+?)<\/#{tag[0]}>)/m)
 				main += 1
 				alltag[tag[0]] << {object: s[:object],attr: s[:attr],con: s[:con]}
 				alltag[tag[1]][main] = []
@@ -144,6 +140,8 @@ class SpecialTag < Bcml
 			when s.skip(/./m)
 			end
 		end
+
+		p alltag
 
 		alltag[:list] = Array.new(alltag[tag[0]].length + 1){""}
 
