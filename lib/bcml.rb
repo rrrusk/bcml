@@ -7,65 +7,21 @@ require 'open-uri'
 class Convert
 	def initialize()
 		# 設定ファイルから変数定義
-		config_open
-	end
-
-	# 設定ファイルから変数定義
-	def config_open
-		config = YAML.load_file("#{$MY_DIRECTORY}/config.yml")
-
-		@TAGS = config["TAGS"].freeze
-		@TAG = make_list(config["TAGS"])
-		@TAG.freeze
-
-		@SPECIALTAGS = config["SPECIALTAGS"].freeze
-
-		@QUALIFIERS = config["QUALIFIERS"].freeze
-		create_starters(@QUALIFIERS) #@STARTERS作成
-
-		@USERTAGS = config["USERTAGS"].freeze #ユーザー定義のタグ @midasi
-
-		@GENERAL = config["GENERAL"].freeze #シンボルに使う文字など
-		general_parse() #@SYMBOL作成
-	end
-
-	def general_parse
-		@SYMBOL = make_list(@GENERAL["symbol"])
-		@BRACKET = make_list(@GENERAL["bracket"])
-		@COMMENT = make_list(@GENERAL["comment"])
-	end
-
-	#ハッシュのキーの配列を返す
-	def make_list(source)
-		product = []
-		source.each do |x,y|
-			x = regex_esc(x)
-			product << x
-		end
-		return product
-	end
-
-	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
-	def create_starters(qualifiers)
-		@STARTERS = "" 
-		qualifiers.each do |key,value|
-			@STARTERS << key
-		end
-		@STARTERS.freeze
+		@config = MakeConfig.new()
 	end
 
 	#修飾部分の分離
 	def separator_qualifier(qualifier)
 		intags = []
 		outtags = [[],[]]
-		qualifier.scan(/(?<starter>[#{@STARTERS}])(?<qsub>(#{@BRACKET[0]}.+?#{@BRACKET[1]}|[^#{@STARTERS}])+)/) do |match|
+		qualifier.scan(/(?<starter>[#{@config.STARTERS}])(?<qsub>(#{@config.BRACKET[0]}.+?#{@config.BRACKET[1]}|[^#{@config.STARTERS}])+)/) do |match|
 			starter,qsub = $~[:starter],$~[:qsub] #starter => qualifierを起動する qsub => qualifierの本文
-			qinfo = @QUALIFIERS[starter] 
+			qinfo = @config.QUALIFIERS[starter] 
 			if qinfo["point"] == "intag"
-				qsub.gsub!(/^#{@BRACKET[0]}(.+?)#{@BRACKET[1]}$/,'\1')
+				qsub.gsub!(/^#{@config.BRACKET[0]}(.+?)#{@config.BRACKET[1]}$/,'\1')
 				intags << qinfo["usage"].gsub(/<qsub>/,qsub) #qsubを有るべき場所に入れる
 			elsif qinfo["point"] == "outtag"
-				qsub.gsub!(/^#{@BRACKET[0]}(.+?)#{@BRACKET[1]}$/,'\1')
+				qsub.gsub!(/^#{@config.BRACKET[0]}(.+?)#{@config.BRACKET[1]}$/,'\1')
 				outtags[0] << qinfo["usage"][0].gsub(/<qsub>/,qsub)
 				outtags[1] << qinfo["usage"][1].gsub(/<qsub>/,qsub)
 			end
@@ -166,7 +122,7 @@ class Convert
 
 	def space_esc
 		s = StringScanner.new(@contents)
-	  open = true
+		open = true
 		text = {}
 		pluspoint = 0
 
@@ -200,7 +156,7 @@ class Convert
 			intag,outtag = separator_qualifier(qualifier)
 			#タグが設定されてるか確認
 			#タグのオプションによって処理を変えたい
-			if @TAG.include?(tag) || tag == ""
+			if @config.TAG.include?(tag) || tag == ""
 				if tag == ""
 					if intag != "" && outtag != ""
 						goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
@@ -210,7 +166,7 @@ class Convert
 						goal = "<span#{intag}>" + subject + "</span>"
 					end
 				else
-					tagt = @TAGS[tag]
+					tagt = @config.TAGS[tag]
 					case
 					when tagt && tagt["escape"]
 						subject.gsub!(/[<>&"]/,"<" => "&lt;", ">" => "&gt;", "&" => "&amp;", '"' => "&quot;")
@@ -226,25 +182,26 @@ class Convert
 	end
 
 	def oneliner
-		convert(@contents,/(?<origin>^[ \t]*#{@SYMBOL[0]}(?<prefix>[^\s]+)[ \t](?<subject>.+))/)
+		convert(@contents,/(?<origin>^[ \t]*#{@config.SYMBOL[0]}(?<prefix>[^\s]+)[ \t](?<subject>.+))/)
 	end
 
 	def multiliner
-		re = /(?<f>#{@SYMBOL[1]}(\g<f>*.*?)*#{@SYMBOL[2]})/m
+		re = /(?<f>#{@config.SYMBOL[1]}(\g<f>*.*?)*#{@config.SYMBOL[2]})/m
 		while re =~ @contents
 			@contents.gsub!(re) do |match|
-				match.gsub!(/(\A#{@SYMBOL[1]}|#{@SYMBOL[2]}\Z)/,"")
+				match.gsub!(/(\A#{@config.SYMBOL[1]}|#{@config.SYMBOL[2]}\Z)/,"")
 				convert(match,/(?<origin>^(?<prefix>[^\s]+)\s(?<subject>.+))/m)
 			end
 		end
 	end
 
 	def special_tag
-		foo = @contents.scan(/(?<origin>^\s*#{@SYMBOL[0]}(?<special_tag>[^\s#{@BRACKET[0]}]+)(#{@BRACKET[0]}(?<ssub>.+?)#{@BRACKET[1]})?)/)
+		foo = @contents.scan(/(?<origin>^\s*#{@config.SYMBOL[0]}(?<special_tag>[^\s#{@config.BRACKET[0]}]+)(#{@config.BRACKET[0]}(?<ssub>.+?)#{@config.BRACKET[1]})?)/)
 		foo.each do |x|
+			p x
 			special_tag = x[1]
 
-			if @SPECIALTAGS.include?(special_tag)
+			if @config.SPECIALTAGS.include?(special_tag)
 				origin = regex_esc(x[0])
 				unless x[2].nil?
 					ssub = x[2]
@@ -331,14 +288,14 @@ class Convert
 	end
 
 	def comment
-		@contents.gsub!(/^#{@COMMENT[0]}.+?#{@COMMENT[1]}$/m,"")
+		@contents.gsub!(/^#{@config.COMMENT[0]}.+?#{@config.COMMENT[1]}$/m,"")
 	end
 
 	def user_tag
 		user_tag_list = []
 		user_tagh = {} 
 		user_tagt = ""
-		@USERTAGS.each do |key,value|
+		@config.USERTAGS.each do |key,value|
 			user_tag_list << [key,value["bcml"]]
 		end
 		user_tag_list.each_with_index do |x,index|
@@ -349,7 +306,7 @@ class Convert
 				user_tagt << x[0]
 			end
 		end
-		@contents.gsub!(/(?<=#{@SYMBOL[0]}|#{@SYMBOL[1]})(#{user_tagt})(?=[ \t]+)/, user_tagh)
+		@contents.gsub!(/(?<=#{@config.SYMBOL[0]}|#{@config.SYMBOL[1]})(#{user_tagt})(?=[ \t]+)/, user_tagh)
 	end
 
 	def main(contents)
@@ -362,5 +319,56 @@ class Convert
 		text
 		puts contents
 		return contents
+	end
+end
+
+class MakeConfig < Convert
+	attr_reader :TAGS, :TAG, :SPECIALTAGS, :QUALIFIERS, :USERTAGS, :GENERAL, :SYMBOL, :BRACKET, :COMMENT, :STARTERS
+	def initialize()
+		yaml_open
+	end
+
+	# 設定ファイルから変数定義
+	def yaml_open
+		config = YAML.load_file("#{$MY_DIRECTORY}/config.yml")
+
+		@TAGS = config["TAGS"].freeze
+		@TAG = make_list(config["TAGS"])
+		@TAG.freeze
+
+		@SPECIALTAGS = config["SPECIALTAGS"].freeze
+
+		@QUALIFIERS = config["QUALIFIERS"].freeze
+		create_starters(@QUALIFIERS) #@STARTERS作成
+
+		@USERTAGS = config["USERTAGS"].freeze #ユーザー定義のタグ @midasi
+
+		@GENERAL = config["GENERAL"].freeze #シンボルに使う文字など
+		general_parse() #@SYMBOL作成
+	end
+
+	def general_parse
+		@SYMBOL = make_list(@GENERAL["symbol"])
+		@BRACKET = make_list(@GENERAL["bracket"])
+		@COMMENT = make_list(@GENERAL["comment"])
+	end
+
+	#ハッシュのキーの配列を返す
+	def make_list(source)
+		product = []
+		source.each do |x,y|
+			x = regex_esc(x)
+			product << x
+		end
+		return product
+	end
+
+	#設定の中からスターターのリストを作る(join(|)で正規表現として使う)
+	def create_starters(qualifiers)
+		@STARTERS = "" 
+		qualifiers.each do |key,value|
+			@STARTERS << key
+		end
+		@STARTERS.freeze
 	end
 end

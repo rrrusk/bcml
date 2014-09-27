@@ -1,4 +1,4 @@
-<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">カスタマイズ</a></li><ul><li><a href="#h360">ユーザータグ</a></li></ul></ul>
+<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">コメント</a></li><li><a href="#h27">カスタマイズ</a></li><ul><li><a href="#h370">ユーザータグ</a></li><li><a href="#h371">hello</a></li><li><a href="#h372">根本的な設定</a></li></ul></ul>
 <h2 id="h21">はじめに</h2><p>
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>
 </p><p>試しに「@span.command&nbsp;hello&nbsp;world」というファイルをsample.bcmlというファイル名で保存し、<br>
@@ -9,23 +9,23 @@ bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコ�
 としてください。<br>
 </p><p>するとこのようなファイルがsample.htmlという名前で出来上がります。<br>
 </p>
-<pre>&lt;span class=&quot;command&quot;&gt;hello&nbsp;world&lt;/span&gt;
+<pre>&lt;span class=&quot;command&quot;&gt;hello world&lt;/span&gt;
 </pre>
 <p>例えばこの例で言うと、「@」が「シンボル」、「span」が「タグ」、「.command」が修飾部、「hello&nbsp;world」が「メインコンテンツ」となります。
 </p><p>bcmlは「シンボル」によってbcml記法で書かれている部分がどこかを判別して「タグ」部分に書かれた文字がhtmlのタグ名に相当します。
 </p><p>「修飾部」は「修飾子」と「修飾内容」でできておりid、クラス、リンクがデフォルトで指定できます。
 この部分についての詳しいことは修飾子の部分を参照してください。
 </p>
-<h2&nbsp;id="h22">ワンライナー記法</h2><p>
+<h2 id="h22">ワンライナー記法</h2><p>
 bcmlにはワンライナー記法とマルチライナー記法があります。
 ワンライナー記法は一行でbcml記法が完結しますが簡潔な記法を使うことができます。
 マルチライナー記法は複数行の「メインコンテンツ」を書くことと行の途中でbcml記法を使うことができますが、閉じタグを書かなければならないためワンライナー記法ほどの簡潔さはありません。
 </p><p>主にマルチライナー記法はpreタグでコードを載せるときや、行の途中にaタグでリンクを載せるときに便利です。
 </p><p>先ほどの例もワンライナー記法で書かれているのでその例で解説します</p>
-<span&nbsp;class="command">hello&nbsp;world</span><p>
+<span class="command">hello world</span><p>
 ワンライナー記法で必要なのは「シンボル」、「タグ」、「修飾部」でできたbcml部文と「メインコンテンツ」なのですがワンライナー記法ではbcml部分とメインコンテンツ部分の間に半角スペースをいれなければなりません。
 </p>
-<h2&nbsp;id="h23">マルチライナー記法</h2><p>
+<h2 id="h23">マルチライナー記法</h2><p>
 マルチライナー記法は開始シンボル、bcml部分、メインコンテンツ、終了シンボルが必要です。
 例を出すと
 </p>
@@ -38,7 +38,7 @@ bcmlにはワンライナー記法とマルチライナー記法があります�
 )@<br>
 </p><p>マルチライナー記法は、開始シンボル(デフォルトでは「」)を必要とします。<br>
 </p>
-<h2&nbsp;id="h24">修飾部</h2><p>
+<h2 id="h24">修飾部</h2><p>
 bcmlは修飾部によってタグで囲われた文字にリンクとidとクラスをデフォルトでつけることができます。<br>
 config.ymlをいじれば修飾子を増やすことができますがこの機能は非推奨です。<br>
 </p><p>修飾部の文法はそれがなにを修飾するかを表す（例えば#ならidをつける）修飾子、修飾する内容を表す（idの例で言えばid名）を表す「修飾内容」をスペースを入れずに書きます。<br>
@@ -47,54 +47,98 @@ config.ymlをいじれば修飾子を増やすことができますがこの機�
 <pre>&lt;h4 class=&quot;class&quot; id=&quot;id&quot;&gt;hello&lt;/h4&gt;
 bcml-&gt;@h4.class#id hello
 &lt;a href=&quot;http://google.com&quot;&gt;google&lt;/a&gt;
-bcml-&gt;@:[http://google.com]&nbsp;google
+bcml-&gt;@:[http://google.com] google
 </pre>
 <p>デフォルトで使える修飾子はidを表す「#」クラスを表す「.」aタグのhref属性持ちで囲まれたリンクを表す「:」です。
 修飾子にはタグ名の中に修飾内容を書き込む「インタグ」修飾子の外にタグを作って修飾内容を書き込む(:の場合は修飾内容がhref属性に入ったaタグを作る)「アウトタグ」の２種類があります。
 先程の例で言うと「.」「#」はインタグ「:」はアウトタグです。
 </p><p>また、シンボルの後のタグを省略して修飾部メインコンテンツとした場合はインタグは自動でspanタグが生成されアウトタグの場合はメインコンテンツをそのままアウトタグの内容で囲みます。
 </p>
-<h2&nbsp;id="h25">特殊タグ</h2><p>
+<h2 id="h25">特殊タグ</h2><p>
 bcmlには今まで述べてきた基本的な文法以外に特殊タグというものがあります。
 特殊タグはここの機能に沿って、htmlを自動生成します。
 また、特殊タグは他のhtmlにも影響を与える場合があります。
 このタグはメインコンテンツを必要とせずワンライナー記法でのシンボル、特殊タグの名前、[]の中に引数を入れたものを必要とします。
 </p><p>説明だけではピンとこないと思うので具体例で説明していきます。
 </p>
-<h3&nbsp;id="h350">目次機能</h3><p>
-目次機能は、引数に書かれたタグのリストを作ります。このリストは<a&nbsp;href="h30">hello</h3>と言ったふうにページ内リンクができるようになった状態で生成されます。
+<h3 id="h350">目次機能</h3><p>
+目次機能は、引数に書かれたタグのリストを作ります。このリストは&lt;a&nbsp;href="h30"&gt;hello&lt;/a&gt;と言ったふうにページ内リンクができるようになった状態で生成されます。
 この機能はリンク先のタグにidを設定する必要があるので他のhtmlに影響を与えます。
-<pre>@mokuzi[h5]
-&lt;h5&gt;hello&lt;/h5&gt;
+</p>
+<h4 id="h41">hello</h4>
+<h5 id="h510">world</h5>
+<h6>hoge</h6>
+<h5 id="h511">bar</h5>
+<h4 id="h42">foo</h4>
+<pre>&lt;h4&gt;hello&lt;/h4&gt;
 &lt;h5&gt;world&lt;/h5&gt;
 &lt;h6&gt;hoge&lt;/h6&gt;
-&lt;h5&gt;foo<a>bar</a>&lt;/h5&gt;
-bcml-&gt;@mokuzi[h5]
-bcml-&gt;@h5&nbsp;hello
-bcml-&gt;@h5&nbsp;world
-bcml-&gt;@h5&nbsp;foo<a>bar</a>
+&lt;h5&gt;bar&lt;/h5&gt;
+&lt;h4&gt;foo&lt;/h4&gt;
+<ul><li><a href="#h41">hello</a></li><ul><li><a href="#h510">world</a></li><li><a href="#h511">bar</a></li></ul><li><a href="#h42">foo</a></li></ul>
+bcml-&gt;@h4 hello
+bcml-&gt;@h5 world
+bcml-&gt;@h6 hoge
+bcml-&gt;@h5 bar
+bcml-&gt;@h4 foo
+bcml-&gt;<ul><li><a href="#h41">hello</a></li><ul><li><a href="#h510">world</a></li><li><a href="#h511">bar</a></li></ul><li><a href="#h42">foo</a></li></ul>
 </pre>
-</p><p>目次機能は[]の中にどのタグを収集するか引数をとります。
-</p><p><h3&nbsp;id="h351">リンクにタイトルをつける</h3>
+<p>目次機能は[]の中にどの目次にするか引数をとります。
+h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4&nbsp;h5]と引数を書きます。
+指定できるタグは２つまでになっており２つ指定した場合は先にしたほうが親になりネストするようになっています。
+</p>
+<h3 id="h351">リンクにタイトルをつける</h3><p>
 ページタイトルを取得するというのはブログなどを書いているとよくやる作業ですが案外デフォルト状態のブラウザでは難しいです。
 この機能だとurlのみ書いておけば自動でタイトルタグからページタイトルを取得できます。
-</p><p><pre>@:[http://google.com]
+</p>
+<pre>@:[http://google.com]
 bcml-&gt;@:[http://google.com]
 </pre>
-</p><p>この書き方はタグを書かなかった時の修飾部でリンクをつけようとした時の書き方に似ていますが、内部処理的には別物です。
+<p>この書き方はタグを書かなかった時の修飾部でリンクをつけようとした時の書き方に似ていますが、内部処理的には別物です。
 しかし、bcmlはこのことを意識しなくてもいいように設計されています。
-</p><p><h2&nbsp;id="h26">カスタマイズ</h2>
+</p>
+<h2 id="h26">コメント</h2><p>
+bcmlでは@---、---@で囲まれた部分がコメントになります。
+コメントはhtmlに変換されるときには消去されているので変換後のファイルに影響を与えることはありません。
+</p>
+<h2 id="h27">カスタマイズ</h2><p>
 bcml記法を使用することの大きなメリットとして挙げられるものの一つにカスタマイズができることがありますがその方法をいまから紹介していきます。
-</p><p><h3&nbsp;id="h360">ユーザータグ</h3>
+</p>
+<h3 id="h370">ユーザータグ</h3><p>
 ユーザータグは設定したものに置き換えられます。
 ユーザータグの設定はbcml/config.ymlを編集してください。これはyamlファイルなのでyaml記法を使って書いてください。
-yamlについてはこちらを参照してください。
-<a&nbsp;href="http://magazine.rubyist.net/?0009-YAML">Rubyist&nbsp;Magazine&nbsp;-&nbsp;プログラマーのための YAML 入門 (初級編)</a>
-</p><p>設定ファイル
+yamlについてはこちらを参照してください。</p>
+<a href="http://magazine.rubyist.net/?0009-YAML">Rubyist Magazine - プログラマーのための YAML 入門 (初級編)</a>
+<p>設定ファイル</p>
 <pre>UTAGS:
   midasi:
     bcml: h3.bbb
-  ruby:
+  るびー:
     bcml: pre.[brush:ruby]
 </pre>
+<p>この設定では@midasiが@h3.bbbのかわり@rubyが@pre.[brush:ruby]の代わりになるようになっています。
+</p>
+<h3 class="bbb" id="h371">hello</h3>
+<pre class="brush:ruby">p &quot;hello&quot;</pre><p>
+bcml->@h3.bbb&nbsp;hello
+@るびー&nbsp;p&nbsp;"hello"
+)@
+</p>
+<h3 id="h372">根本的な設定</h3>
+<pre>GENERAL:
+  symbol: [&quot;!&quot;, &quot;![&quot;, &quot;]!&quot;]
+  bracket: [&quot;(&quot;, &quot;)&quot;]
+  comment: [&quot;!---&quot;,&quot;---!&quot;]
+</pre>
+<p>こうするとsymbolはワンライナー記法の時!になりマルチライナー記法の時は開始シンボルが![終了シンボルが]!になり、修飾部の修飾内容を囲むものは()になり、コメントは!---&nbsp;---!で囲まれたものになります。
+</p><p>つまり
+デフォルトだと
+\@h3&nbsp;hello
+</p>\<a>world</a><p>
+\@---&nbsp;comment&nbsp;---@
+となるところを
+\!h3&nbsp;hello
+\![a:[http://foo]&nbsp;world&nbsp;]!
+\!---&nbsp;comment&nbsp;---!
+と書くことができます。
 </p>
