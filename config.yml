@@ -3,7 +3,7 @@ GENERAL:
   symbol: ["@", "@(", ")@"]
   bracket: ["[", "]"]
   comment: ["@---","---@"]
-UTAGS:
+USERTAGS:
   midasi:
     bcml: h3.bbb
   ruby:
@@ -36,6 +36,6 @@ QUALIFIERS:
     usage: [<a href="<qsub>">, </a>]
     other:
     - bracket
-STAGS:
+SPECIALTAGS:
   - mokuzi
   - ":"

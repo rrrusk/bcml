@@ -18,12 +18,12 @@ class Convert
 		@TAG = make_list(config["TAGS"])
 		@TAG.freeze
 
-		@STAGS = config["STAGS"].freeze
+		@SPECIALTAGS = config["SPECIALTAGS"].freeze
 
 		@QUALIFIERS = config["QUALIFIERS"].freeze
 		create_starters(@QUALIFIERS) #@STARTERS作成
 
-		@UTAGS = config["UTAGS"].freeze #ユーザー定義のタグ @midasi
+		@USERTAGS = config["USERTAGS"].freeze #ユーザー定義のタグ @midasi
 
 		@GENERAL = config["GENERAL"].freeze #シンボルに使う文字など
 		general_parse() #@SYMBOL作成
@@ -187,7 +187,10 @@ class Convert
 		end
 
 		text.each do |key,var|
-			@contents[key..var-1] = @contents[key..var-1].gsub(/ /,"&nbsp;")
+			@contents[key+pluspoint..var-1+pluspoint] = @contents[key+pluspoint..var-1+pluspoint].gsub(/ /) do |match|
+				pluspoint += 5
+				"&nbsp;"
+			end
 		end
 	end
 
@@ -222,11 +225,11 @@ class Convert
 		end
 	end
 
-	def oneline
+	def oneliner
 		convert(@contents,/(?<origin>^[ \t]*#{@SYMBOL[0]}(?<prefix>[^\s]+)[ \t](?<subject>.+))/)
 	end
 
-	def manyline
+	def multiliner
 		re = /(?<f>#{@SYMBOL[1]}(\g<f>*.*?)*#{@SYMBOL[2]})/m
 		while re =~ @contents
 			@contents.gsub!(re) do |match|
@@ -236,20 +239,20 @@ class Convert
 		end
 	end
 
-	def stag
-		foo = @contents.scan(/(?<origin>^\s*#{@SYMBOL[0]}(?<stag>[^\s#{@BRACKET[0]}]+)(#{@BRACKET[0]}(?<ssub>.+?)#{@BRACKET[1]})?)/)
+	def special_tag
+		foo = @contents.scan(/(?<origin>^\s*#{@SYMBOL[0]}(?<special_tag>[^\s#{@BRACKET[0]}]+)(#{@BRACKET[0]}(?<ssub>.+?)#{@BRACKET[1]})?)/)
 		foo.each do |x|
-			stag = x[1]
+			special_tag = x[1]
 
-			if @STAGS.include?(stag)
+			if @SPECIALTAGS.include?(special_tag)
 				origin = regex_esc(x[0])
 				unless x[2].nil?
 					ssub = x[2]
 				end
 				case
-				when stag == "mokuzi"
+				when special_tag == "mokuzi"
 					mokuzi(origin,ssub)
-				when stag == ":"
+				when special_tag == ":"
 					get_link_title(origin,ssub)
 				end
 			end
@@ -331,31 +334,31 @@ class Convert
 		@contents.gsub!(/^#{@COMMENT[0]}.+?#{@COMMENT[1]}$/m,"")
 	end
 
-	def utag
-		utagl = []
-		utagh = {} 
-		utagt = ""
-		@UTAGS.each do |key,value|
-			utagl << [key,value["bcml"]]
+	def user_tag
+		user_tag_list = []
+		user_tagh = {} 
+		user_tagt = ""
+		@USERTAGS.each do |key,value|
+			user_tag_list << [key,value["bcml"]]
 		end
-		utagl.each_with_index do |x,index|
-			utagh[x[0]] = x[1]
-			unless index == utagl.length - 1
-				utagt << x[0] + "|"
+		user_tag_list.each_with_index do |x,index|
+			user_tagh[x[0]] = x[1]
+			unless index == user_tag_list.length - 1
+				user_tagt << x[0] + "|"
 			else
-				utagt << x[0]
+				user_tagt << x[0]
 			end
 		end
-		@contents.gsub!(/(?<=#{@SYMBOL[0]}|#{@SYMBOL[1]})(#{utagt})(?=[ \t]+)/, utagh)
+		@contents.gsub!(/(?<=#{@SYMBOL[0]}|#{@SYMBOL[1]})(#{user_tagt})(?=[ \t]+)/, user_tagh)
 	end
 
 	def main(contents)
 		@contents = contents
 		comment
-		utag
-		oneline
-		manyline
-		stag
+		user_tag
+		oneliner
+		multiliner
+		special_tag
 		text
 		puts contents
 		return contents
