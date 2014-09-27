@@ -1,9 +1,3 @@
-["@mokuzi[h2 h3]", "mokuzi", "h2 h3"]
-["@command", "command", nil]
-["@command", "command", nil]
-["@mokuzi[h4 h5]", "mokuzi", "h4 h5"]
-["@:[http://magazine.rubyist.net/?0009-YAML]", ":", "http://magazine.rubyist.net/?0009-YAML"]
-["@るびー", "るびー", nil]
 <ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">コメント</a></li><li><a href="#h27">カスタマイズ</a></li><ul><li><a href="#h370">ユーザータグ</a></li><li><a href="#h371">hello</a></li><li><a href="#h372">根本的な設定</a></li></ul></ul>
 <h2 id="h21">はじめに</h2><p>
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>

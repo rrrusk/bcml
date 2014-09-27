@@ -14,8 +14,8 @@ source = open(ARGV[0])
 contents = source.read
 source.close
 
-con = Convert.new
-converted = con.main(contents)
+bcml = Bcml.new
+converted = bcml.exec(contents)
 
 newfile.write(converted)
 newfile.close
