@@ -1,4 +1,5 @@
 @mokuzi[h2 h3]
+
 @h2 はじめに
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。
 
@@ -38,15 +39,15 @@ bcmlにはワンライナー記法とマルチライナー記法があります�
 例を出すと
 
 @(pre
-@@(pre
+\@(pre
 alert('hello');
-)@@
+)@
 )@
 
 ほかに、このような書き方もできます。
 
 @(pre
-@@(pre alert('hello');)@@
+\@(pre alert('hello');)@
 )@
 
 マルチライナー記法は、開始シンボル(デフォルトでは「@(」)の直後にbcml部分、その後に半角スペースもしくは改行をいれてメインコンテンツ、終了シンボル(デフォルトでは「)@」)を必要とします。
@@ -101,7 +102,7 @@ bcml->@h5 world
 bcml->@h6 hoge
 bcml->@h5 bar
 bcml->@h4 foo
-bcml->@mokuzi[h4 h5]
+bcml->\@mokuzi[h4 h5]
 )@
 
 目次機能は[]の中にどの目次にするか引数をとります。
@@ -120,19 +121,89 @@ bcml->@:[http://google.com]
 この書き方はタグを書かなかった時の修飾部でリンクをつけようとした時の書き方に似ていますが、内部処理的には別物です。
 しかし、bcmlはこのことを意識しなくてもいいように設計されています。
 
+@h2 エスケープ
+bcml記法をエスケープしたい場合は、ワンライナー記法の時はシンボル。マルチライナー記法の時は開始シンボルの前にバックスラッシュを入れてください。
+
+@(pre
+\@span エスケープされます
+bcml-> \\@span エスケープされます
+)@
+
 @h2 コメント
 bcmlでは@---、---@で囲まれた部分がコメントになります。
 コメントはhtmlに変換されるときには消去されているので変換後のファイルに影響を与えることはありません。
 
 @h2 カスタマイズ
 bcml記法を使用することの大きなメリットとして挙げられるものの一つにカスタマイズができることがありますがその方法をいまから紹介していきます。
-
-@h3 ユーザータグ
-ユーザータグは設定したものに置き換えられます。
-ユーザータグの設定はbcml/config.ymlを編集してください。これはyamlファイルなのでyaml記法を使って書いてください。
+ユーザーの設定はbcmlフォルダ直下にあるconfig.ymlに記述していきます。これはyamlファイルなのでyaml記法を使って書いてください。
 yamlについてはこちらを参照してください。
 @:[http://magazine.rubyist.net/?0009-YAML]
 
+config.ymlの中身はデフォルトではこうなっています。
+@(pre
+---
+GENERAL:
+  symbol: ["@", "@(", ")@"]
+  bracket: ["[", "]"]
+  comment: ["@---","---@"]
+
+USERTAGS:
+
+TAGS:
+  h1:
+    display: block
+  h2:
+    display: block
+  h3:
+    display: block
+  h4:
+    display: block
+  h5:
+    display: block
+  h6:
+    display: block
+  a:
+    display: inline
+  div:
+    display: block
+  span:
+    display: inline
+  p:
+    display: block
+  pre:
+    display: block
+    escape: true
+  ul:
+    display: block
+  li:
+    display: inline
+  b:
+    display: inline
+  i:
+    display: inline
+  blockquote:
+    display: block
+
+QUALIFIERS:
+  ".":
+    point: intag
+    usage: class="<qsub>"
+  "#":
+    point: intag
+    usage: id="<qsub>"
+  ":":
+    point: outtag
+    usage: [<a href="<qsub>">, </a>]
+
+SPECIALTAGS:
+  - mokuzi
+  - ":"
+)@
+
+
+@h3 ユーザータグ
+ユーザータグは設定したものに置き換えられます。
+ユーザータグの設定はUTAGSを編集してください。
 設定ファイル
 @(pre
 UTAGS:
@@ -170,3 +241,46 @@ GENERAL:
 \![a:[http://foo] world ]!
 \!--- comment ---!
 と書くことができます。
+
+@h3 使えるタグの設定
+bcmlはbcml記法が書かれていてもタグが登録されていない場合は、htmlに変換せず普通のテキストと同様に扱います。
+そのためデフォルトで用意されているもの以外のタグが使いたい場合は他具を登録する必要があります。
+
+使えるタグはTAGSの中に記述することで増やせます。
+タグ名がキー、displayはそのタグがインライン要素ならinlineブロック要素ならblockとしてください。
+pタグをbcmlは自動でつけますがその時pタグでインライン要素なら囲みますがブロック要素なら囲みません。
+@(pre
+TAGS:
+  h1:
+    display: block
+  a:
+    display: inline
+  div:
+    display: block
+  span:
+    display: inline
+)@
+
+@h3 使える修飾子の設定
+デフォルトで用意されている修飾子はid、クラス、リンクを意味する「#」「.」「:」のみです。
+増やしたい場合はQUALIFIERSの中に記述してください。
+
+@(pre
+QUALIFIERS:
+  ".":
+    point: intag
+    usage: class="<qsub>"
+  "#":
+    point: intag
+    usage: id="<qsub>"
+  ":":
+    point: outtag
+    usage: [<a href="<qsub>">, </a>]
+)@
+
+必要な情報はキーに修飾子にする文字、pointにintagもしくはouttag、usageに修飾内容を囲む部分を書いていきます。
+
+pointはintagにするとインタグ、outtagにするとアウトタグとして扱われます。
+
+usageはインタグの場合は文字列で<qsub>が修飾内容と入れ替わります。
+アウトタグの場合は配列で一つ目が開きタグ、二つ目が閉じタグになっておりこの2つがメインコンテンツを囲います。アウトタグも同様に<qsub>が修飾内容と入れ替わります。

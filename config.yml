@@ -12,18 +12,42 @@ USERTAGS:
     bcml: pre.[brush:python]
   js:
     bcml: pre.[brush:js]
+  command:
+    bcml: span.command
 TAGS:
   h1:
+    display: block
   h2:
+    display: block
   h3:
+    display: block
   h4:
+    display: block
   h5:
+    display: block
   h6:
+    display: block
   a:
-  span:
+    display: inline
   div:
+    display: block
+  span:
+    display: inline
+  p:
+    display: block
   pre:
+    display: block
     escape: true
+  ul:
+    display: block
+  li:
+    display: inline
+  b:
+    display: inline
+  i:
+    display: inline
+  blockquote:
+    display: block
 QUALIFIERS:
   ".":
     point: intag
@@ -34,8 +58,6 @@ QUALIFIERS:
   ":":
     point: outtag
     usage: [<a href="<qsub>">, </a>]
-    other:
-    - bracket
 SPECIALTAGS:
   - mokuzi
   - ":"
