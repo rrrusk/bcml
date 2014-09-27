@@ -185,8 +185,6 @@ class Convert
 			when s.skip(/./m)
 			end
 		end
-		
-		p text
 
 		text.each do |key,var|
 			@contents[key..var-1] = @contents[key..var-1].gsub(/ /,"&nbsp;")
@@ -359,9 +357,7 @@ class Convert
 		manyline
 		stag
 		text
-		puts 'return'
 		puts contents
-		puts 'end'
 		return contents
 	end
 end

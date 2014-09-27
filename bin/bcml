@@ -8,13 +8,12 @@ rescue LoadError
   require 'bcml'
 end
 
-newfile = open("#{ARGV[0].gsub(/\/.+(?!\/)/,"/")}convert.html", 'w')
-p 
+path = ARGV[0].gsub(/(?<=\/).+(?!\/)/,"") if ARGV[0] =~ /\//
+newfile = open("#{path}convert.html", 'w')
 source = open(ARGV[0])
 contents = source.read
 source.close
 
-#変換元データを処理した後変換先ファイルに書き込み
 con = Convert.new
 converted = con.main(contents)
 
