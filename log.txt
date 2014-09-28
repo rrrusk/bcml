@@ -2,17 +2,17 @@
 <br>
 <h2 id="h21">はじめに</h2><p>
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>
-</p><p>試しに「@span.command&nbsp;hello&nbsp;world」というファイルをsample.bcmlというファイル名で保存し、<br>
-<span&nbsp;class="command">bcml&nbsp;sample.bcml</span>
+</p><p>試しに「@span.command hello world」というファイルをsample.bcmlというファイル名で保存し、<br>
+<span class="command">bcml sample.bcml</span>
 とコマンドをうってください。<br>
 パスを通してない場合は、<br>
-<span&nbsp;class="command">bcmlフォルダのパス/lib/bcml&nbsp;sample.bcml</span>
+<span class="command">bcmlフォルダのパス/lib/bcml sample.bcml</span>
 としてください。<br>
 </p><p>するとこのようなファイルがsample.htmlという名前で出来上がります。<br>
 </p>
 <pre>&lt;span class=&quot;command&quot;&gt;hello world&lt;/span&gt;
 </pre>
-<p>例えばこの例で言うと、「@」が「シンボル」、「span」が「タグ」、「.command」が修飾部、「hello&nbsp;world」が「メインコンテンツ」となります。
+<p>例えばこの例で言うと、「@」が「シンボル」、「span」が「タグ」、「.command」が修飾部、「hello world」が「メインコンテンツ」となります。
 </p><p>bcmlは「シンボル」によってbcml記法で書かれている部分がどこかを判別して「タグ」部分に書かれた文字がhtmlのタグ名に相当します。
 </p><p>「修飾部」は「修飾子」と「修飾内容」でできておりid、クラス、リンクがデフォルトで指定できます。
 この部分についての詳しいことは修飾子の部分を参照してください。
@@ -23,7 +23,7 @@ bcmlにはワンライナー記法とマルチライナー記法があります�
 マルチライナー記法は複数行の「メインコンテンツ」を書くことと行の途中でbcml記法を使うことができますが、閉じタグを書かなければならないためワンライナー記法ほどの簡潔さはありません。
 </p><p>主にマルチライナー記法はpreタグでコードを載せるときや、行の途中にaタグでリンクを載せるときに便利です。
 </p><p>先ほどの例もワンライナー記法で書かれているのでその例で解説します
-<span&nbsp;class="command">hello&nbsp;world</span>
+<span class="command">hello world</span>
 ワンライナー記法で必要なのは「シンボル」、「タグ」、「修飾部」でできたbcml部文と「メインコンテンツ」なのですがワンライナー記法ではbcml部分とメインコンテンツ部分の間に半角スペースをいれなければなりません。
 </p>
 <h2 id="h23">マルチライナー記法</h2><p>
@@ -32,13 +32,13 @@ bcmlにはワンライナー記法とマルチライナー記法があります�
 </p>
 <pre>@(pre
 alert('hello');
-</pre><p>
 )@
-</p><p>ほかに、このような書き方もできます。
+</pre>
+<p>ほかに、このような書き方もできます。
 </p>
-<pre>@(pre alert('hello');</pre><p>
-)@
-</p><p>マルチライナー記法は、開始シンボル(デフォルトでは「」)を必要とします。
+<pre>@(pre alert('hello');)@
+</pre>
+<p>マルチライナー記法は、開始シンボル(デフォルトでは「」)を必要とします。
 </p>
 <h2 id="h24">修飾部</h2><p>
 bcmlは修飾部によってタグで囲われた文字にリンクとidとクラスをデフォルトでつけることができます。
@@ -64,7 +64,7 @@ bcmlには今まで述べてきた基本的な文法以外に特殊タグとい�
 </p><p>説明だけではピンとこないと思うので具体例で説明していきます。
 </p>
 <h3 id="h350">目次機能</h3><p>
-目次機能は、引数に書かれたタグのリストを作ります。このリストは&lt;a&nbsp;href="h30"&gt;hello&lt;/a&gt;と言ったふうにページ内リンクができるようになった状態で生成されます。
+目次機能は、引数に書かれたタグのリストを作ります。このリストは&lt;a href="h30"&gt;hello&lt;/a&gt;と言ったふうにページ内リンクができるようになった状態で生成されます。
 この機能はリンク先のタグにidを設定する必要があるので他のhtmlに影響を与えます。
 </p>
 <h4 id="h41">hello</h4>
@@ -86,7 +86,7 @@ bcml-&gt;@h4 foo
 bcml-&gt;\<ul><li><a href="#h41">hello</a></li><ul><li><a href="#h510">world</a></li><li><a href="#h511">bar</a></li></ul><li><a href="#h42">foo</a></li></ul>
 </pre>
 <p>目次機能は[]の中にどの目次にするか引数をとります。
-h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4&nbsp;h5]と引数を書きます。
+h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4 h5]と引数を書きます。
 指定できるタグは２つまでになっており２つ指定した場合は先にしたほうが親になりネストするようになっています。
 </p>
 <h3 id="h351">リンクにタイトルをつける</h3><p>
@@ -114,7 +114,7 @@ bcmlでは@---、---@で囲まれた部分がコメントになります。
 bcml記法を使用することの大きなメリットとして挙げられるものの一つにカスタマイズができることがありますがその方法をいまから紹介していきます。
 ユーザーの設定はbcmlフォルダ直下にあるconfig.ymlに記述していきます。これはyamlファイルなのでyaml記法を使って書いてください。
 yamlについてはこちらを参照してください。
-<a&nbsp;href="http://magazine.rubyist.net/?0009-YAML">Rubyist&nbsp;Magazine&nbsp;-&nbsp;プログラマーのための&nbsp;YAML&nbsp;入門&nbsp;(初級編)</a>
+<a href="http://magazine.rubyist.net/?0009-YAML">Rubyist Magazine - プログラマーのための YAML 入門 (初級編)</a>
 </p><p>config.ymlの中身はデフォルトではこうなっています。</p>
 <pre>---
 GENERAL:
@@ -123,55 +123,55 @@ GENERAL:
   comment: [&quot;@---&quot;,&quot;---@&quot;]
 </p><p>USERTAGS:
 </p><p>TAGS:
-&nbsp;&nbsp;h1:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;h2:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;h3:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;h4:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;h5:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;h6:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;a:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;inline
-&nbsp;&nbsp;div:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;span:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;inline
-&nbsp;&nbsp;p:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;pre:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;&nbsp;&nbsp;escape:&nbsp;true
-&nbsp;&nbsp;ul:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
-&nbsp;&nbsp;li:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;inline
-&nbsp;&nbsp;b:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;inline
-&nbsp;&nbsp;i:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;inline
-&nbsp;&nbsp;blockquote:
-&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block
+ &nbsp;h1:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;h2:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;h3:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;h4:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;h5:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;h6:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;a:
+ &nbsp; &nbsp; &nbsp;display: inline
+ &nbsp;div:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;span:
+ &nbsp; &nbsp; &nbsp;display: inline
+ &nbsp;p:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;pre:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp; &nbsp; &nbsp;escape: true
+ &nbsp;ul:
+ &nbsp; &nbsp; &nbsp;display: block
+ &nbsp;li:
+ &nbsp; &nbsp; &nbsp;display: inline
+ &nbsp;b:
+ &nbsp; &nbsp; &nbsp;display: inline
+ &nbsp;i:
+ &nbsp; &nbsp; &nbsp;display: inline
+ &nbsp;blockquote:
+ &nbsp; &nbsp; &nbsp;display: block
 </p><p>QUALIFIERS:
-&nbsp;&nbsp;&quot;.&quot;:
-&nbsp;&nbsp;&nbsp;&nbsp;point:&nbsp;intag
-&nbsp;&nbsp;&nbsp;&nbsp;usage:&nbsp;class=&quot;&lt;qsub&gt;&quot;
-&nbsp;&nbsp;&quot;#&quot;:
-&nbsp;&nbsp;&nbsp;&nbsp;point:&nbsp;intag
-&nbsp;&nbsp;&nbsp;&nbsp;usage:&nbsp;id=&quot;&lt;qsub&gt;&quot;
-&nbsp;&nbsp;&quot;:&quot;:
-&nbsp;&nbsp;&nbsp;&nbsp;point:&nbsp;outtag
-&nbsp;&nbsp;&nbsp;&nbsp;usage:&nbsp;[&lt;a&nbsp;href=&quot;&lt;qsub&gt;&quot;&gt;,&nbsp;&lt;/a&gt;]
+ &nbsp;&quot;.&quot;:
+ &nbsp; &nbsp; &nbsp;point: intag
+ &nbsp; &nbsp; &nbsp;usage: class=&quot;&lt;qsub&gt;&quot;
+ &nbsp;&quot;#&quot;:
+ &nbsp; &nbsp; &nbsp;point: intag
+ &nbsp; &nbsp; &nbsp;usage: id=&quot;&lt;qsub&gt;&quot;
+ &nbsp;&quot;:&quot;:
+ &nbsp; &nbsp; &nbsp;point: outtag
+ &nbsp; &nbsp; &nbsp;usage: [&lt;a href=&quot;&lt;qsub&gt;&quot;&gt;, &lt;/a&gt;]
 </p><p>SPECIALTAGS:
-&nbsp;&nbsp;-&nbsp;mokuzi
-&nbsp;&nbsp;-&nbsp;&quot;:&quot;
+ &nbsp;- mokuzi
+ &nbsp;- &quot;:&quot;
 </pre>
 
-<h3&nbsp;id="h380">ユーザータグ</h3><p>
+<h3 id="h380">ユーザータグ</h3><p>
 ユーザータグは設定したものに置き換えられます。
 ユーザータグの設定はUTAGSを編集してください。
 設定ファイル</p>
@@ -185,8 +185,8 @@ GENERAL:
 </p>
 <h3 class="bbb" id="h381">hello</h3>
 <pre class="brush:ruby">p &quot;hello&quot;</pre><p>
-bcml->@h3.bbb&nbsp;hello
-@るびー&nbsp;p&nbsp;"hello"
+bcml->@h3.bbb hello
+@るびー p "hello"
 )@
 </p>
 <h3 id="h382">根本的な設定</h3>
@@ -195,16 +195,16 @@ bcml->@h3.bbb&nbsp;hello
   bracket: [&quot;(&quot;, &quot;)&quot;]
   comment: [&quot;!---&quot;,&quot;---!&quot;]
 </pre>
-<p>こうするとsymbolはワンライナー記法の時!になりマルチライナー記法の時は開始シンボルが![終了シンボルが]!になり、修飾部の修飾内容を囲むものは()になり、コメントは!---&nbsp;---!で囲まれたものになります。
+<p>こうするとsymbolはワンライナー記法の時!になりマルチライナー記法の時は開始シンボルが![終了シンボルが]!になり、修飾部の修飾内容を囲むものは()になり、コメントは!--- ---!で囲まれたものになります。
 </p><p>つまり
 デフォルトだと
-@h3&nbsp;hello
-@(a&nbsp;world)@
-@---&nbsp;comment&nbsp;---@
+@h3 hello
+@(a world)@
+@--- comment ---@
 となるところを
-\!h3&nbsp;hello
-\![a:[http://foo]&nbsp;world&nbsp;]!
-\!---&nbsp;comment&nbsp;---!
+\!h3 hello
+\![a:[http://foo] world ]!
+\!--- comment ---!
 と書くことができます。
 </p>
 <h3 id="h383">使えるタグの設定</h3><p>

@@ -5,11 +5,11 @@ class BcmlToHtml < Bcml
 	end
 
 	def oneliner
-		convert(@@contents,/(?<origin>^[ \t]*#{@@config.SYMBOL[0]}(?<prefix>[^\s]+)[ \t](?<subject>.+))/)
+		convert(@@contents,/(?<origin>^[ \t]*(?<!\\)#{@@config.SYMBOL[0]}(?<prefix>[^\s]+)[ \t](?<subject>.+))/)
 	end
 
 	def multiliner
-		re = /(?<f>(?<!\\)#{@@config.SYMBOL[1]}(\g<f>*.*?)*#{@@config.SYMBOL[2]})/m
+		re = /(?<f>(?<!\\)#{@@config.SYMBOL[1]}(\g<f>*.*?)*#{@@config.SYMBOL[2]})(?!\\)/m
 		while re =~ @@contents
 			@@contents.gsub!(re) do |match|
 				match.gsub!(/(\A#{@@config.SYMBOL[1]}|#{@@config.SYMBOL[2]}\Z)/,"")
@@ -26,17 +26,17 @@ class BcmlToHtml < Bcml
 			#タグのオプションによって処理を変えたい
 			if @@config.TAG.include?(tag) || tag == ""
 				if tag == ""
-					if intag != "" && outtag != ""
+					case
+					when intag != "" && outtag != ""
 						goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
-					elsif outtag != ""
+					when outtag != ""
 						goal = outtag[0] + subject + outtag[1]
-					elsif intag != ""
+					when intag != ""
 						goal = "<span#{intag}>" + subject + "</span>"
 					end
 				else
 					tagt = @@config.TAGS[tag]
-					case
-					when tagt && tagt["escape"]
+					if tagt && tagt["escape"]
 						subject.gsub!(/[<>&"]/,"<" => "&lt;", ">" => "&gt;", "&" => "&amp;", '"' => "&quot;")
 					end
 					goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
