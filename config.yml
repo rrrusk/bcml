@@ -54,6 +54,8 @@ TAGS:
     display: inline
   i:
     display: inline
+  code:
+    display: block
   blockquote:
     display: block
 QUALIFIERS:

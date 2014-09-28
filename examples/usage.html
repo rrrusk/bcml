@@ -1,66 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta charset="UTF-8">
-	<title>bcmlの文法</title>
-<style>
-*{
-	font-size: 16px;
-}
-pre{
-	border: 1px #888 solid;
-	background: #eee;
-	padding: 7px;
-	margin: 10px;
-}
-h2{
-	font-size: 30px;
-	border-left: 4px #31db96 solid;
-	margin: 40px 4px 0 4px;
-	padding-left: 3px;
-	padding-bottom: 0;
-}
-h3{
-	font-size: 24px;
-	border-left: 2px #00F solid;
-	margin: 8px 4px 0 4px;
-	padding-left: 3px;
-	padding-bottom: 0px;
-}
-p{
-	margin-top: 5px;
-}
-.command{
-	padding: 6px;
-	text-shadow: 0 0 6px #31db96;
-	background: #000;
-	color: #31db96;
-	display: inline-block;
-	vertical-align: center;
-}
-a{
-	text-decoration: none;
-	color: #20b97b;
-}
-.command:before{
-	content: '$';
-	padding-right: 3px;
-}
-#main{
-	margin: 0 auto;
-	width: 700px;
-}
-</style>
-<link type="text/css" rel="stylesheet" href="styles/shCore.css" />
-<link type="text/css" rel="stylesheet" href="styles/shThemeFadeToGrey.css" />
-<script type="text/javascript" src="scripts/shCore.js"></script>
-<script type="text/javascript" src="scripts/shBrushYaml.js"></script>
-<script type="text/javascript" src="scripts/shBrushXml.js"></script>
-<script type="text/javascript" src="scripts/shBrushBash.js"></script>
-<script type="text/javascript" src="scripts/shBrushPlain.js"></script>
-</head>
-<body>
-<div id="main">
 <ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">根本的な設定</a></li><li><a href="#h382">使えるタグの設定</a></li><li><a href="#h383">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul>
 <br>
 <h2 id="h21">はじめに</h2><p>
@@ -312,10 +249,3 @@ pタグをbcmlは自動でつけますがその時pタグでインライン要�
 サンプルはexamplesディレクトリを参照してください。
 カスタマイズされている場合はコメントにconfig.ymlの内容が書いてあります。
 </p>
-</div>
-<!-- Finally, to actually run the highlighter, you need to include this JS on your page -->
-<script type="text/javascript">
-     SyntaxHighlighter.all()
-</script>
-</body>
-</html>
