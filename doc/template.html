@@ -31,10 +31,16 @@ p{
 	margin-top: 5px;
 }
 .command{
-	padding: 5px;
-	border: 1px solid #ddd;
+	padding: 6px;
+	text-shadow: 0 0 6px #31db96;
 	background: #000;
-	color: #00F;
+	color: #31db96;
+	display: inline-block;
+	vertical-align: center;
+}
+a{
+	text-decoration: none;
+	color: #20b97b;
 }
 .command:before{
 	content: '$';
@@ -59,13 +65,12 @@ p{
 <br>
 <h2 id="h21">はじめに</h2><p>
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>
-</p><p>試しに「@span.command hello world」というファイルをsample.bcmlというファイル名で保存し、</p>
-<pre class="brush:bash">bcml sample.bcml</pre><p>
+</p><p>試しに「@span.command hello world」というファイルをsample.bcmlというファイル名で保存し、<br>
+@code.command bcml sample.bcml<br>
 とコマンドをうってください。<br>
-パスを通してない場合は、</p>
-<pre class="brush:bash">bcmlフォルダのパス/lib/bcml sample.bcml</pre><p>
+パスを通してない場合は、<br>
+@code.command bcmlフォルダのパス/lib/bcml sample.bcml<br>
 としてください。<br>
-パスの通し方はREADMEを参照してください<br>
 </p><p>するとこのようなファイルがsample.htmlという名前で出来上がります。<br>
 </p>
 <pre class="brush:html">&lt;span class=&quot;command&quot;&gt;hello world&lt;/span&gt;
@@ -152,12 +157,12 @@ bcml-&gt;@:[http://google.com]
 しかし、bcmlはこのことを意識しなくてもいいように設計されています。
 </p>
 <h2 id="h26">エスケープ</h2><p>
-bcml記法をエスケープしたい場合は、ワンライナー記法の時はシンボル。マルチライナー記法の時は開始シンボルの前と終了シンボルの後にバックスラッシュを入れてください。
+bcml記法をエスケープしたい場合は、ワンライナー記法の時はシンボル。マルチライナー記法の時は開始シンボルの前にバックスラッシュを入れてください。
 </p>
-<pre class="brush:plain">@span エスケープされます
+<pre class="brush:html">@span エスケープされます
 bcml-&gt; \@span エスケープされます
-@(div エスケープされます</pre><p>
-bcml-> \@(div エスケープされます)@\
+@div エスケープされます
+bcml-&gt; \@(div エスケープされます</pre><p>
 )@
 </p>
 <h2 id="h27">コメント</h2><p>

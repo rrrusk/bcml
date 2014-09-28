@@ -21,7 +21,7 @@ USERTAGS:
   plain:
     bcml: pre.[brush:plain]
   command:
-    bcml: div.command
+    bcml: code.command
 TAGS:
   h1:
     display: block

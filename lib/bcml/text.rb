@@ -156,6 +156,6 @@ class Text < Bcml
 
 	def symbol_esc
 		@@contents.gsub!(/\\(#{@@config.SYMBOL[0]}|#{@@config.SYMBOL[1]})/,'\1')
-			.gsub!(/(#{@@config.SYMBOL[2]})\\/,'\1')
+		@@contents.gsub!(/(#{@@config.SYMBOL[2]})\\/,'\1')
 	end
 end
