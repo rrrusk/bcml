@@ -28,20 +28,20 @@ class BcmlToHtml < Bcml
 				if tag == ""
 					case
 					when intag != "" && outtag != ""
-						goal = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
+						product = outtag[0] + "<span#{intag}>" + subject + "</span>" + outtag[1]
 					when outtag != ""
-						goal = outtag[0] + subject + outtag[1]
+						product = outtag[0] + subject + outtag[1]
 					when intag != ""
-						goal = "<span#{intag}>" + subject + "</span>"
+						product = "<span#{intag}>" + subject + "</span>"
 					end
 				else
-					tagt = @@config.TAGS[tag]
-					if tagt && tagt["escape"]
+					this_tag = @@config.TAGS[tag]
+					if this_tag && this_tag["escape"]
 						subject.gsub!(/[<>&"]/,"<" => "&lt;", ">" => "&gt;", "&" => "&amp;", '"' => "&quot;")
 					end
-					goal = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
+					product = outtag[0] + "<#{tag}#{intag}>" + subject + "</#{tag}>" + outtag[1]
 				end
-				goal
+				product
 
 			else #タグが無効なものだったら変換せずに終了
 				$~[:origin]

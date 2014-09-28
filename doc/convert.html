@@ -1,4 +1,4 @@
-<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">hello</a></li><li><a href="#h382">根本的な設定</a></li><li><a href="#h383">使えるタグの設定</a></li><li><a href="#h384">使える修飾子の設定</a></li></ul></ul>
+<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">hello</a></li><li><a href="#h382">根本的な設定</a></li><li><a href="#h383">使えるタグの設定</a></li><li><a href="#h384">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul>
 <br>
 <h2 id="h21">はじめに</h2><p>
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>
@@ -50,7 +50,7 @@ config.ymlをいじれば修飾子を増やすことができますがこの機�
 <pre>&lt;h4 class=&quot;class&quot; id=&quot;id&quot;&gt;hello&lt;/h4&gt;
 bcml-&gt;@h4.class#id hello
 &lt;a href=&quot;http://google.com&quot;&gt;google&lt;/a&gt;
-bcml-&gt;@:[http://google.com] google
+bcml-&gt;<a href="http://google.com">Google</a> google
 </pre>
 <p>デフォルトで使える修飾子はidを表す「#」クラスを表す「.」aタグのhref属性持ちで囲まれたリンクを表す「:」です。
 修飾子にはタグ名の中に修飾内容を書き込む「インタグ」修飾子の外にタグを作って修飾内容を書き込む(:の場合は修飾内容がhref属性に入ったaタグを作る)「アウトタグ」の２種類があります。
@@ -68,33 +68,26 @@ bcmlには今まで述べてきた基本的な文法以外に特殊タグとい�
 目次機能は、引数に書かれたタグのリストを作ります。このリストは&lt;a href="h30"&gt;hello&lt;/a&gt;と言ったふうにページ内リンクができるようになった状態で生成されます。
 この機能はリンク先のタグにidを設定する必要があるので他のhtmlに影響を与えます。
 </p>
-<h4 id="h41">hello</h4>
-<h5 id="h510">world</h5>
-<h6>hoge</h6>
-<h5 id="h511">bar</h5>
-<h4 id="h42">foo</h4>
-<pre>&lt;h4&gt;hello&lt;/h4&gt;
-&lt;h5&gt;world&lt;/h5&gt;
-&lt;h6&gt;hoge&lt;/h6&gt;
-&lt;h5&gt;bar&lt;/h5&gt;
-&lt;h4&gt;foo&lt;/h4&gt;
-<ul><li><a href="#h41">hello</a></li><ul><li><a href="#h510">world</a></li><li><a href="#h511">bar</a></li></ul><li><a href="#h42">foo</a></li></ul>
-bcml-&gt;@h4 hello
+<h4>foo</h4>
+<h5>j</h5>
+<pre>bcml-&gt;@h4 hello
 bcml-&gt;@h5 world
 bcml-&gt;@h6 hoge
 bcml-&gt;@h5 bar
 bcml-&gt;@h4 foo
-bcml-&gt;\<ul><li><a href="#h41">hello</a></li><ul><li><a href="#h510">world</a></li><li><a href="#h511">bar</a></li></ul><li><a href="#h42">foo</a></li></ul>
+bcml-&gt;@mokuzi[h4 h5]
 </pre>
-<p>目次機能は[]の中にどの目次にするか引数をとります。
-h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4 h5]と引数を書きます。
-指定できるタグは２つまでになっており２つ指定した場合は先にしたほうが親になりネストするようになっています。
+<p>こうした場合は目次は@h4 hello,@h5 world,@h5 bar,@h4 fooを目次にします。
+このドキュメントの目次は@mokuzi[h2 h3]
+によって生成されています。
+</p><p>目次機能は[]の中にどの目次にするか引数をとります。
+h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4 h5]と引数を書きます。</p><p>指定できるタグは２つまでになっており２つ指定した場合は先にしたほうが親になりネストするようになっています。
 </p>
 <h3 id="h351">リンクにタイトルをつける</h3><p>
 ページタイトルを取得するというのはブログなどを書いているとよくやる作業ですが案外デフォルト状態のブラウザでは難しいです。
 この機能だとurlのみ書いておけば自動でタイトルタグからページタイトルを取得できます。
 </p>
-<pre>@:[http://google.com]
+<pre>&lt;a href=&quot;http://google.com&quot;&gt;Google&lt;/a&gt;
 bcml-&gt;@:[http://google.com]
 </pre>
 <p>この書き方はタグを書かなかった時の修飾部でリンクをつけようとした時の書き方に似ていますが、内部処理的には別物です。
@@ -174,8 +167,9 @@ QUALIFIERS:
 </p><p>SPECIALTAGS:
  &nbsp;- mokuzi
  &nbsp;- &quot;:&quot;
-</pre>
+</pre><p>
 
+</p>
 <h3 id="h380">ユーザータグ</h3><p>
 ユーザータグは設定したものに置き換えられます。
 ユーザータグの設定はUTAGSを編集してください。
@@ -208,9 +202,9 @@ bcml->@h3.bbb hello
 @(a world)@
 @--- comment ---@
 となるところを
-\!h3 hello
-\![a:[http://foo] world ]!
-\!--- comment ---!
+!h3 hello
+![a:[http://foo] world ]!
+!--- comment ---!
 と書くことができます。
 </p>
 <h3 id="h383">使えるタグの設定</h3><p>
@@ -244,12 +238,13 @@ pタグをbcmlは自動でつけますがその時pタグでインライン要�
   &quot;:&quot;:
     point: outtag
     usage: [&lt;a href=&quot;&lt;qsub&gt;&quot;&gt;, &lt;/a&gt;]
-</pre><p>
-
-必要な情報はキーに修飾子にする文字、pointにintagもしくはouttag、usageに修飾内容を囲む部分を書いていきます。
-
-pointはintagにするとインタグ、outtagにするとアウトタグとして扱われます。
-
-usageはインタグの場合は文字列で<qsub>が修飾内容と入れ替わります。
+</pre>
+<p>必要な情報はキーに修飾子にする文字、pointにintagもしくはouttag、usageに修飾内容を囲む部分を書いていきます。
+</p><p>pointはintagにするとインタグ、outtagにするとアウトタグとして扱われます。
+</p><p>usageはインタグの場合は文字列で<qsub>が修飾内容と入れ替わります。
 アウトタグの場合は配列で一つ目が開きタグ、二つ目が閉じタグになっておりこの2つがメインコンテンツを囲います。アウトタグも同様に<qsub>が修飾内容と入れ替わります。
+</p>
+<h2 id="h29">サンプル</h2><p>
+サンプルはexamplesディレクトリを参照してください。
+カスタマイズされている場合はコメントにconfig.ymlの内容が書いてあります。
 </p>

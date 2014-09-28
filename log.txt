@@ -1,4 +1,4 @@
-<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">hello</a></li><li><a href="#h382">根本的な設定</a></li><li><a href="#h383">使えるタグの設定</a></li><li><a href="#h384">使える修飾子の設定</a></li></ul></ul>
+<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">hello</a></li><li><a href="#h382">根本的な設定</a></li><li><a href="#h383">使えるタグの設定</a></li><li><a href="#h384">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul>
 <br>
 <h2 id="h21">はじめに</h2><p>
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>
@@ -23,7 +23,7 @@ bcmlにはワンライナー記法とマルチライナー記法があります�
 マルチライナー記法は複数行の「メインコンテンツ」を書くことと行の途中でbcml記法を使うことができますが、閉じタグを書かなければならないためワンライナー記法ほどの簡潔さはありません。
 </p><p>主にマルチライナー記法はpreタグでコードを載せるときや、行の途中にaタグでリンクを載せるときに便利です。
 </p><p>先ほどの例もワンライナー記法で書かれているのでその例で解説します
-<span class="command">hello world</span>
+@span.command hello world
 ワンライナー記法で必要なのは「シンボル」、「タグ」、「修飾部」でできたbcml部文と「メインコンテンツ」なのですがワンライナー記法ではbcml部分とメインコンテンツ部分の間に半角スペースをいれなければなりません。
 </p>
 <h2 id="h23">マルチライナー記法</h2><p>
@@ -33,9 +33,9 @@ bcmlにはワンライナー記法とマルチライナー記法があります�
 <pre>@(pre
 alert('hello');
 )@
-</pre>
-<p>ほかに、このような書き方もできます。
-</p>
+</pre><p>
+
+ほかに、このような書き方もできます。</p>
 <pre>@(pre alert('hello');)@
 </pre>
 <p>マルチライナー記法は、開始シンボル(デフォルトでは「」)を必要とします。
@@ -45,7 +45,8 @@ bcmlは修飾部によってタグで囲われた文字にリンクとidとク�
 config.ymlをいじれば修飾子を増やすことができますがこの機能は非推奨です。
 </p><p>修飾部の文法はそれがなにを修飾するかを表す（例えば#ならidをつける）修飾子、修飾する内容を表す（idの例で言えばid名）を表す「修飾内容」をスペースを入れずに書きます。
 修飾内容にスペースや修飾子にある文字が含まれている場合は[]で囲んでください。
-</p><p>例</p>
+
+例</p>
 <pre>&lt;h4 class=&quot;class&quot; id=&quot;id&quot;&gt;hello&lt;/h4&gt;
 bcml-&gt;@h4.class#id hello
 &lt;a href=&quot;http://google.com&quot;&gt;google&lt;/a&gt;
@@ -67,25 +68,18 @@ bcmlには今まで述べてきた基本的な文法以外に特殊タグとい�
 目次機能は、引数に書かれたタグのリストを作ります。このリストは&lt;a href="h30"&gt;hello&lt;/a&gt;と言ったふうにページ内リンクができるようになった状態で生成されます。
 この機能はリンク先のタグにidを設定する必要があるので他のhtmlに影響を与えます。
 </p>
-<h4 id="h41">hello</h4>
-<h5 id="h510">world</h5>
-<h6>hoge</h6>
-<h5 id="h511">bar</h5>
-<h4 id="h42">foo</h4>
-<pre>&lt;h4&gt;hello&lt;/h4&gt;
-&lt;h5&gt;world&lt;/h5&gt;
-&lt;h6&gt;hoge&lt;/h6&gt;
-&lt;h5&gt;bar&lt;/h5&gt;
-&lt;h4&gt;foo&lt;/h4&gt;
-<ul><li><a href="#h41">hello</a></li><ul><li><a href="#h510">world</a></li><li><a href="#h511">bar</a></li></ul><li><a href="#h42">foo</a></li></ul>
-bcml-&gt;@h4 hello
+<h4>foo</h4>
+<pre>bcml-&gt;@h4 hello
 bcml-&gt;@h5 world
 bcml-&gt;@h6 hoge
 bcml-&gt;@h5 bar
 bcml-&gt;@h4 foo
-bcml-&gt;\<ul><li><a href="#h41">hello</a></li><ul><li><a href="#h510">world</a></li><li><a href="#h511">bar</a></li></ul><li><a href="#h42">foo</a></li></ul>
-</pre>
-<p>目次機能は[]の中にどの目次にするか引数をとります。
+bcml-&gt;@mokuzi[h4 h5]
+</pre><p>
+
+こうした場合は目次は@h4 hello,@h5 world,@h5 bar,@h4 fooを目次にします。
+このドキュメントの目次は</p>\<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">hello</a></li><li><a href="#h382">根本的な設定</a></li><li><a href="#h383">使えるタグの設定</a></li><li><a href="#h384">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul><p>によって生成されています。
+</p><p>目次機能は[]の中にどの目次にするか引数をとります。
 h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4 h5]と引数を書きます。
 指定できるタグは２つまでになっており２つ指定した場合は先にしたほうが親になりネストするようになっています。
 </p>
@@ -115,57 +109,61 @@ bcml記法を使用することの大きなメリットとして挙げられる�
 ユーザーの設定はbcmlフォルダ直下にあるconfig.ymlに記述していきます。これはyamlファイルなのでyaml記法を使って書いてください。
 yamlについてはこちらを参照してください。
 <a href="http://magazine.rubyist.net/?0009-YAML">Rubyist Magazine - プログラマーのための YAML 入門 (初級編)</a>
-</p><p>config.ymlの中身はデフォルトではこうなっています。</p>
+
+config.ymlの中身はデフォルトではこうなっています。</p>
 <pre>---
 GENERAL:
   symbol: [&quot;@&quot;, &quot;&quot;&quot;]
   bracket: [&quot;[&quot;, &quot;]&quot;]
   comment: [&quot;@---&quot;,&quot;---@&quot;]
-</p><p>USERTAGS:
-</p><p>TAGS:
- &nbsp;h1:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;h2:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;h3:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;h4:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;h5:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;h6:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;a:
- &nbsp; &nbsp; &nbsp;display: inline
- &nbsp;div:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;span:
- &nbsp; &nbsp; &nbsp;display: inline
- &nbsp;p:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;pre:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp; &nbsp; &nbsp;escape: true
- &nbsp;ul:
- &nbsp; &nbsp; &nbsp;display: block
- &nbsp;li:
- &nbsp; &nbsp; &nbsp;display: inline
- &nbsp;b:
- &nbsp; &nbsp; &nbsp;display: inline
- &nbsp;i:
- &nbsp; &nbsp; &nbsp;display: inline
- &nbsp;blockquote:
- &nbsp; &nbsp; &nbsp;display: block
-</p><p>QUALIFIERS:
- &nbsp;&quot;.&quot;:
- &nbsp; &nbsp; &nbsp;point: intag
- &nbsp; &nbsp; &nbsp;usage: class=&quot;&lt;qsub&gt;&quot;
- &nbsp;&quot;#&quot;:
- &nbsp; &nbsp; &nbsp;point: intag
- &nbsp; &nbsp; &nbsp;usage: id=&quot;&lt;qsub&gt;&quot;
- &nbsp;&quot;:&quot;:
- &nbsp; &nbsp; &nbsp;point: outtag
- &nbsp; &nbsp; &nbsp;usage: [&lt;a href=&quot;&lt;qsub&gt;&quot;&gt;, &lt;/a&gt;]
+
+USERTAGS:
+
+TAGS:
+  h1:
+    display: block
+  h2:
+    display: block
+  h3:
+    display: block
+  h4:
+    display: block
+  h5:
+    display: block
+  h6:
+    display: block
+  a:
+    display: inline
+  div:
+    display: block
+  span:
+    display: inline
+  p:
+    display: block
+  pre:
+    display: block
+    escape: true
+  ul:
+    display: block
+  li:
+    display: inline
+  b:
+    display: inline
+  i:
+    display: inline
+  blockquote:
+    display: block
+
+QUALIFIERS:
+  &quot;.&quot;:
+    point: intag
+    usage: class=&quot;&lt;qsub&gt;&quot;
+  &quot;#&quot;:
+    point: intag
+    usage: id=&quot;&lt;qsub&gt;&quot;
+  &quot;:&quot;:
+    point: outtag
+    usage: [&lt;a href=&quot;&lt;qsub&gt;&quot;&gt;, &lt;/a&gt;]
 </p><p>SPECIALTAGS:
  &nbsp;- mokuzi
  &nbsp;- &quot;:&quot;
@@ -180,8 +178,9 @@ GENERAL:
     bcml: h3.bbb
   るびー:
     bcml: pre.[brush:ruby]
-</pre>
-<p>この設定では@midasiが@h3.bbbのかわり@rubyが@pre.[brush:ruby]の代わりになるようになっています。
+</pre><p>
+
+この設定では@midasiが@h3.bbbのかわり@rubyが@pre.[brush:ruby]の代わりになるようになっています。
 </p>
 <h3 class="bbb" id="h381">hello</h3>
 <pre class="brush:ruby">p &quot;hello&quot;</pre><p>
@@ -202,9 +201,9 @@ bcml->@h3.bbb hello
 @(a world)@
 @--- comment ---@
 となるところを
-\!h3 hello
-\![a:[http://foo] world ]!
-\!--- comment ---!
+!h3 hello
+![a:[http://foo] world ]!
+!--- comment ---!
 と書くことができます。
 </p>
 <h3 id="h383">使えるタグの設定</h3><p>
@@ -243,4 +242,8 @@ pタグをbcmlは自動でつけますがその時pタグでインライン要�
 </p><p>pointはintagにするとインタグ、outtagにするとアウトタグとして扱われます。
 </p><p>usageはインタグの場合は文字列で<qsub>が修飾内容と入れ替わります。
 アウトタグの場合は配列で一つ目が開きタグ、二つ目が閉じタグになっておりこの2つがメインコンテンツを囲います。アウトタグも同様に<qsub>が修飾内容と入れ替わります。
+</p>
+<h2 id="h29">サンプル</h2><p>
+サンプルはexamplesディレクトリを参照してください。
+カスタマイズされている場合はコメントにconfig.ymlの内容が書いてあります。
 </p>
