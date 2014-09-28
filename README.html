@@ -1,16 +1,32 @@
-<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">hello</a></li><li><a href="#h382">根本的な設定</a></li><li><a href="#h383">使えるタグの設定</a></li><li><a href="#h384">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>bcmlの文法</title>
+<link type="text/css" rel="stylesheet" href="styles/mycss.css" />
+<link type="text/css" rel="stylesheet" href="styles/shCore.css" />
+<link type="text/css" rel="stylesheet" href="styles/shThemeFadeToGrey.css" />
+<script type="text/javascript" src="scripts/shCore.js"></script>
+<script type="text/javascript" src="scripts/shBrushYaml.js"></script>
+<script type="text/javascript" src="scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="scripts/shBrushBash.js"></script>
+<script type="text/javascript" src="scripts/shBrushPlain.js"></script>
+</head>
+<body>
+<div id="main">
+<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">根本的な設定</a></li><li><a href="#h382">使えるタグの設定</a></li><li><a href="#h383">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul>
 <br>
 <h2 id="h21">はじめに</h2><p>
 bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>
-</p><p>試しに「@span.command hello world」というファイルをsample.bcmlというファイル名で保存し、<br>
-<span class="command">bcml sample.bcml</span>
+</p><p>試しに「@span.command hello world」というファイルをsample.bcmlというファイル名で保存し、</p>
+<code class="command">bcml sample.bcml</code><p>
 とコマンドをうってください。<br>
-パスを通してない場合は、<br>
-<span class="command">bcmlフォルダのパス/lib/bcml sample.bcml</span>
+パスを通してない場合は、</p>
+<code class="command">bcmlフォルダのパス/lib/bcml sample.bcml</code><p>
 としてください。<br>
 </p><p>するとこのようなファイルがsample.htmlという名前で出来上がります。<br>
 </p>
-<pre>&lt;span class=&quot;command&quot;&gt;hello world&lt;/span&gt;
+<pre class="brush:html">&lt;span class=&quot;command&quot;&gt;hello world&lt;/span&gt;
 </pre>
 <p>例えばこの例で言うと、「@」が「シンボル」、「span」が「タグ」、「.command」が修飾部、「hello world」が「メインコンテンツ」となります。
 </p><p>bcmlは「シンボル」によってbcml記法で書かれている部分がどこかを判別して「タグ」部分に書かれた文字がhtmlのタグ名に相当します。
@@ -30,13 +46,14 @@ bcmlにはワンライナー記法とマルチライナー記法があります�
 マルチライナー記法は開始シンボル、bcml部分、メインコンテンツ、終了シンボルが必要です。
 例を出すと
 </p>
-<pre>@(pre
+<pre class="brush:plain">@(pre
 alert('hello');
 )@
 </pre><p>
 
-ほかに、このような書き方もできます。</p>
-<pre>@(pre alert('hello');)@
+ほかに、このような書き方もできます。
+</p>
+<pre class="brush:plain">@(pre alert('hello');)@
 </pre>
 <p>マルチライナー記法は、開始シンボル(デフォルトでは「」)を必要とします。
 </p>
@@ -47,7 +64,7 @@ config.ymlをいじれば修飾子を増やすことができますがこの機�
 修飾内容にスペースや修飾子にある文字が含まれている場合は[]で囲んでください。
 
 例</p>
-<pre>&lt;h4 class=&quot;class&quot; id=&quot;id&quot;&gt;hello&lt;/h4&gt;
+<pre class="brush:html">&lt;h4 class=&quot;class&quot; id=&quot;id&quot;&gt;hello&lt;/h4&gt;
 bcml-&gt;@h4.class#id hello
 &lt;a href=&quot;http://google.com&quot;&gt;google&lt;/a&gt;
 bcml-&gt;@:[http://google.com] google
@@ -68,17 +85,16 @@ bcmlには今まで述べてきた基本的な文法以外に特殊タグとい�
 目次機能は、引数に書かれたタグのリストを作ります。このリストは&lt;a href="h30"&gt;hello&lt;/a&gt;と言ったふうにページ内リンクができるようになった状態で生成されます。
 この機能はリンク先のタグにidを設定する必要があるので他のhtmlに影響を与えます。
 </p>
-<h4>foo</h4>
-<pre>bcml-&gt;@h4 hello
+<pre class="brush:plain">bcml-&gt;@h4 hello
 bcml-&gt;@h5 world
 bcml-&gt;@h6 hoge
 bcml-&gt;@h5 bar
 bcml-&gt;@h4 foo
 bcml-&gt;@mokuzi[h4 h5]
-</pre><p>
-
-こうした場合は目次は@h4 hello,@h5 world,@h5 bar,@h4 fooを目次にします。
-このドキュメントの目次</p>は<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">hello</a></li><li><a href="#h382">根本的な設定</a></li><li><a href="#h383">使えるタグの設定</a></li><li><a href="#h384">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul><p>によって生成されています。
+</pre>
+<p>こうした場合は目次は@h4 hello,@h5 world,@h5 bar,@h4 fooを目次にします。
+このドキュメントの目次は@mokuzi[h2 h3]
+によって生成されています。
 </p><p>目次機能は[]の中にどの目次にするか引数をとります。
 h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4 h5]と引数を書きます。
 指定できるタグは２つまでになっており２つ指定した場合は先にしたほうが親になりネストするようになっています。
@@ -87,19 +103,21 @@ h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にし�
 ページタイトルを取得するというのはブログなどを書いているとよくやる作業ですが案外デフォルト状態のブラウザでは難しいです。
 この機能だとurlのみ書いておけば自動でタイトルタグからページタイトルを取得できます。
 </p>
-<pre>@:[http://google.com]
+<pre class="brush:html">&lt;a href=&quot;http://google.com&quot;&gt;Google&lt;/a&gt;
 bcml-&gt;@:[http://google.com]
 </pre>
 <p>この書き方はタグを書かなかった時の修飾部でリンクをつけようとした時の書き方に似ていますが、内部処理的には別物です。
 しかし、bcmlはこのことを意識しなくてもいいように設計されています。
 </p>
 <h2 id="h26">エスケープ</h2><p>
-bcml記法をエスケープしたい場合は、ワンライナー記法の時はシンボル。マルチライナー記法の時は開始シンボルの前にバックスラッシュを入れてください。
+bcml記法をエスケープしたい場合は、ワンライナー記法の時はシンボル。マルチライナー記法の時は開始シンボルの前と終了タグの後にバックスラッシュを入れてください。
 </p>
-<pre>@span エスケープされます
+<pre class="brush:html">@span エスケープされます
 bcml-&gt; \@span エスケープされます
-</pre>
-
+@div エスケープされます
+bcml-&gt; \@(div エスケープされます</pre><p>
+)@
+</p>
 <h2 id="h27">コメント</h2><p>
 bcmlでは@---、---@で囲まれた部分がコメントになります。
 コメントはhtmlに変換されるときには消去されているので変換後のファイルに影響を与えることはありません。
@@ -111,7 +129,7 @@ yamlについてはこちらを参照してください。
 <a href="http://magazine.rubyist.net/?0009-YAML">Rubyist Magazine - プログラマーのための YAML 入門 (初級編)</a>
 
 config.ymlの中身はデフォルトではこうなっています。</p>
-<pre>---
+<pre class="brush:yaml">---
 GENERAL:
   symbol: [&quot;@&quot;, &quot;&quot;&quot;]
   bracket: [&quot;[&quot;, &quot;]&quot;]
@@ -173,7 +191,7 @@ QUALIFIERS:
 ユーザータグは設定したものに置き換えられます。
 ユーザータグの設定はUTAGSを編集してください。
 設定ファイル</p>
-<pre>UTAGS:
+<pre class="brush:yaml">UTAGS:
   midasi:
     bcml: h3.bbb
   るびー:
@@ -182,14 +200,14 @@ QUALIFIERS:
 
 この設定では@midasiが@h3.bbbのかわり@rubyが@pre.[brush:ruby]の代わりになるようになっています。
 </p>
-<h3 class="bbb" id="h381">hello</h3>
-<pre class="brush:ruby">p &quot;hello&quot;</pre><p>
-bcml->@h3.bbb hello
-@るびー p "hello"
-)@
-</p>
-<h3 id="h382">根本的な設定</h3>
-<pre>GENERAL:
+<pre class="brush:html">&lt;h3 class=&quot;bbb&quot;&gt;hello&lt;/h3&gt;
+&lt;pre class=&quot;brush:ruby&quot;&gt;p &amp;quot;hello&amp;quot;&lt;/pre&gt;
+bcml-&gt;@h3.bbb hello
+@るびー p &quot;hello&quot;
+</pre>
+
+<h3 id="h381">根本的な設定</h3>
+<pre class="brush:yaml">GENERAL:
   symbol: [&quot;!&quot;, &quot;![&quot;, &quot;]!&quot;]
   bracket: [&quot;(&quot;, &quot;)&quot;]
   comment: [&quot;!---&quot;,&quot;---!&quot;]
@@ -206,13 +224,13 @@ bcml->@h3.bbb hello
 !--- comment ---!
 と書くことができます。
 </p>
-<h3 id="h383">使えるタグの設定</h3><p>
+<h3 id="h382">使えるタグの設定</h3><p>
 bcmlはbcml記法が書かれていてもタグが登録されていない場合は、htmlに変換せず普通のテキストと同様に扱います。
 そのためデフォルトで用意されているもの以外のタグが使いたい場合は他具を登録する必要があります。
 </p><p>使えるタグはTAGSの中に記述することで増やせます。
 タグ名がキー、displayはそのタグがインライン要素ならinlineブロック要素ならblockとしてください。
 pタグをbcmlは自動でつけますがその時pタグでインライン要素なら囲みますがブロック要素なら囲みません。</p>
-<pre>TAGS:
+<pre class="brush:yaml">TAGS:
   h1:
     display: block
   a:
@@ -223,11 +241,11 @@ pタグをbcmlは自動でつけますがその時pタグでインライン要�
     display: inline
 </pre>
 
-<h3 id="h384">使える修飾子の設定</h3><p>
+<h3 id="h383">使える修飾子の設定</h3><p>
 デフォルトで用意されている修飾子はid、クラス、リンクを意味する「#」「.」「:」のみです。
 増やしたい場合はQUALIFIERSの中に記述してください。
 </p>
-<pre>QUALIFIERS:
+<pre class="brush:yaml">QUALIFIERS:
   &quot;.&quot;:
     point: intag
     usage: class=&quot;&lt;qsub&gt;&quot;
@@ -247,3 +265,10 @@ pタグをbcmlは自動でつけますがその時pタグでインライン要�
 サンプルはexamplesディレクトリを参照してください。
 カスタマイズされている場合はコメントにconfig.ymlの内容が書いてあります。
 </p>
+</div>
+<!-- Finally, to actually run the highlighter, you need to include this JS on your page -->
+<script type="text/javascript">
+     SyntaxHighlighter.all()
+</script>
+</body>
+</html>

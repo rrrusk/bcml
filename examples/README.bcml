@@ -1,3 +1,78 @@
+@---
+GENERAL:
+  symbol: ["@", "@(", ")@"]
+  bracket: ["[", "]"]
+  comment: ["@---","---@"]
+USERTAGS:
+  midasi:
+    bcml: h3.bbb
+  ruby:
+    bcml: pre.[brush:ruby]
+  python:
+    bcml: pre.[brush:python]
+  html:
+    bcml: pre.[brush:html]
+  js:
+    bcml: pre.[brush:js]
+  bash:
+    bcml: pre.[brush:bash]
+  yaml:
+    bcml: pre.[brush:yaml]
+  plain:
+    bcml: pre.[brush:plain]
+  command:
+    bcml: code.command
+TAGS:
+  h1:
+    display: block
+  h2:
+    display: block
+  h3:
+    display: block
+  h4:
+    display: block
+  h5:
+    display: block
+  h6:
+    display: block
+  a:
+    display: inline
+  div:
+    display: block
+  span:
+    display: inline
+  p:
+    display: block
+  pre:
+    display: block
+    escape: true
+  ul:
+    display: block
+  li:
+    display: inline
+  b:
+    display: inline
+  i:
+    display: inline
+  code:
+    display: block
+  blockquote:
+    display: block
+QUALIFIERS:
+  ".":
+    point: intag
+    usage: class="<qsub>"
+  "#":
+    point: intag
+    usage: id="<qsub>"
+  ":":
+    point: outtag
+    usage: [<a href="<qsub>">, </a>]
+SPECIALTAGS:
+  - mokuzi
+  - ":"
+---@
+
 @h2 目次
 @mokuzi[h2]
 
@@ -26,6 +101,8 @@ h3タグでhello worldと書きたい場合はbcml記法が始まることを表
 
 ここで紹介したのはbcmlのデフォルト設定での最も基本的なサンプルです。詳しい情報はdocフォルダのusage.htmlを参照ください。
 また、bcmlで書かれた文書のサンプルがexamplesフォルダにあるので何ができるかを知りたい場合はそこを見ると解決すると思います。
+このファイルもdocフォルダのドキュメントもbcmlで書かれているのでそれもおいてあります。
+設定をしている場合はその設定がコメントに入っています。
 
 @h2 カスタマイズ例
 bcmlは設定ファイルを変更することで簡単に文法を変えることができますがこれはその中の一例です。
