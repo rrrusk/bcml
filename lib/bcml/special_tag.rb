@@ -7,17 +7,15 @@ class SpecialTag < Bcml
 
 		scan.each do |x|
 			special_tag = x[1]
-			if @@config.SPECIALTAGS.include?(special_tag)
-				origin = regex_esc(x[0])
-				unless x[2].nil?
-					ssub = x[2]
-				end
-				case
-				when special_tag == "mokuzi"
-					mokuzi(origin,ssub)
-				when special_tag == ":"
-					get_link_title(origin,ssub)
-				end
+			origin = regex_esc(x[0])
+			unless x[2].nil?
+				ssub = x[2]
+			end
+			case
+			when special_tag == "mokuzi"
+				mokuzi(origin,ssub)
+			when special_tag == ":"
+				get_link_title(origin,ssub)
 			end
 		end
 	end

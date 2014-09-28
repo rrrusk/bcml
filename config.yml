@@ -10,10 +10,18 @@ USERTAGS:
     bcml: pre.[brush:ruby]
   python:
     bcml: pre.[brush:python]
+  html:
+    bcml: pre.[brush:html]
   js:
     bcml: pre.[brush:js]
+  bash:
+    bcml: pre.[brush:bash]
+  yaml:
+    bcml: pre.[brush:yaml]
+  plain:
+    bcml: pre.[brush:plain]
   command:
-    bcml: span.command
+    bcml: div.command
 TAGS:
   h1:
     display: block

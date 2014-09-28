@@ -19,7 +19,6 @@ class Bcml
 		BcmlToHtml.new()
 		SpecialTag.new()
 		Text.new()
-		puts contents
 		return contents
 	end
 
@@ -38,7 +37,7 @@ class Bcml
 				user_tag_pipe << key
 			end
 		end
-		@@contents.gsub!(/(?<=#{@@config.SYMBOL[0]}|#{@@config.SYMBOL[1]})(#{user_tag_pipe})(?=[ \t]+)/, user_tag_hash)
+		@@contents.gsub!(/(?<=#{@@config.SYMBOL[0]}|#{@@config.SYMBOL[1]})(#{user_tag_pipe})(?=[ \n\t]+)/, user_tag_hash)
 	end
 
 	def regex_esc(strings)

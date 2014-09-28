@@ -9,7 +9,8 @@ rescue LoadError
 end
 
 path = ARGV[0].gsub(/(?<=\/).+(?!\/)/,"") if ARGV[0] =~ /\//
-newfile = open("#{path}convert.html", 'w')
+filename = File.basename($~[0],'.bcml')
+newfile = open("#{path}#{filename}.html", 'w')
 source = open(ARGV[0])
 contents = source.read
 source.close
