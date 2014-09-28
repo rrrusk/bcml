@@ -234,12 +234,12 @@ GENERAL:
 つまり
 デフォルトだと
 \@h3 hello
-\@(a world)@
+\@(a world)@\
 \@--- comment ---@
 となるところを
-\!h3 hello
-\![a:[http://foo] world ]!
-\!--- comment ---!
+!h3 hello
+![a:[http://foo] world ]!
+!--- comment ---!
 と書くことができます。
 
 @h3 使えるタグの設定
