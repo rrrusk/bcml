@@ -4,6 +4,7 @@ class MakeConfig < Bcml
 		yaml_open
 	end
 
+	private
 	# 設定ファイルから変数定義
 	def yaml_open
 		config = YAML.load_file("#{$MY_DIRECTORY}/config.yml")

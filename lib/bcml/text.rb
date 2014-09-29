@@ -7,6 +7,7 @@ class Text < Bcml
 		symbol_esc
 	end
 
+	private
 	def ptag_insert
 		s = StringScanner.new(@@contents)
 		tagname = nil
@@ -51,27 +52,8 @@ class Text < Bcml
 			pluspoint += 3
 		end
 
-		s = StringScanner.new(@@contents)
-		open = true
-		ptags_pair = {}
+		ptags_pair = tag_pair
 		pluspoint = 0
-
-		until s.eos?
-			case
-			when s.skip(/<p( .*?)?>/)
-				if open
-					open = false
-					start = s.charpos
-				end
-			when s.skip(/<\/p>/)
-				if !open
-					open = true
-					ptags_pair[start] = s.charpos - s[0].length
-				end
-			when s.skip(/./m)
-			end
-		end
-
 		ptags_pair.each do |key,var|
 			@@contents[key+pluspoint..var-1+pluspoint] = @@contents[key+pluspoint..var-1+pluspoint].gsub(/^\n/) do |match|
 				"</p><p>"
@@ -108,10 +90,27 @@ class Text < Bcml
 	end
 
 	def space_esc
+		ptags_pair = tag_pair
+
+		pluspoint = 0
+		ptags_pair.each do |key,var|
+			@@contents[key+pluspoint..var-1+pluspoint] = @@contents[key+pluspoint..var-1+pluspoint].gsub(/  ++/) do |match|
+				pluspoint += 1 + 5 * (match.length - 1)
+				" " + "&nbsp;" * (match.length - 1)
+			end
+		end
+	end
+
+	def symbol_esc
+		@@contents.gsub!(/\\(#{@@config.SYMBOL[0]}|#{@@config.SYMBOL[1]})/,'\1')
+		@@contents.gsub!(/(#{@@config.SYMBOL[2]})\\/,'\1')
+	end
+
+	def tag_pair
 		s = StringScanner.new(@@contents)
 		open = true
 		ptags_pair = {}
-		pluspoint = 0
+		start = 0
 
 		until s.eos?
 			case
@@ -129,16 +128,6 @@ class Text < Bcml
 			end
 		end
 
-		ptags_pair.each do |key,var|
-			@@contents[key+pluspoint..var-1+pluspoint] = @@contents[key+pluspoint..var-1+pluspoint].gsub(/  ++/) do |match|
-				pluspoint += 1 + 5 * (match.length - 1)
-				" " + "&nbsp;" * (match.length - 1)
-			end
-		end
-	end
-
-	def symbol_esc
-		@@contents.gsub!(/\\(#{@@config.SYMBOL[0]}|#{@@config.SYMBOL[1]})/,'\1')
-		@@contents.gsub!(/(#{@@config.SYMBOL[2]})\\/,'\1')
+		return ptags_pair
 	end
 end

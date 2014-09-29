@@ -4,6 +4,7 @@ class BcmlToHtml < Bcml
 		multiliner
 	end
 
+	private
 	def oneliner
 		convert(@@contents,/(?<origin>^[ \t]*(?<!\\)#{@@config.SYMBOL[0]}(?<prefix>[^\s]+)[ \t](?<subject>.+))/)
 	end
@@ -53,7 +54,7 @@ class BcmlToHtml < Bcml
 	def separator(data)
 		subject = data[:subject]
 		prefix = data[:prefix]
-		prefix.slice!(/^(?<tag>[a-z0-9あ-ん]+)/)
+		prefix.slice!(/^(?<tag>[a-z0-9]+)/)
 		qualifier = prefix
 		tag = $~ ? $~[:tag] : ""
 		return subject,tag,qualifier

@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+#!ruby -Ku
+# encoding utf-8
 
 THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
 $MY_DIRECTORY = File.dirname(THIS_FILE) + '/..'
@@ -11,8 +13,6 @@ end
 path = File.dirname(ARGV[0])
 filename = File.basename(ARGV[0],'.bcml')
 
-p path
-p filename
 newfile = open("#{path}/#{filename}.html", 'w')
 source = open(ARGV[0])
 contents = source.read

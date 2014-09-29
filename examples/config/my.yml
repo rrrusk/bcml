@@ -1,14 +1,27 @@
-！！！
 ---
 GENERAL:
-  symbol: ["！", "！？", "？！"]
+  symbol: ["@", "@(", ")@"]
   bracket: ["[", "]"]
-  comment: ["！！！","？？？"]
+  comment: ["@---","---@"]
 USERTAGS:
-  みだし:
-    bcml: h3
-  おおみだし:
-    bcml: h1
+  midasi:
+    bcml: h3.bbb
+  ruby:
+    bcml: pre.[brush:ruby]
+  python:
+    bcml: pre.[brush:python]
+  html:
+    bcml: pre.[brush:html]
+  js:
+    bcml: pre.[brush:js]
+  bash:
+    bcml: pre.[brush:bash]
+  yaml:
+    bcml: pre.[brush:yaml]
+  plain:
+    bcml: pre.[brush:plain]
+  command:
+    bcml: code.command
 TAGS:
   h1:
     display: block
@@ -58,13 +71,3 @@ QUALIFIERS:
 SPECIALTAGS:
   - mokuzi
   - ":"
-？？？
-！おおみだし スマホで書く場合もbcmlなら楽チン
-Androidのsimejiで入力しています。
-カスタマイズによってフリックタッチで入力できる文字だけでブログ用コンテンツを作成できます。
-
-！？みだし
-マルチライナー記法も楽にかけます。
-マルチライナー記法も楽にかけます。
-マルチライナー記法も楽にかけます。
-？！

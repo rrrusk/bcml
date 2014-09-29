@@ -19,10 +19,10 @@ class Bcml
 		BcmlToHtml.new()
 		SpecialTag.new()
 		Text.new()
-		puts @@contents
 		return @@contents
 	end
 
+	private
 	def comment
 		@@contents.gsub!(/^#{@@config.COMMENT[0]}.+?#{@@config.COMMENT[1]}$/m,"")
 	end

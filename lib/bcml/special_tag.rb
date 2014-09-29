@@ -2,6 +2,8 @@ class SpecialTag < Bcml
 	def initialize()
 		exec
 	end
+
+	private
 	def exec
 		scan = @@contents.scan(/(?<!\\)(?<origin>#{@@config.SYMBOL[0]}(?<special_tag>(#{@@config.SPECIALTAGS.join("|")})+)(#{@@config.BRACKET[0]}(?<ssub>.+?)#{@@config.BRACKET[1]})?)/)
 
@@ -52,14 +54,13 @@ class SpecialTag < Bcml
 			tag_list[:list][0] = "<ul>#{list_string}</ul>"
 		end
 
-		child_list_string = ""
-
 		tag_list[tag[0]].each_with_index do |x,i|
 			i += 1
 			tag_list[:list][i] << "<li><a href=\"##{tag[0]}#{i}\">#{x[:con]}</a></li>"
 			@@contents.gsub!(/#{x[:object]}/,"<#{tag[0]}#{x[:attr]} id=\"#{tag[0]}#{i}\">#{x[:con]}</#{tag[0]}>")
 			unless tag_list[tag[1]][i].empty?
 
+				child_list_string = ""
 				tag_list[tag[1]][i].each_with_index do |x,y|
 					child_list_string << "<li><a href=\"##{tag[1]}#{i}#{y}\">#{x[:con]}</a></li>"
 					@@contents.gsub!(/#{x[:object]}/,"<#{tag[1]}#{x[:attr]} id=\"#{tag[1]}#{i}#{y}\">#{x[:con]}</#{tag[1]}>")
