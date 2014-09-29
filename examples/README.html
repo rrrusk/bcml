@@ -2,7 +2,6 @@
 <br>
 <h2 id="h21">目次</h2>
 <ul><li><a href="#h21">目次</a></li><li><a href="#h22">説明</a></li><li><a href="#h23">使いかた</a></li><li><a href="#h24">文法</a></li><li><a href="#h25">カスタマイズ例</a></li></ul>
-<br>
 <h2 id="h22">説明</h2><p>
 bcmlはブログなどのサイト上のテキストコンテンツを書きやすくする独自の記法を提供し、bcmlファイルからhtmlファイルを生成することができます。<br>
 これを聞くとマークダウンをイメージするかもしれませんがbcmlはクラスを指定するなどより細かい作業に対応しています。<br>
@@ -15,10 +14,14 @@ lib/bcmlを直接呼び出してもいいですがファイルパスを毎回記
 </p><p>パスの通し方は環境によって違いますがシェルがzshの場合はこれを~/.zshrcに記述してください。</p>
 <pre class="brush:bash">PATH=${PATH}:~/bcml/bin</pre><p>
 ここで重要なのは、bcmlのフォルダがホームディレクトリに入ってる場合は~/bcml/binにパスを通すということです。<br>
+</p><p>では試しにこの文書のソースであるREADME.bcmlを変換してみましょう。<br>
+README.bcmlはexamplesフォルダの中にあります。<br>
+</p><p>これを変換するとREADME.htmlが出来上がりますが、examplesフォルダはコンパイルした後のものもすぐ見れるようにREADME.htmlがはじめからあるので別のフォルダに移してからコマンドを実行しましょう。<br>
+変換しようとしたファイルがすでにある場合は変換後のファイルで置き換えられます。<br>
+bcmlという拡張子はわかりやすくするためにこちらが定めたもので特に意味はありませんがこの拡張子にしないとエラーが出ます。<br>
 </p>
-<code class="command">bcml foo.bcml</code>
-<br>
-<h2 id="h24">文法</h2><p>
+<code class="command">bcml README.bcml</code>
+</p><p><h2 id="h24">文法</h2><p>
 h3タグでhello worldと書きたい場合はbcml記法が始まることを表す「@」とタグ名「h3」をbcmlでは書きます。</p>
 <pre class="brush:html">
 &lt;h3&gt;hello world&lt;/h3&gt;

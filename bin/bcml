@@ -8,15 +8,12 @@ rescue LoadError
   require 'bcml'
 end
 
-path = ARGV[0].gsub(/\/([^\/])+(?!\/)/,'/') if ARGV[0] =~ /\//
+path = File.dirname(ARGV[0])
+filename = File.basename(ARGV[0],'.bcml')
 
-begin
-	filename = File.basename($~[0],'.bcml')
-rescue
-	raise '拡張子がおかしい可能性があります。'
-end
-
-newfile = open("#{path}#{filename}.html", 'w')
+p path
+p filename
+newfile = open("#{path}/#{filename}.html", 'w')
 source = open(ARGV[0])
 contents = source.read
 source.close
