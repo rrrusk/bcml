@@ -87,17 +87,23 @@ bcmlはlib/bcmlにファイル名を引数として渡し実行することでht
 lib/bcmlを直接呼び出してもいいですがファイルパスを毎回記述するのはめんどくさいのでパスを通すことをおすすめします。
 
 パスの通し方は環境によって違いますがシェルがzshの場合はこれを~/.zshrcに記述してください。
-@bash( PATH=${PATH}:~/bcml/bin)@
+@bash PATH=${PATH}:~/bcml/bin
 ここで重要なのは、bcmlのフォルダがホームディレクトリに入ってる場合は~/bcml/binにパスを通すということです。
 
-@command bcml foo.bcml
+では試しにこの文書のソースであるREADME.bcmlを変換してみましょう。
+README.bcmlはexamplesフォルダの中にあります。
+
+これを変換するとREADME.htmlが出来上がりますが、examplesフォルダはコンパイルした後のものもすぐ見れるようにREADME.htmlがはじめからあるので別のフォルダに移してからコマンドを実行しましょう。
+変換しようとしたファイルがすでにある場合は変換後のファイルで置き換えられます。
+bcmlという拡張子はわかりやすくするためにこちらが定めたもので特に意味はありませんがこの拡張子にしないとエラーが出ます。
+
+@command bcml README.bcml
 
 @h2 文法
 h3タグでhello worldと書きたい場合はbcml記法が始まることを表す「@」とタグ名「h3」をbcmlでは書きます。
 @(html 
 @h3 hello world
--> @h3 hello world
-)@
+bcml-> \@h3 hello world)@
 
 ここで紹介したのはbcmlのデフォルト設定での最も基本的なサンプルです。詳しい情報はdocフォルダのusage.htmlを参照ください。
 また、bcmlで書かれた文書のサンプルがexamplesフォルダにあるので何ができるかを知りたい場合はそこを見ると解決すると思います。

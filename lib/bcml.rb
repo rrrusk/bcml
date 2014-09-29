@@ -19,7 +19,8 @@ class Bcml
 		BcmlToHtml.new()
 		SpecialTag.new()
 		Text.new()
-		return contents
+		puts @@contents
+		return @@contents
 	end
 
 	def comment

@@ -12,8 +12,8 @@ bcmlはユーザーが記法をカスタマイズでき、記事を書く上で�
 <h2 id="h23">使いかた</h2><p>
 bcmlはlib/bcmlにファイル名を引数として渡し実行することでhtmlファイルを生成できます。<br>
 lib/bcmlを直接呼び出してもいいですがファイルパスを毎回記述するのはめんどくさいのでパスを通すことをおすすめします。<br>
-</p><p>パスの通し方は環境によって違いますがシェルがzshの場合はこれを~/.zshrcに記述してください。<br>
-@bash( PATH=${PATH}:~/bcml/bin)@<br>
+</p><p>パスの通し方は環境によって違いますがシェルがzshの場合はこれを~/.zshrcに記述してください。</p>
+<pre class="brush:bash">PATH=${PATH}:~/bcml/bin</pre><p>
 ここで重要なのは、bcmlのフォルダがホームディレクトリに入ってる場合は~/bcml/binにパスを通すということです。<br>
 </p>
 <code class="command">bcml foo.bcml</code>
@@ -21,8 +21,8 @@ lib/bcmlを直接呼び出してもいいですがファイルパスを毎回記
 <h2 id="h24">文法</h2><p>
 h3タグでhello worldと書きたい場合はbcml記法が始まることを表す「@」とタグ名「h3」をbcmlでは書きます。</p>
 <pre class="brush:html">
-&lt;h3&gt;hello world&lt;/h3&gt;<br>
--&gt; @h3 hello world</p><p></pre>
+&lt;h3&gt;hello world&lt;/h3&gt;
+bcml-&gt; @h3 hello world</pre>
 <p>ここで紹介したのはbcmlのデフォルト設定での最も基本的なサンプルです。詳しい情報はdocフォルダのusage.htmlを参照ください。<br>
 また、bcmlで書かれた文書のサンプルがexamplesフォルダにあるので何ができるかを知りたい場合はそこを見ると解決すると思います。<br>
 このファイルもdocフォルダのドキュメントもbcmlで書かれているのでそれもおいてあります。<br>
@@ -34,8 +34,8 @@ bcmlは設定ファイルを変更することで簡単に文法を変えるこ�
 <pre class="brush:html">&lt;span class=&quot;command&quot;&gt;bcml sample.bcml&lt;/span&gt;
 bcml-&gt; ！こまんど bcml sample.bcml
 </pre>
-<p>この例を見れば解ると思いますがbcmlはひらがなを使うこともできます。
-そしてこの設定にした時の設定ファイルは以下のものです。
+<p>この例を見れば解ると思いますがbcmlはひらがなを使うこともできます。<br>
+そしてこの設定にした時の設定ファイルは以下のものです。<br>
 </p>
 <pre class="brush:yaml">GENERAL:
   symbol: [&quot;！&quot;, &quot;！(&quot;, &quot;)！&quot;]
@@ -43,6 +43,6 @@ UTAGS:
   こまんど:
     bcml: span.command
 </pre><p>
-
-具体的な設定ファイルの書きかたはdocフォルダを参照してください。
+<br>
+具体的な設定ファイルの書きかたはdocフォルダを参照してください。<br>
 </p>

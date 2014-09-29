@@ -2,268 +2,65 @@
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
-	<title>bcmlの文法</title>
-<link type="text/css" rel="stylesheet" href="styles/mycss.css" />
-<link type="text/css" rel="stylesheet" href="styles/shCore.css" />
-<link type="text/css" rel="stylesheet" href="styles/shThemeFadeToGrey.css" />
-<script type="text/javascript" src="scripts/shCore.js"></script>
-<script type="text/javascript" src="scripts/shBrushYaml.js"></script>
-<script type="text/javascript" src="scripts/shBrushXml.js"></script>
-<script type="text/javascript" src="scripts/shBrushBash.js"></script>
-<script type="text/javascript" src="scripts/shBrushPlain.js"></script>
+	<title>README</title>
+<link type="text/css" rel="stylesheet" href="doc/styles/mycss.css" />
+<link type="text/css" rel="stylesheet" href="doc/styles/shCore.css" />
+<link type="text/css" rel="stylesheet" href="doc/styles/shThemeFadeToGrey.css" />
+<script type="text/javascript" src="doc/scripts/shCore.js"></script>
+<script type="text/javascript" src="doc/scripts/shBrushYaml.js"></script>
+<script type="text/javascript" src="doc/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="doc/scripts/shBrushBash.js"></script>
+<script type="text/javascript" src="doc/scripts/shBrushPlain.js"></script>
 </head>
 <body>
 <div id="main">
-<ul><li><a href="#h21">はじめに</a></li><li><a href="#h22">ワンライナー記法</a></li><li><a href="#h23">マルチライナー記法</a></li><li><a href="#h24">修飾部</a></li><li><a href="#h25">特殊タグ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li></ul><li><a href="#h26">エスケープ</a></li><li><a href="#h27">コメント</a></li><li><a href="#h28">カスタマイズ</a></li><ul><li><a href="#h350">目次機能</a></li><li><a href="#h351">リンクにタイトルをつける</a></li><li><a href="#h380">ユーザータグ</a></li><li><a href="#h381">根本的な設定</a></li><li><a href="#h382">使えるタグの設定</a></li><li><a href="#h383">使える修飾子の設定</a></li></ul><li><a href="#h29">サンプル</a></li></ul>
+
 <br>
-<h2 id="h21">はじめに</h2><p>
-bcmlの文法は、「シンボル」「タグ」「修飾部」「メインコンテンツ」にわかれます。<br>
-</p><p>試しに「@span.command hello world」というファイルをsample.bcmlというファイル名で保存し、</p>
-<code class="command">bcml sample.bcml</code><p>
-とコマンドをうってください。<br>
-パスを通してない場合は、</p>
-<code class="command">bcmlフォルダのパス/lib/bcml sample.bcml</code><p>
-としてください。<br>
-</p><p>するとこのようなファイルがsample.htmlという名前で出来上がります。<br>
+<h2 id="h21">目次</h2>
+<ul><li><a href="#h21">目次</a></li><li><a href="#h22">説明</a></li><li><a href="#h23">使いかた</a></li><li><a href="#h24">文法</a></li><li><a href="#h25">カスタマイズ例</a></li></ul>
+<br>
+<h2 id="h22">説明</h2><p>
+bcmlはブログなどのサイト上のテキストコンテンツを書きやすくする独自の記法を提供し、bcmlファイルからhtmlファイルを生成することができます。<br>
+これを聞くとマークダウンをイメージするかもしれませんがbcmlはクラスを指定するなどより細かい作業に対応しています。<br>
+bcmlはユーザーが記法をカスタマイズでき、記事を書く上で煩わしい作業はbcmlが請負ます。<br>
+あなたはPCでもスマホでも好きな端末で書きやすい記法にカスタマイズし文章の作成に集中することができます。<br>
 </p>
-<pre class="brush:html">&lt;span class=&quot;command&quot;&gt;hello world&lt;/span&gt;
+<h2 id="h23">使いかた</h2><p>
+bcmlはlib/bcmlにファイル名を引数として渡し実行することでhtmlファイルを生成できます。<br>
+lib/bcmlを直接呼び出してもいいですがファイルパスを毎回記述するのはめんどくさいのでパスを通すことをおすすめします。<br>
+</p><p>パスの通し方は環境によって違いますがシェルがzshの場合はこれを~/.zshrcに記述してください。</p>
+<pre class="brush:bash">PATH=${PATH}:~/bcml/bin</pre><p>
+ここで重要なのは、bcmlのフォルダがホームディレクトリに入ってる場合は~/bcml/binにパスを通すということです。<br>
+</p>
+<code class="command">bcml foo.bcml</code>
+<br>
+<h2 id="h24">文法</h2><p>
+h3タグでhello worldと書きたい場合はbcml記法が始まることを表す「@」とタグ名「h3」をbcmlでは書きます。</p>
+<pre class="brush:html">
+&lt;h3&gt;hello world&lt;/h3&gt;
+bcml-&gt; @h3 hello world</pre>
+<p>ここで紹介したのはbcmlのデフォルト設定での最も基本的なサンプルです。詳しい情報はdocフォルダのusage.htmlを参照ください。<br>
+また、bcmlで書かれた文書のサンプルがexamplesフォルダにあるので何ができるかを知りたい場合はそこを見ると解決すると思います。<br>
+このファイルもdocフォルダのドキュメントもbcmlで書かれているのでそれもおいてあります。<br>
+設定をしている場合はその設定がコメントに入っています。<br>
+</p>
+<h2 id="h25">カスタマイズ例</h2><p>
+bcmlは設定ファイルを変更することで簡単に文法を変えることができますがこれはその中の一例です。<br>
+</p>
+<pre class="brush:html">&lt;span class=&quot;command&quot;&gt;bcml sample.bcml&lt;/span&gt;
+bcml-&gt; ！こまんど bcml sample.bcml
 </pre>
-<p>例えばこの例で言うと、「@」が「シンボル」、「span」が「タグ」、「.command」が修飾部、「hello world」が「メインコンテンツ」となります。
-</p><p>bcmlは「シンボル」によってbcml記法で書かれている部分がどこかを判別して「タグ」部分に書かれた文字がhtmlのタグ名に相当します。
-</p><p>「修飾部」は「修飾子」と「修飾内容」でできておりid、クラス、リンクがデフォルトで指定できます。
-この部分についての詳しいことは修飾子の部分を参照してください。
+<p>この例を見れば解ると思いますがbcmlはひらがなを使うこともできます。<br>
+そしてこの設定にした時の設定ファイルは以下のものです。<br>
 </p>
-<h2 id="h22">ワンライナー記法</h2><p>
-bcmlにはワンライナー記法とマルチライナー記法があります。
-ワンライナー記法は一行でbcml記法が完結しますが簡潔な記法を使うことができます。
-マルチライナー記法は複数行の「メインコンテンツ」を書くことと行の途中でbcml記法を使うことができますが、閉じタグを書かなければならないためワンライナー記法ほどの簡潔さはありません。
-</p><p>主にマルチライナー記法はpreタグでコードを載せるときや、行の途中にaタグでリンクを載せるときに便利です。
-</p><p>先ほどの例もワンライナー記法で書かれているのでその例で解説します
-@span.command hello world
-ワンライナー記法で必要なのは「シンボル」、「タグ」、「修飾部」でできたbcml部文と「メインコンテンツ」なのですがワンライナー記法ではbcml部分とメインコンテンツ部分の間に半角スペースをいれなければなりません。
-</p>
-<h2 id="h23">マルチライナー記法</h2><p>
-マルチライナー記法は開始シンボル、bcml部分、メインコンテンツ、終了シンボルが必要です。
-例を出すと
-</p>
-<pre class="brush:plain">@(pre
-alert('hello');
-)@
-</pre><p>
-
-ほかに、このような書き方もできます。
-</p>
-<pre class="brush:plain">@(pre alert('hello');)@
-</pre>
-<p>マルチライナー記法は、開始シンボル(デフォルトでは「」)を必要とします。
-</p>
-<h2 id="h24">修飾部</h2><p>
-bcmlは修飾部によってタグで囲われた文字にリンクとidとクラスをデフォルトでつけることができます。
-config.ymlをいじれば修飾子を増やすことができますがこの機能は非推奨です。
-</p><p>修飾部の文法はそれがなにを修飾するかを表す（例えば#ならidをつける）修飾子、修飾する内容を表す（idの例で言えばid名）を表す「修飾内容」をスペースを入れずに書きます。
-修飾内容にスペースや修飾子にある文字が含まれている場合は[]で囲んでください。
-
-例</p>
-<pre class="brush:html">&lt;h4 class=&quot;class&quot; id=&quot;id&quot;&gt;hello&lt;/h4&gt;
-bcml-&gt;@h4.class#id hello
-&lt;a href=&quot;http://google.com&quot;&gt;google&lt;/a&gt;
-bcml-&gt;@:[http://google.com] google
-</pre>
-<p>デフォルトで使える修飾子はidを表す「#」クラスを表す「.」aタグのhref属性持ちで囲まれたリンクを表す「:」です。
-修飾子にはタグ名の中に修飾内容を書き込む「インタグ」修飾子の外にタグを作って修飾内容を書き込む(:の場合は修飾内容がhref属性に入ったaタグを作る)「アウトタグ」の２種類があります。
-先程の例で言うと「.」「#」はインタグ「:」はアウトタグです。
-</p><p>また、シンボルの後のタグを省略して修飾部メインコンテンツとした場合はインタグは自動でspanタグが生成されアウトタグの場合はメインコンテンツをそのままアウトタグの内容で囲みます。
-</p>
-<h2 id="h25">特殊タグ</h2><p>
-bcmlには今まで述べてきた基本的な文法以外に特殊タグというものがあります。
-特殊タグはここの機能に沿って、htmlを自動生成します。
-また、特殊タグは他のhtmlにも影響を与える場合があります。
-このタグはメインコンテンツを必要とせずワンライナー記法でのシンボル、特殊タグの名前、[]の中に引数を入れたものを必要とします。
-</p><p>説明だけではピンとこないと思うので具体例で説明していきます。
-</p>
-<h3 id="h350">目次機能</h3><p>
-目次機能は、引数に書かれたタグのリストを作ります。このリストは&lt;a href="h30"&gt;hello&lt;/a&gt;と言ったふうにページ内リンクができるようになった状態で生成されます。
-この機能はリンク先のタグにidを設定する必要があるので他のhtmlに影響を与えます。
-</p>
-<pre class="brush:plain">bcml-&gt;@h4 hello
-bcml-&gt;@h5 world
-bcml-&gt;@h6 hoge
-bcml-&gt;@h5 bar
-bcml-&gt;@h4 foo
-bcml-&gt;@mokuzi[h4 h5]
-</pre>
-<p>こうした場合は目次は@h4 hello,@h5 world,@h5 bar,@h4 fooを目次にします。
-このドキュメントの目次は@mokuzi[h2 h3]
-によって生成されています。
-</p><p>目次機能は[]の中にどの目次にするか引数をとります。
-h3タグを目次にしたい場合は[h3]、h4タグとh5タグを目次にしたい場合は[h4 h5]と引数を書きます。
-指定できるタグは２つまでになっており２つ指定した場合は先にしたほうが親になりネストするようになっています。
-</p>
-<h3 id="h351">リンクにタイトルをつける</h3><p>
-ページタイトルを取得するというのはブログなどを書いているとよくやる作業ですが案外デフォルト状態のブラウザでは難しいです。
-この機能だとurlのみ書いておけば自動でタイトルタグからページタイトルを取得できます。
-</p>
-<pre class="brush:html">&lt;a href=&quot;http://google.com&quot;&gt;Google&lt;/a&gt;
-bcml-&gt;@:[http://google.com]
-</pre>
-<p>この書き方はタグを書かなかった時の修飾部でリンクをつけようとした時の書き方に似ていますが、内部処理的には別物です。
-しかし、bcmlはこのことを意識しなくてもいいように設計されています。
-</p>
-<h2 id="h26">エスケープ</h2><p>
-bcml記法をエスケープしたい場合は、ワンライナー記法の時はシンボル。マルチライナー記法の時は開始シンボルの前と終了タグの後にバックスラッシュを入れてください。
-</p>
-<pre class="brush:html">@span エスケープされます
-bcml-&gt; \@span エスケープされます
-@div エスケープされます
-bcml-&gt; \@(div エスケープされます</pre><p>
-)@
-</p>
-<h2 id="h27">コメント</h2><p>
-bcmlでは@---、---@で囲まれた部分がコメントになります。
-コメントはhtmlに変換されるときには消去されているので変換後のファイルに影響を与えることはありません。
-</p>
-<h2 id="h28">カスタマイズ</h2><p>
-bcml記法を使用することの大きなメリットとして挙げられるものの一つにカスタマイズができることがありますがその方法をいまから紹介していきます。
-ユーザーの設定はbcmlフォルダ直下にあるconfig.ymlに記述していきます。これはyamlファイルなのでyaml記法を使って書いてください。
-yamlについてはこちらを参照してください。
-<a href="http://magazine.rubyist.net/?0009-YAML">Rubyist Magazine - プログラマーのための YAML 入門 (初級編)</a>
-
-config.ymlの中身はデフォルトではこうなっています。</p>
-<pre class="brush:yaml">---
-GENERAL:
-  symbol: [&quot;@&quot;, &quot;&quot;&quot;]
-  bracket: [&quot;[&quot;, &quot;]&quot;]
-  comment: [&quot;@---&quot;,&quot;---@&quot;]
-
-USERTAGS:
-
-TAGS:
-  h1:
-    display: block
-  h2:
-    display: block
-  h3:
-    display: block
-  h4:
-    display: block
-  h5:
-    display: block
-  h6:
-    display: block
-  a:
-    display: inline
-  div:
-    display: block
-  span:
-    display: inline
-  p:
-    display: block
-  pre:
-    display: block
-    escape: true
-  ul:
-    display: block
-  li:
-    display: inline
-  b:
-    display: inline
-  i:
-    display: inline
-  blockquote:
-    display: block
-
-QUALIFIERS:
-  &quot;.&quot;:
-    point: intag
-    usage: class=&quot;&lt;qsub&gt;&quot;
-  &quot;#&quot;:
-    point: intag
-    usage: id=&quot;&lt;qsub&gt;&quot;
-  &quot;:&quot;:
-    point: outtag
-    usage: [&lt;a href=&quot;&lt;qsub&gt;&quot;&gt;, &lt;/a&gt;]
-</p><p>SPECIALTAGS:
- &nbsp;- mokuzi
- &nbsp;- &quot;:&quot;
-</pre>
-
-<h3 id="h380">ユーザータグ</h3><p>
-ユーザータグは設定したものに置き換えられます。
-ユーザータグの設定はUTAGSを編集してください。
-設定ファイル</p>
-<pre class="brush:yaml">UTAGS:
-  midasi:
-    bcml: h3.bbb
-  るびー:
-    bcml: pre.[brush:ruby]
-</pre><p>
-
-この設定では@midasiが@h3.bbbのかわり@rubyが@pre.[brush:ruby]の代わりになるようになっています。
-</p>
-<pre class="brush:html">&lt;h3 class=&quot;bbb&quot;&gt;hello&lt;/h3&gt;
-&lt;pre class=&quot;brush:ruby&quot;&gt;p &amp;quot;hello&amp;quot;&lt;/pre&gt;
-bcml-&gt;@h3.bbb hello
-@るびー p &quot;hello&quot;
-</pre>
-
-<h3 id="h381">根本的な設定</h3>
 <pre class="brush:yaml">GENERAL:
-  symbol: [&quot;!&quot;, &quot;![&quot;, &quot;]!&quot;]
-  bracket: [&quot;(&quot;, &quot;)&quot;]
-  comment: [&quot;!---&quot;,&quot;---!&quot;]
-</pre>
-<p>こうするとsymbolはワンライナー記法の時!になりマルチライナー記法の時は開始シンボルが![終了シンボルが]!になり、修飾部の修飾内容を囲むものは()になり、コメントは!--- ---!で囲まれたものになります。
-</p><p>つまり
-デフォルトだと
-@h3 hello
-@(a world)@
-@--- comment ---@
-となるところを
-!h3 hello
-![a:[http://foo] world ]!
-!--- comment ---!
-と書くことができます。
-</p>
-<h3 id="h382">使えるタグの設定</h3><p>
-bcmlはbcml記法が書かれていてもタグが登録されていない場合は、htmlに変換せず普通のテキストと同様に扱います。
-そのためデフォルトで用意されているもの以外のタグが使いたい場合は他具を登録する必要があります。
-</p><p>使えるタグはTAGSの中に記述することで増やせます。
-タグ名がキー、displayはそのタグがインライン要素ならinlineブロック要素ならblockとしてください。
-pタグをbcmlは自動でつけますがその時pタグでインライン要素なら囲みますがブロック要素なら囲みません。</p>
-<pre class="brush:yaml">TAGS:
-  h1:
-    display: block
-  a:
-    display: inline
-  div:
-    display: block
-  span:
-    display: inline
-</pre>
-
-<h3 id="h383">使える修飾子の設定</h3><p>
-デフォルトで用意されている修飾子はid、クラス、リンクを意味する「#」「.」「:」のみです。
-増やしたい場合はQUALIFIERSの中に記述してください。
-</p>
-<pre class="brush:yaml">QUALIFIERS:
-  &quot;.&quot;:
-    point: intag
-    usage: class=&quot;&lt;qsub&gt;&quot;
-  &quot;#&quot;:
-    point: intag
-    usage: id=&quot;&lt;qsub&gt;&quot;
-  &quot;:&quot;:
-    point: outtag
-    usage: [&lt;a href=&quot;&lt;qsub&gt;&quot;&gt;, &lt;/a&gt;]
-</pre>
-<p>必要な情報はキーに修飾子にする文字、pointにintagもしくはouttag、usageに修飾内容を囲む部分を書いていきます。
-</p><p>pointはintagにするとインタグ、outtagにするとアウトタグとして扱われます。
-</p><p>usageはインタグの場合は文字列で<qsub>が修飾内容と入れ替わります。
-アウトタグの場合は配列で一つ目が開きタグ、二つ目が閉じタグになっておりこの2つがメインコンテンツを囲います。アウトタグも同様に<qsub>が修飾内容と入れ替わります。
-</p>
-<h2 id="h29">サンプル</h2><p>
-サンプルはexamplesディレクトリを参照してください。
-カスタマイズされている場合はコメントにconfig.ymlの内容が書いてあります。
+  symbol: [&quot;！&quot;, &quot;！(&quot;, &quot;)！&quot;]
+UTAGS:
+  こまんど:
+    bcml: span.command
+</pre><p>
+<br>
+具体的な設定ファイルの書きかたはdocフォルダを参照してください。<br>
 </p>
 </div>
 <!-- Finally, to actually run the highlighter, you need to include this JS on your page -->
