@@ -19,7 +19,9 @@ source = open(ARGV[0])
 contents = source.read
 source.close
 
-bcml = Bcml::Bcml.new("#{$MY_DIRECTORY}/config.yml")
+yaml = File.read("#{$MY_DIRECTORY}/config.yml")
+puts yaml
+bcml = Bcml::Bcml.new(yaml)
 converted = bcml.exec(contents)
 
 newfile.write(converted)

@@ -8,7 +8,7 @@ module Bcml
 		private
 		# 設定ファイルから変数定義
 		def yaml_open(source)
-			config = source.empty? ? YAML.load_file("#{File.dirname(__FILE__)}/../config.yml") : YAML.load_file(source)
+			config = source.empty? ? YAML.load_file("#{File.dirname(__FILE__)}/../config.yml") : YAML.load(source)
 
 			@TAGS = config["TAGS"]
 			@TAG = make_list(config["TAGS"])
