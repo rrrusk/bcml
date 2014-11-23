@@ -73,20 +73,24 @@ module Bcml
 
 			product = ""
 			tag_list[:list].each {|x| product << x}
-			@@contents.gsub!(/(?<!\\)#{origin}/, "<ul>#{product}</ul>") #@mokuzi[]を目次に変更
+			@@contents.gsub!(/(?<!\\)#{origin}/, "<ul>#{product}</ul>")
 		end
 
 		def get_link_title(origin,ssub)
 			require 'open-uri'
 
 			if ssub =~ /https?:\/\/.+/
-				title = ""
-				open(ssub) {|f|
-					html = f.read
-					html.scan(/<title>(.+)<\/title>/)
-					title = $~[1]
-				}
-				product = "<a href=\"#{ssub}\">#{title}</a>"
+				begin
+					title = ""
+					open(ssub) {|f|
+						html = f.read
+						html.scan(/<title>(.+)<\/title>/)
+						title = $~[1]
+					}
+					product = "<a href=\"#{ssub}\">#{title}</a>"
+				rescue
+					product = "<a href=\"#{ssub}\">#{ssub}</a>"
+				end
 			else
 				product = "<a href=\"#{ssub}\">#{ssub}</a>"
 			end

@@ -1,5 +1,5 @@
-#テキスト部分にpとかbrとか&nbsp;とかいれる
 module Bcml
+	#テキスト部分にpとかbrとか&nbsp;とかいれる
 	class Text < Bcml
 		def initialize()
 			ptag_insert

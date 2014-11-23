@@ -36,17 +36,16 @@ bcmlは設定ファイルを変更することで簡単に文法を変えるこ�
 </p>
 <pre class="brush:html">&lt;span class=&quot;command&quot;&gt;bcml sample.bcml&lt;/span&gt;
 bcml-&gt; ！こまんど bcml sample.bcml
-</pre><p>
-<br>
-この例を見れば解ると思いますがbcmlはひらがなを使うこともできます。<br>
+</pre>
+<p>この例を見れば解ると思いますがbcmlはひらがなを使うこともできます。<br>
 そしてこの設定にした時の設定ファイルは以下のものです。<br>
-<br>
-<a href="<br>
- &nbsp;symbol"><a href=" ["！", "！(", ")！"]"><pre class="brush:yaml
-GENERAL">UTAGS:
- &nbsp;こまんど:
- &nbsp;&nbsp;&nbsp;bcml: span.command
-</pre></a></a>
+</p>
+<pre class="brush:yaml">GENERAL:
+  symbol: [&quot;！&quot;, &quot;！(&quot;, &quot;)！&quot;]
+UTAGS:
+  こまんど:
+    bcml: span.command
+</pre><p>
 <br>
 具体的な設定ファイルの書きかたはdocフォルダを参照してください。<br>
 </p>
