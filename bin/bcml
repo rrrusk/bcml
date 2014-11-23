@@ -3,9 +3,11 @@
 # encoding utf-8
 
 THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
-$MY_DIRECTORY = File.dirname(THIS_FILE) + '/..'
+$MY_DIRECTORY = File.expand_path(File.dirname(THIS_FILE)) + '/..'
 begin
-  require File.dirname(THIS_FILE) + '/../lib/bcml'
+	libpath = File.expand_path(File.dirname(THIS_FILE)) + "/../lib/bcml"
+	puts libpath
+  require File.expand_path(libpath)
 rescue LoadError
   require 'bcml'
 end
@@ -18,7 +20,7 @@ source = open(ARGV[0])
 contents = source.read
 source.close
 
-bcml = Bcml.new
+bcml = Bcml::Bcml.new("#{$MY_DIRECTORY}/config.yml")
 converted = bcml.exec(contents)
 
 newfile.write(converted)

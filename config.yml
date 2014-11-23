@@ -54,6 +54,8 @@ TAGS:
     display: inline
   i:
     display: inline
+  strong:
+    display: inline
   code:
     display: block
   blockquote:
@@ -65,6 +67,9 @@ QUALIFIERS:
   "#":
     point: intag
     usage: id="<qsub>"
+  ";":
+    point: intag
+    usage: style="<qsub>"
   ":":
     point: outtag
     usage: [<a href="<qsub>">, </a>]

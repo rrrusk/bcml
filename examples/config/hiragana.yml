@@ -1,13 +1,17 @@
 ---
 GENERAL:
-  symbol: ["！", "！？", "？！"]
+  symbol: ["！", "！（", "）！"]
   bracket: ["[", "]"]
   comment: ["！！！","？？？"]
 USERTAGS:
-  みだし:
-    bcml: h3
   おおみだし:
     bcml: h1
+  こみだし:
+    bcml: h2
+  みだし:
+    bcml: h3
+  りんく:
+    bcml: ":"
 TAGS:
   h1:
     display: block
